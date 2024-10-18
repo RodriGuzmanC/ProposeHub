@@ -7,35 +7,42 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { User, Phone, ArrowLeft, MapPin, Building, Users, X, Mail, Building2 } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import Link from "next/link"
-import { postData } from "@/lib/methods"
+import { postData } from "@/lib/utils/methods"
 import BackLink from "@/app/components/global/BackLink"
+import { crearOrganizacion } from "@/lib/services/organizacion"
+import { toast } from "react-toastify"
 
-
-const handleSubmit = (e: any) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const formEntries = Object.fromEntries(formData.entries())
-    console.log('Form submitted:', formEntries)
-    // Here you would typically send the data to your backend
-
-    try {
-        postData('https://proposehub.p.rapidapi.com/personas', { formEntries })
-        .then(data => {
-            console.log(data); // JSON data parsed by `data.json()` call
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 
 export default function page() {
-
+    function crearConToast(e: any){
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        const formEntries = Object.fromEntries(formData.entries())
+        
+        toast.promise(
+          () => crearOrganizacion(formEntries),
+          {
+            pending: 'Creando...',
+            success: {
+                render({data} : any) {
+                    return data.message || 'Creado correctamente ';
+                },
+            },
+            error: {
+              render({ data } : any) {
+                // Aquí 'data' contiene el error rechazado
+                return data.message || 'Error al crear'; // Usa el mensaje de error o un mensaje predeterminado
+            },
+            },
+        }
+        )
+      }
     return (
         <div className="container mx-auto px-8 py-8">
             <BackLink href="/contactos/organizaciones">Volver a organizaciones</BackLink>
             <h1 className="text-3xl font-bold mb-6">Crear Organización</h1>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={crearConToast} className="space-y-6">
                 <div className="space-y-2">
                     <Label htmlFor="nombre">Nombre</Label>
                     <div className="relative">

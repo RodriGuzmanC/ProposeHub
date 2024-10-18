@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import { lazy, Suspense } from 'react';
 import LoadingFallback from '../components/grapes/LoadingFallback';
+import '../../public/styles/grapesjs.module.css'
 
 const GrapesJSComponent = lazy(() => import('@/app/components/grapes/GrapesJSComponente'));
 

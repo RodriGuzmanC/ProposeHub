@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -9,6 +9,7 @@ import { Home, Users, Briefcase, MessageSquare, PieChart, LogOut, Menu } from 'l
 import { HeightIcon } from '@radix-ui/react-icons'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
+import PagesLoading from '../components/skeletons/PagesLoading'
 
 const navItems = [
   { id: 'inicio', icon: Home, label: 'Inicio', href: '/inicio' },
@@ -77,7 +78,9 @@ export default function ModernNavbar({children}: Props) {
         </div>
       </aside>
       <main className="flex-grow">
+        <Suspense fallback={<PagesLoading></PagesLoading>}>
         {children}
+        </Suspense>
       </main>
     </div>
   )

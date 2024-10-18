@@ -4,10 +4,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { User, Phone, ArrowLeft, MapPin, Building, Users, X, Mail } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
-import { postData } from "@/lib/methods"
+import { postData } from "@/lib/utils/methods"
 import Link from "next/link"
 import { FormEvent } from 'react'
-import { OrganizationsDataExample } from "@/lib/api"
 import BackLink from "@/app/components/global/BackLink"
 
 interface PageProps {
@@ -35,7 +34,7 @@ export default function Page({ params }: PageProps) {
     const organizacionActual = OrganizationsDataExample.find((c) => c.id == parseInt(params.id))
 
     if (!organizacionActual) return <p>Organización no encontrada</p>
-
+    
     return (
         <div className="container mx-auto px-8 py-8">
 

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Building, Mail, Phone, User, Users } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
-import { postData } from "@/lib/methods"
+import { postData } from "@/lib/utils/methods"
 import Link from "next/link"
 import { FormEvent } from "react"
 
