@@ -1,13 +1,19 @@
+'use client'
 import { useEffect, useRef, useState } from 'react';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import '../../../public/styles/grapesjs.module.css';
+
 import LoadingFallback from './LoadingFallback';
 import { AddBlocks } from './Blocks';
-
+import PrintPDFButton from './PrintPDFButton';
+import { AddPdfBlocks } from './AddPdfBlocks';
+//import 'grapesjs-blocks-basic'; // Asegúrate de que esté correctamente instalado
+import blocksBasic from 'grapesjs-blocks-basic';
 
 const GrapesJSComponent = () => {
-
     const editorRef = useRef<HTMLDivElement | null>(null);
+    const [htmlContent, setHtmlContent] = useState<string>('');
 
     useEffect(() => {
         if (editorRef.current) {
@@ -15,37 +21,45 @@ const GrapesJSComponent = () => {
                 container: editorRef.current,
                 fromElement: true,
                 height: '100%',
-
-                blockManager: {
-                    appendTo: '', // El contenedor donde se mostrará el panel de bloques
+                plugins: [blocksBasic],
+                pluginsOpts: {
+                    blocksBasic: { /* Opciones del plugin */ }
                 },
-
                 
-                // Opciones adicionales
                 storageManager: {
-                    type: 'local', // Type of the storage, available: 'local' | 'remote'
-                    autosave: true, // Store data automatically
-                    autoload: true, // Autoload stored data on init
-                    stepsBeforeSave: 1, // If autosave enabled, indicates how many changes are necessary before store method is triggered
+                    type: 'local',
+                    autosave: true,
+                    autoload: true,
+                    stepsBeforeSave: 1,
                     options: {
-                        local: { // Options for the `local` type
-                            key: 'gjsProject', // The key for the local storage
+                        local: {
+                            key: 'gjsProject',
                         },
-                    }
+                    },
                 },
             });
-            AddBlocks(editor)
+            AddBlocks(editor),
 
+            // Obtén el contenido de GrapesJS cada vez que cambie
+            editor.on('update', () => {
+                const html = editor.getHtml();
+                setHtmlContent(html);
+            });
         }
     }, []);
 
+    // Componente PDF para exportar el contenido de GrapesJS
+    
+
     return (
-        <div className="h-screen flex">
+        <div className="h-screen flex flex-col">
+            <PrintPDFButton></PrintPDFButton>
 
-            <div ref={editorRef} className="w-3/4 h-screen" />
-
+            {/* Editor GrapesJS */}
+            <div ref={editorRef} className="w-full h-full" />
         </div>
     );
 };
+
 
 export default GrapesJSComponent;

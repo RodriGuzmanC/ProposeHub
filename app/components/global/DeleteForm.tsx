@@ -21,13 +21,13 @@ export default function DeleteFormModal({userId, userName, closeEvent, deleteEve
         success: {
             render({data} : any) {
                 closeEvent(); // Llama a closeEvent cuando la promesa se resuelve
-                return data.message || 'Eliminado correctamente ';
+                return data?.message ?? 'Eliminado correctamente ';
             },
         },
         error: {
           render({ data } : any) {
             // Aquí 'data' contiene el error rechazado
-            return data.message || 'Error al eliminar'; // Usa el mensaje de error o un mensaje predeterminado
+            return data?.message ?? 'Error al eliminar'; // Usa el mensaje de error o un mensaje predeterminado
         },
         },
     }

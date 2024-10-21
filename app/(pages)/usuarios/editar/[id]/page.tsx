@@ -1,4 +1,3 @@
-'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,46 +7,11 @@ import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { postData } from "@/lib/utils/methods"
 import Link from "next/link"
 import { FormEvent } from "react"
-import { rolesData, UsuariosDataExample } from "@/lib/api"
 import BackLink from "@/app/components/global/BackLink"
+import EditarUsuarioClientPage from "./client"
+import { obtenerRoles } from "@/lib/services/rol"
+import { obtenerUsuario } from "@/lib/services/usuario"
 
-type Contact = {
-    id: number;
-    correo: string;
-    nombre: string;
-    telefono: string;
-    organizacion: number;
-    estado: string;
-}
-
-type Organization = {
-    id: number;
-    nombre: string;
-    telefono: string;
-    correo: string;
-}
-
-const organizationsData: Organization[] = [
-    { id: 1, nombre: "Organización Alpha", telefono: "555-1234", correo: "contacto@alpha.com" },
-    { id: 2, nombre: "Beta Solutions", telefono: "555-5678", correo: "info@beta.com" },
-    { id: 3, nombre: "Gamma Corp", telefono: "555-9101", correo: "support@gamma.com" },
-    { id: 4, nombre: "Delta Group", telefono: "555-1213", correo: "sales@delta.com" },
-    { id: 5, nombre: "Epsilon Enterprises", telefono: "555-1415", correo: "contact@epsilon.com" },
-    { id: 6, nombre: "Zeta Innovations", telefono: "555-1617", correo: "hello@zeta.com" },
-    { id: 7, nombre: "Eta Solutions", telefono: "555-1819", correo: "info@eta.com" },
-    { id: 8, nombre: "Theta Technologies", telefono: "555-2021", correo: "support@theta.com" },
-    { id: 9, nombre: "Iota Ventures", telefono: "555-2223", correo: "hello@iota.com" },
-    { id: 10, nombre: "Kappa Labs", telefono: "555-2425", correo: "contact@kappa.com" }
-];
-
-const contactos: Contact[] = [
-    { id: 1, correo: 'juan@gmail.com', nombre: 'Juan Pérez', telefono: '555-1234', organizacion: 1, estado: 'activo' },
-    { id: 2, correo: 'mari@gmail.com', nombre: 'María López', telefono: '555-5678', organizacion: 2, estado: 'activo' },
-    { id: 3, correo: 'carlos@gmail.com', nombre: 'Carlos García', telefono: '555-9012', organizacion: 3, estado: 'activo' },
-    { id: 4, correo: 'ana@gmail.com', nombre: 'Ana González', telefono: '555-3456', organizacion: 4, estado: 'inactivo' },
-    { id: 5, correo: 'pedro@gmail.com', nombre: 'Pedro Martínez', telefono: '555-7890', organizacion: 5, estado: 'activo' },
-    { id: 6, correo: 'sofia@gmail.com', nombre: 'Sofía Fernández', telefono: '555-1122', organizacion: 6, estado: 'inactivo' }
-]
 
 type PageProps = {
     params: {
@@ -55,86 +19,32 @@ type PageProps = {
     };
 }
 
-const roles = rolesData
-const usuarios = UsuariosDataExample
-
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const formEntries = Object.fromEntries(formData.entries());
-    console.log(formEntries)
+const fetchRoles = async () => {
     try {
-        const data = await postData('https://proposehub.p.rapidapi.com/personas', { formEntries });
-        console.log(data);
+        const resultado = await obtenerRoles();
+        return resultado;
     } catch (error) {
-        console.error('Error:', error);
+        console.error(error);
+        return []; // Retornar un arreglo vacío en caso de error
     }
-}
+};
 
-export default function Page({ params }: PageProps) {
-    const usuarioActual = usuarios.find((c) => c.id === parseInt(params.id));
+const fetchUsuario = async (id: number) => {
+    try {
+        const resultado = await obtenerUsuario(id);
 
-    if (!usuarioActual) {
-        return <p>Contacto no encontrado</p>;
+        return resultado
+    } catch (error) {
+        console.error(error);
     }
+};
+
+export default async function Page({ params }: PageProps) {
+    // Llama a fetchCliente directamente
+    const usuario = await fetchUsuario(parseInt(params.id));
+    const roles = await fetchRoles();
 
     return (
-        <div className="container mx-auto px-8 py-8">
-            <BackLink href="/usuarios">Volver a usuarios</BackLink>
-            <h1 className="text-3xl font-bold mb-6">Editar Usuario - {params.id}</h1>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                    <Label htmlFor="nombre">Nombre</Label>
-                    <div className="relative">
-                        <User className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                        <Input
-                            id="nombre"
-                            name="nombre"
-                            className="pl-8"
-                            defaultValue={usuarioActual.nombre}
-                            required
-                        />
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="correo">Correo</Label>
-                    <div className="relative">
-                        <Mail className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                        <Input
-                            id="correo"
-                            name="correo"
-                            type="email"
-                            className="pl-8"
-                            defaultValue={usuarioActual.correo}
-                            required
-                        />
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="rol">Rol</Label>
-                    <div className="relative">
-                        <Building className="absolute left-2 top-2.5 h-4 w-4 text-gray-500 z-10" />
-                        <Select name="rol" defaultValue={usuarioActual.id_rol.toString()}>
-                            <SelectTrigger className="pl-8">
-                                <SelectValue placeholder="Selecciona un rol" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {roles.map((organizacion) => (
-                                    <SelectItem key={organizacion.id} value={organizacion.id.toString()}>
-                                        {organizacion.nombre}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                <div className='w-full flex justify-end'>
-                    <ButtonTheme type="submit" className='w-fit'>
-                        <Users className="mr-2 h-4 w-4" />
-                        Editar Usuario
-                    </ButtonTheme>
-                </div>
-            </form>
-        </div>
+        <EditarUsuarioClientPage usuario={usuario} roles={roles} ></EditarUsuarioClientPage>
     )
 }

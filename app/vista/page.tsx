@@ -2,18 +2,23 @@
 import dynamic from 'next/dynamic';
 import { lazy, Suspense } from 'react';
 import LoadingFallback from '../components/grapes/LoadingFallback';
-import '../../public/styles/grapesjs.module.css'
 
+// Lazy loading para GrapesJSComponent
 const GrapesJSComponent = lazy(() => import('@/app/components/grapes/GrapesJSComponente'));
 
-const EditorPage = () => {
+
+
+export default function EditorPage() {
     return (
-        <div className="h-screen">
-            <Suspense fallback={<LoadingFallback />}>
-                <GrapesJSComponent />
-            </Suspense>
+        <div className="h-screen flex flex-col">
+
+            {/* El editor de GrapesJS */}
+            <div className="flex-grow">
+                <Suspense fallback={<LoadingFallback />}>
+                    <GrapesJSComponent />
+                </Suspense>
+            </div>
         </div>
     );
 };
 
-export default EditorPage;
