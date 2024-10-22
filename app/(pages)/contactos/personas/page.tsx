@@ -1,7 +1,8 @@
 "use server"
 
 import { obtenerClientes } from "@/lib/services/cliente";
-import PersonasClient from "./client";
+import PersonasVistaClient from "./client";
+
 
 
 export default async function PersonasServer() {
@@ -9,6 +10,6 @@ export default async function PersonasServer() {
   const data = await obtenerClientes()
 
   return (
-    <PersonasClient data={data}></PersonasClient>
+    <PersonasVistaClient data={data}></PersonasVistaClient>
   );
 }

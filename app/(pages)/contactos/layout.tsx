@@ -58,7 +58,7 @@ export default function ModernProposalSidebar({ children }: SidebarProps) {
                                 </Button>
                             </Link>
                         ))}
-                        <div className="pt-4 mt-4 border-t border-gray-800">
+                        {/*<div className="pt-4 mt-4 border-t border-gray-800">
                             <Button
                                 variant="ghost"
                                 className="w-full justify-start px-2 py-1.5 text-gray-400 hover:bg-blue-600/10 hover:text-white"
@@ -66,7 +66,7 @@ export default function ModernProposalSidebar({ children }: SidebarProps) {
                                 <Trash className="mr-2 h-4 w-4" />
                                 Eliminados
                             </Button>
-                        </div>
+                        </div>*/}
                     </nav>
                 </ScrollArea>
             </aside>

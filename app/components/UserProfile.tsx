@@ -12,7 +12,7 @@ export const UserProfileItem = ({ name, company, phone, isSelected, onClick } : 
   return (
     <div 
       className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
-        isSelected ? 'item-seleccionable-active' : 'bg-white border-gray-200 hover:bg-gray-50'
+        isSelected ? 'item-seleccionable-active text-white' : 'bg-white border-gray-200 hover:bg-gray-50'
       }`}
       onClick={onClick}
     >
@@ -30,12 +30,11 @@ export const UserProfileItem = ({ name, company, phone, isSelected, onClick } : 
 
 interface ServItemProps{
   name: string,
-  description: string,
   isSelected: boolean,
   onClick: () => void
 }
 
-export const ServiceItem = ({ name, description, isSelected, onClick } : ServItemProps) => {
+export const ServiceItem = ({ name, isSelected, onClick } : ServItemProps) => {
   return (
     <div 
       className={`flex w-full items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
@@ -48,7 +47,6 @@ export const ServiceItem = ({ name, description, isSelected, onClick } : ServIte
       </div>
       <div>
         <h3 className="text-sm font-semibold text-gray-900">{name}</h3>
-        <p className="text-xs text-gray-800">{description}</p>
       </div>
     </div>
   );

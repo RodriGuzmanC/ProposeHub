@@ -13,9 +13,10 @@ import PagesLoading from '../components/skeletons/PagesLoading'
 
 const navItems = [
   { id: 'inicio', icon: Home, label: 'Inicio', href: '/inicio' },
-  { id: 'contactos', icon: Users, label: 'Contactos', href: '/contactos' },
+  { id: 'contactos', icon: Users, label: 'Contactos', href: '/contactos/personas' },
   { id: 'propuestas', icon: Briefcase, label: 'Propuestas', href: '/propuestas' },
-  { id: 'mensajes', icon: MessageSquare, label: 'Mensajes', href: '/mensajes' },
+  { id: 'plantillas', icon: Briefcase, label: 'Plantillas', href: '/plantillas' },
+  //{ id: 'mensajes', icon: MessageSquare, label: 'Mensajes', href: '/mensajes' },
   { id: 'usuarios', icon: Users, label: 'Usuarios', href: '/usuarios' }
 ]
 

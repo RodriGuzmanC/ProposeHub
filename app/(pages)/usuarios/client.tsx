@@ -15,11 +15,16 @@ import { eliminarUsuario } from '@/lib/services/usuario'
 
 
 export default function UsuariosClientPage({ usuarios }: any) {
-    const [filteredData, setFilteredData] = useState(usuarios);
+
+    const [filteredData, setFilteredData] = useState([]);
 
     async function eliminarFun(id: number) {
         await eliminarUsuario(id)
     }
+
+    useEffect(() => {
+        setFilteredData(usuarios);
+      }, [usuarios]);
 
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
@@ -39,12 +44,7 @@ export default function UsuariosClientPage({ usuarios }: any) {
                     </div>
                     <div className="space-y-4">
                         {filteredData.map((usuario: any) => (
-                            /*<ContactInfoCard
-                              key={usuario.id}
-                              id={usuario.id}
-                              correo={usuario.correo}
-                              nombre={usuario.nombre}
-                            />*/
+                            
                             <CustomItemCard
                                 id={usuario.id}
                                 nombre={usuario.nombre}

@@ -11,9 +11,10 @@ interface FormData {
 interface Paso4Props {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  handleSubmit: () => void
 }
 
-export default function Paso4({ formData, setFormData }: Paso4Props) {
+export default function Paso4({ formData, setFormData, handleSubmit }: Paso4Props) {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -90,7 +91,7 @@ export default function Paso4({ formData, setFormData }: Paso4Props) {
         </div>
 
         <div className="flex justify-center">
-          <Button onClick={()=>{}} variant='primary' href='/'>
+          <Button onClick={handleSubmit} variant='primary'>
             Generar Propuesta
           </Button>
         </div>

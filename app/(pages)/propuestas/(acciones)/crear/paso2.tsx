@@ -4,40 +4,30 @@ import Breadcrumb from '@/app/components/Breadcrumb';
 import Button from '@/app/components/Button';
 import Tab from '@/app/components/Tab';
 import { UserProfileItem } from '@/app/components/UserProfile';
+import { obtenerClientes } from '@/lib/services/cliente';
+import { obtenerOrganizaciones } from '@/lib/services/organizacion';
 
-interface Contact {
-  id: number;
-  name: string;
-  company: string;
-  phone: string;
-}
-
-interface Organization {
-  id: number;
-  name: string;
-  details: string;
-}
 
 interface Page2Props {
-  selectedContact: Contact | null;
-  setSelectedContact: (contact: Contact | null) => void;
+  selectedContact: any;
+  setSelectedContact: (contact: any) => void;
   nextStep: () => void;
 }
 
-const contactsData: Contact[] = [
-  { id: 1, name: 'Julio Abraham', company: 'Armstrong SAC', phone: '993 943 812' },
-  { id: 2, name: 'Ana Martínez', company: 'TechCorp', phone: '987 654 321' },
-  { id: 3, name: 'Carlos Rodríguez', company: 'InnovaSoft', phone: '912 345 678' },
-];
-
-const organizationsData: Organization[] = [
-  { id: 10, name: 'Armstrong SAC', details: 'Tecnología' },
-  { id: 11, name: 'TechCorp', details: 'Consultoría' },
-  { id: 20, name: 'InnovaSoft', details: 'Desarrollo de software' },
-];
 
 export default function Page2({ selectedContact, setSelectedContact, nextStep }: Page2Props) {
-  const [selectedUser, setSelectedUser] = useState<Contact | null>(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [contactos, setContactos] = useState<any>([])
+  const [organizaciones, setOrganizaciones] = useState<any>([])
+
+  async function fetchContactos(){
+    setContactos(await obtenerClientes())
+  }
+  async function fetchOrganizaciones(){
+    setOrganizaciones(await obtenerOrganizaciones())
+  }
+  fetchContactos()
+  fetchOrganizaciones()
 
   return (
     <div className='flex flex-col gap-8'>
@@ -56,8 +46,8 @@ export default function Page2({ selectedContact, setSelectedContact, nextStep }:
         </Button>
       </div>
       <Tab 
-        contactsData={contactsData} 
-        organizationsData={organizationsData} 
+        contactsData={contactos} 
+        organizationsData={organizaciones} 
         selectedContact={selectedContact}
         setSelectedContact={setSelectedContact}
       />

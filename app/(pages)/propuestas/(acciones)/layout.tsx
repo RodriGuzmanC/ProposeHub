@@ -1,7 +1,7 @@
-import { LayoutProps } from '@/.next/types/app/layout'
+import { LayoutPropsLib } from '@/lib/utils/definitions'
 import React from 'react'
 
-export default function layout({children} : LayoutProps) {
+export default function layout({children} : LayoutPropsLib) {
   return (
     <div className='h-screen overflow-auto'>
       {children}

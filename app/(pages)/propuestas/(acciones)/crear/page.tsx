@@ -5,6 +5,7 @@ import Paso1 from './paso1';
 import Paso2 from './paso2';
 import Paso3 from './paso3';
 import Paso4 from './paso4';
+import { crearPropuesta } from '@/lib/services/propuesta';
 
 export default function Page() {
     {/** Breadcrumb */ }
@@ -13,8 +14,8 @@ export default function Page() {
     const previousStep = () => setStep(step - 1);
 
     {/** Datos */}
-    const [plantillaSeleccionada, setPlantillaSeleccionada] = useState(null);
-    const [selectedContact, setSelectedContact] = useState(null);
+    const [plantillaSeleccionada, setPlantillaSeleccionada] = useState<number | null>(null);
+    const [selectedContact, setSelectedContact] = useState<number | null>(null);
     const [selectedService, setSelectService] = useState(null);
     const [formData, setFormData] = useState({
         proposalName: '',
@@ -23,6 +24,24 @@ export default function Page() {
         additionalComments: ''
     });
 
+    const createProposalData = () => {
+        return {
+            plantillaSeleccionada,
+            selectedContact,
+            selectedService,
+            ...formData,
+        };
+    };
+
+    async function postPropuesta() {
+        const propuestaData = createProposalData();
+        try {
+            await crearPropuesta(propuestaData);
+            console.log(`Todo bien : ${propuestaData}`)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className='flex justify-center w-full bg-slate-200 py-10'>
@@ -47,6 +66,7 @@ export default function Page() {
                 {step === 3 && <Paso4 
                 formData={formData}
                 setFormData={setFormData}
+                    handleSubmit={postPropuesta}
                 />}
             </div>
         </div>

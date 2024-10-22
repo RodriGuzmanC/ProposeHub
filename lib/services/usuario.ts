@@ -15,7 +15,11 @@ const UsuariosDataExample = [
 
 // Obtener todas las organizaciones
 export const obtenerUsuarios = async () => {
-    return UsuariosDataExample;
+    try {
+      return UsuariosDataExample;
+    } catch (error) {
+      return false;
+    }
 };
 
 // Obtener una organización por ID

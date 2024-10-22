@@ -1,35 +1,32 @@
 'use client'
 import Button from '@/app/components/Button';
 import { ServiceItem } from '@/app/components/UserProfile';
-import React from 'react';
+import { obtenerServicios } from '@/lib/services/servicio';
+import React, { useState } from 'react';
 
-interface Servicio {
-  id: number;
-  name: string;
-  details: string;
-}
 
 interface Page3Props {
-  selectedService: number | null;
-  setSelectedService: (id: number) => void;
+  selectedService: any
+  setSelectedService: (id: any) => void;
   nextStep: () => void;
 }
 
-const servicios: Servicio[] = [
-  { id: 1, name: 'Diseño web', details: 'Servicio de diseño web' },
-  { id: 2, name: 'Aplicación web', details: 'Servicio de aplicación web' },
-  { id: 3, name: 'Meta Ads', details: 'Servicio de anuncios de Facebook' },
-];
 
 export default function Page3({ selectedService, setSelectedService, nextStep }: Page3Props) {
+  const [servicios, setServicios] = useState<any>([])
+
+  async function fetchServicios(){
+    setServicios(await obtenerServicios())
+  }
+  fetchServicios()
+
   return (
     <div className="flex-col flex gap-6 items-center w-full">
       <h2 className="text-2xl font-bold text-gray-950">Selecciona el Servicio</h2>
-      {servicios.map((servicio) => (
+      {servicios.map((servicio: any) => (
         <ServiceItem
           key={servicio.id}
-          name={servicio.name}
-          description={servicio.details}
+          name={servicio.nombre}
           isSelected={servicio.id === selectedService}
           onClick={() => setSelectedService(servicio.id)}
         />

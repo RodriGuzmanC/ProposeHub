@@ -42,11 +42,11 @@ export default function CustomItemCard({ id, nombre, elementos, verHref, editarH
           </div>
         </div>
         <div className="flex space-x-2">
-          <Link href={verHref}>
+          {/*<Link href={verHref}>
             <Button variant="ghost" size="icon">
               <Eye className="h-4 w-4" />
             </Button>
-          </Link>
+          </Link>*/}
           <Link href={editarHref}>
             <Button variant="ghost" size="icon">
               <Edit className="h-4 w-4" />

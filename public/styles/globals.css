@@ -108,9 +108,14 @@ body {
 /* Componentes */
 
 .item-seleccionable-active{
-  background-color: var(--color-principal-200);
+  background-color: var(--color-principal-100);
   border-color: var(--color-principal-600);
   border-width: 1px;
+}
+
+.item-seleccionable-active h3, .item-seleccionable-active p{
+  color: #fff !important;
+
 }
 
 .card-seleccionable-active{

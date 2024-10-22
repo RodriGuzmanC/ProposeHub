@@ -25,9 +25,9 @@ export default function Tab({ contactsData, organizationsData, selectedContact, 
           {contactsData.map(contact => (
             <UserProfileItem
               key={contact.id}
-              name={contact.name}
-              company={contact.company}
-              phone={contact.phone}
+              name={contact.nombre}
+              company={contact.nombreOrganizacion}
+              phone={contact.telefono}
               isSelected={selectedContact === contact.id}
               onClick={() => setSelectedContact(contact.id)}
             />
@@ -48,8 +48,8 @@ export default function Tab({ contactsData, organizationsData, selectedContact, 
           {organizationsData.map(org => (
               <UserProfileItem
                 key={org.id}
-                name={org.name}
-                phone={org.details}
+                name={org.nombre}
+                phone={org.correo}
                 isSelected={selectedContact === org.id}
                 onClick={() => setSelectedContact(org.id)}
               />

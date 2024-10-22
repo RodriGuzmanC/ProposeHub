@@ -55,14 +55,10 @@ export default function ModernProposalSidebar({children} : LayoutPropsLib) {
             >
               <state.icon className={`mr-2 h-4 w-4 ${activeState === state.id ? 'text-white' : ''}`} />
               {state.label}
-              {state.id === 'en-progreso' && (
-                <span className="ml-auto bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded-full">
-                  14
-                </span>
-              )}
+              
             </Button>
           ))}
-          <div className="pt-4 mt-4 border-t border-gray-800">
+          {/*<div className="pt-4 mt-4 border-t border-gray-800">
             <Button
               variant="ghost"
               className="w-full justify-start px-2 py-1.5 text-gray-400 hover:bg-blue-600/10 hover:text-white"
@@ -70,7 +66,7 @@ export default function ModernProposalSidebar({children} : LayoutPropsLib) {
               <Settings className="mr-2 h-4 w-4" />
               Configuración
             </Button>
-          </div>
+          </div>*/}
         </nav>
       </ScrollArea>
     </aside>
