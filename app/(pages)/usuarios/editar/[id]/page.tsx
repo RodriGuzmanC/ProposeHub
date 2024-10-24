@@ -10,16 +10,6 @@ type PageProps = {
     };
 }
 
-const fetchRoles = async () => {
-    try {
-        const resultado = await obtenerRoles();
-        return resultado;
-    } catch (error) {
-        console.error(error);
-        return []; // Retornar un arreglo vacío en caso de error
-    }
-};
-
 const fetchUsuario = async (id: number) => {
     try {
         const resultado = await obtenerUsuario(id);
@@ -33,9 +23,8 @@ const fetchUsuario = async (id: number) => {
 export default async function Page({ params }: PageProps) {
     // Llama a fetchCliente directamente
     const usuario = await fetchUsuario(parseInt(params.id));
-    const roles = await fetchRoles();
 
     return (
-        <EditarUsuarioClientPage usuario={usuario} roles={roles} ></EditarUsuarioClientPage>
+        <EditarUsuarioClientPage usuario={usuario} ></EditarUsuarioClientPage>
     )
 }

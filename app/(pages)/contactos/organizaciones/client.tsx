@@ -2,7 +2,6 @@
 import ButtonTheme from '@/app/components/global/ButtonTheme'
 import CustomItemCard from '@/app/components/global/CustomItemCard'
 import FilterComponent from '@/app/components/global/FilterComponent'
-import OrgInfoCard from '@/app/components/organizaciones/OrgInfoCard'
 import { eliminarOrganizacion } from '@/lib/services/organizacion'
 import { Building, Building2 } from 'lucide-react'
 import Link from 'next/link'
@@ -11,6 +10,7 @@ import { useState } from 'react'
 
 
 export default function OrganizacionClient({data}: any) {
+    
     async function eliminarFun (id: number){
         await eliminarOrganizacion(id)
     }
@@ -35,7 +35,6 @@ export default function OrganizacionClient({data}: any) {
                                 </Link>
                             </FilterComponent>
 
-
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -48,7 +47,6 @@ export default function OrganizacionClient({data}: any) {
                             eliminarAction={eliminarFun}
                             nombre={organization.nombre} 
                             elementos={[organization.correo, organization.telefono]}></CustomItemCard>
-                            /*<OrgInfoCard key={organization.id} id={organization.id} nombre={organization.nombre} telefono={organization.telefono} correo={organization.correo}></OrgInfoCard>*/
                         ))}
                     </div>
                 </div>

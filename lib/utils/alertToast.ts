@@ -11,11 +11,17 @@ interface toastEditInterface{
     event: (id: number, cuerpo: any) => any
 }
 
+interface toastLoginInterface{
+    correo: string
+    clave: string
+    event: (correo: string, clave: string) => any
+}
+
 export async function crearConToast({cuerpo, event} : toastInterface){
     toast.promise(
       () => event(cuerpo),
       {
-        pending: 'Eliminando...',
+        pending: 'Creando...',
         success: {
             render({data} : any) {
                 return data?.message ?? 'Creado correctamente ';
@@ -44,6 +50,26 @@ export async function editarConToast({ id, cuerpo, event }: toastEditInterface) 
             error: {
                 render({ data }: any) {
                     return data?.message ?? 'Error al editar';
+                },
+            },
+        }
+    );
+}
+
+
+export async function loginConToast({ correo, clave, event }: toastLoginInterface) {
+    toast.promise(
+        () => event(correo, clave),
+        {
+            pending: 'Validando...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? 'Logueado correctamente';
+                },
+            },
+            error: {
+                render({ data }: any) {
+                    return data?.message ?? 'Error al loguearse';
                 },
             },
         }

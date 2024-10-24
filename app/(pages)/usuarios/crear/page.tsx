@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { User, Building, Users, Mail, Key } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
-import { FormEvent } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import BackLink from "@/app/components/global/BackLink"
 import { crearUsuario } from "@/lib/services/usuario"
 import { crearConToast } from "@/lib/utils/alertToast"
@@ -20,29 +20,30 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     console.log('Form submitted:', formEntries)
 
     try {
-        
-        await crearConToast({ 
-            cuerpo: formEntries, 
-            event: crearUsuario 
+
+        await crearConToast({
+            cuerpo: formEntries,
+            event: crearUsuario
         });
-        
+
     } catch (error) {
         console.error(error)
     }
 }
 
-const fetchRoles = async () => {
-    try {
-        const resultado = await obtenerRoles();
-        return resultado;
-    } catch (error) {
-        console.error(error);
-        return []; // Retornar un arreglo vacío en caso de error
-    }
-};
 
 export default async function Page() {
-    const roles = await fetchRoles()
+
+    const [roles, setRoles] = useState<any>([]);
+
+    const fetchRoles = async () => {
+        const data = await obtenerRoles();
+        setRoles(data);
+    };
+
+    useEffect(() => {
+        fetchRoles();
+    }, []);
 
     return (
         <div className="container mx-auto px-8 py-8">
@@ -82,7 +83,7 @@ export default async function Page() {
                                 <SelectValue placeholder="Selecciona un rol" />
                             </SelectTrigger>
                             <SelectContent>
-                                {roles.map((rol:any) => (
+                                {roles.map((rol: any) => (
                                     <SelectItem key={rol.id} value={rol.id.toString()}>
                                         {rol.nombre}
                                     </SelectItem>

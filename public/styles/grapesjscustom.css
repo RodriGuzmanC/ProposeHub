@@ -6,22 +6,32 @@
   
   /* Primary color for the background */
   .gjs-one-bg {
-    background-color: #78366a;
+    background-color: #00406C;
   }
   
   /* Secondary color for the text color */
   .gjs-two-color {
-    color: rgba(255, 255, 255, 0.7);
+    color: #ecf3ff;
   }
   
   /* Tertiary color for the background */
   .gjs-three-bg {
-    background-color: #ec5896;
+    background-color: #137cc2;
     color: white;
   }
   
   /* Quaternary color for the text color */
   .gjs-four-color,
   .gjs-four-color-h:hover {
-    color: #ec5896;
+    color: #45b0f8;
+  }
+
+
+  .my-custom-button::before{
+    margin-right: 10px;
+  }
+
+  .btn-salir-editor{
+    order: -1;
+    margin-right: 50px;
   }

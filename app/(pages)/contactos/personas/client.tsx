@@ -33,17 +33,6 @@ export default async function PersonasVistaClient({ data }: any) {
             </FilterComponent>
           </div>
           <div className="space-y-4">
-            {/*filteredData.map((propuesta : any) => (
-              <ContactInfoCard
-                key={propuesta.id}
-                id={propuesta.id}
-                correo={propuesta.correo}
-                nombre={propuesta.nombre}
-                telefono={propuesta.telefono}
-                organizacion={propuesta.organizacion}
-              />
-              
-            ))*/}
             {filteredData.map((cliente: any) => (
               <CustomItemCard
                 key={cliente.id}

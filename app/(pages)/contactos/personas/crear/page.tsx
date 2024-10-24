@@ -1,13 +1,10 @@
 'use client'
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { User, Phone, ArrowLeft, Building, Users, Mail } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
-import { postData } from "@/lib/utils/methods"
-import Link from "next/link"
-import { FormEvent } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import BackLink from "@/app/components/global/BackLink"
 import { crearCliente } from "@/lib/services/cliente"
 import { obtenerOrganizaciones } from "@/lib/services/organizacion"
@@ -32,19 +29,28 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     }
 }
 
-const fetchOrganizaciones = async () => {
-    try {
-        const resultado = await obtenerOrganizaciones();
-        return resultado;
-    } catch (error) {
-        console.error(error);
-        return []; // Retornar un arreglo vacío en caso de error
-    }
-};
 
+export default function Page() {
+    const [organizaciones, setOrganizaciones] = useState<any | null>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-export default async function Page() {
-    const organizaciones = await fetchOrganizaciones()
+    useEffect(() => {
+        const fetchOrganizaciones = async () => {
+            try {
+                const resultado = await obtenerOrganizaciones();
+                setOrganizaciones(resultado);
+            } catch (error) {
+                console.error(error);
+                setError('Error al cargar organizaciones');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrganizaciones();
+    }, []);
+    
     return (
         <div className="container mx-auto px-8 py-8">
             <BackLink href="/contactos/personas">Volver a contactos</BackLink>
@@ -84,7 +90,7 @@ export default async function Page() {
                                 <SelectValue placeholder="Selecciona una organización" />
                             </SelectTrigger>
                             <SelectContent>
-                                {organizaciones.map((organizacion) => (
+                                {organizaciones.map((organizacion : any) => (
                                     <SelectItem key={organizacion.id} value={organizacion.id.toString()}>
                                         {organizacion.nombre}
                                     </SelectItem>

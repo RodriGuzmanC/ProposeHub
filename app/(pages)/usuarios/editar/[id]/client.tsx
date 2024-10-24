@@ -2,31 +2,18 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building, Mail, User, Users } from 'lucide-react'
+import { Building, Key, Mail, User, Users } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { postData } from "@/lib/utils/methods"
-import { FormEvent } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import BackLink from "@/app/components/global/BackLink"
 import { editarUsuario } from "@/lib/services/usuario"
 import { editarConToast } from "@/lib/utils/alertToast"
+import { obtenerRoles } from "@/lib/services/rol"
 
 
 
-
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const formEntries = Object.fromEntries(formData.entries());
-    console.log(formEntries)
-    try {
-        const data = await postData('https://proposehub.p.rapidapi.com/personas', { formEntries });
-        console.log(data);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-export default function EditarUsuarioClientPage({ usuario, roles }: any) {
+export default function EditarUsuarioClientPage({ usuario }: any) {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,6 +32,18 @@ export default function EditarUsuarioClientPage({ usuario, roles }: any) {
         }
     }
 
+
+    const [roles, setRoles] = useState<any>([]);
+
+    const fetchRoles = async () => {
+        const data = await obtenerRoles();
+        setRoles(data);
+    };
+
+    useEffect(() => {
+        fetchRoles();
+    }, []);
+    
     return (
         <div className="container mx-auto px-8 py-8">
             <BackLink href="/usuarios">Volver a usuarios</BackLink>
@@ -93,6 +92,13 @@ export default function EditarUsuarioClientPage({ usuario, roles }: any) {
                                 ))}
                             </SelectContent>
                         </Select>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="clave">Contraseña</Label>
+                    <div className="relative">
+                        <Key className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                        <Input id="clave" name="clave" type="password" className="pl-8" required />
                     </div>
                 </div>
                 <div className='w-full flex justify-end'>

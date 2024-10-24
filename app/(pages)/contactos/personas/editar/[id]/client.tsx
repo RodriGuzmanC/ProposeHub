@@ -94,7 +94,7 @@ export default function EditarClienteClient({ datosContactoActual, organizacione
                     <Label htmlFor="organization">Organización</Label>
                     <div className="relative">
                         <Building className="absolute left-2 top-2.5 h-4 w-4 text-gray-500 z-10" />
-                        <Select name="organization" defaultValue={datosContactoActual?.organizacion.toString()}>
+                        <Select name="organization" defaultValue={datosContactoActual?.organizacion_id.toString()}>
                             <SelectTrigger className="pl-8">
                                 <SelectValue placeholder="Selecciona una organización" />
                             </SelectTrigger>

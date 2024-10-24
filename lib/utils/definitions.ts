@@ -6,9 +6,11 @@ export interface LayoutPropsLib{
 
 export interface OrganizacionInterface {
     id?: number
-    nombre: string
-    telefono: string
-    correo: string
+    nombre?: string
+    telefono?: string
+    correo?: string
+    created_at?: string
+    updated_at?: string
 }
 
 export interface ClienteInterface {

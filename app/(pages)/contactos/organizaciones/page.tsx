@@ -6,7 +6,6 @@ import OrganizacionClient from './client'
 
 
 export default async function Contactos() {
-
     const data = await obtenerOrganizaciones()
     
     return (

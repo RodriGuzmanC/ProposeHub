@@ -1,11 +1,12 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Search, Clock, Briefcase, Trash, ContactRound, Building2 } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { Search, ContactRound, Building2 } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { LayoutPropsLib } from '@/lib/utils/definitions'
 
 const proposalStates = [
     { id: 'personas', label: 'Personas', icon: ContactRound, href: '/contactos/personas' },
@@ -13,12 +14,9 @@ const proposalStates = [
 ]
 
 
-interface SidebarProps {
-    children: React.ReactNode
-}
 
-export default function ModernProposalSidebar({ children }: SidebarProps) {
-    const router = useRouter();
+
+export default function ModernProposalSidebar({ children }: LayoutPropsLib) {
     const pathName = usePathname()
 
 

@@ -5,7 +5,7 @@ import CreateTemplateModal from '@/app/components/plantillas/createTemplateModal
 import { eliminarPlantilla, obtenerPlantillas } from '@/lib/services/plantilla';
 import { Briefcase, BriefcaseBusiness } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function ListPlantillas() {
     /** Elimina la plantilla seleccionada */
@@ -14,10 +14,14 @@ export default function ListPlantillas() {
     }
     /* Obtiene las plantillas */
     const [plantillas, setPlantillas] = useState<any>([]);
+
     async function fetchPlantillas (){
         setPlantillas(await obtenerPlantillas());
     }
-    fetchPlantillas()
+
+    useEffect(()=>{
+        fetchPlantillas()
+    }, [])
     /** Abre y cierra el modal */
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,13 +34,11 @@ export default function ListPlantillas() {
             <div className="w-full">
                 <div className="flex space-x-4 mb-6 items-end">
                         <h3 className='text-2xl font-bold'>Plantillas</h3>
-                        <button onClick={closeOpenModal}>
-                            <ButtonTheme>
+                            <ButtonTheme onClick={closeOpenModal}>
                                 <BriefcaseBusiness className="w-5 h-5 mr-2" />
                                 <span>Agregar</span>
                                 <span className="ml-2 bg-white bg-opacity-20 text-xs font-bold py-1 px-2 rounded-full">+</span>
                             </ButtonTheme>
-                        </button>
 
                 </div>
             </div>
@@ -49,7 +51,7 @@ export default function ListPlantillas() {
                     nombre={plantilla.nombre} 
                     elementos={['creacion propia']} 
                     verHref='/plantillas/ver' 
-                    editarHref={`/plantillas/editar/${plantilla.id}`}
+                    editarHref={`constructor/editar/${plantilla.id}`}
                     IconCard={Briefcase}
                     eliminarAction={eliminarFun}
                     ></CustomItemCard>

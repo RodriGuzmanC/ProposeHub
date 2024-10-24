@@ -1,3 +1,4 @@
+import { getData, postData, updateData } from "../utils/methods";
 
 const plantillas = [
     { id: 1, nombre: 'Plantilla 1', contenido: 'Descripción corta de la plantilla' },
@@ -8,18 +9,37 @@ const plantillas = [
 
 // Obtener todas las organizaciones
 export const obtenerPlantillas = async () => {
-    return plantillas;
+    try {
+        const data = await getData('plantillas');
+        return data; // Devuelve los datos obtenidos
+    } catch (error) {
+        throw new Error(`Error al obtener plantillas: ${error}`);
+    }
 };
 
 // Obtener una organización por ID
 export const obtenerPlantilla = async (id: number) => {
-    return plantillas.find(org => org.id === id) || null;
+    try {
+        const data = await getData(`plantillas/${id}`);
+        return data; // Devuelve la organización obtenida
+    } catch (error) {
+        throw new Error(`Error al obtener la organización: ${error}`);
+    }
 };
 
 // Crear una nueva organización
 export const crearPlantilla = async (cuerpo: any) => {
-    
-    return true;
+    try {
+        const data = {
+            nombre: cuerpo.nombre,
+            descripcion: cuerpo.descripcion
+        }
+        return await postData('plantillas/', data);
+        //return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al crear plantilla: ${error instanceof Error ? error.message : String(error)}`);
+
+    }
 };
 
 // Editar una organización
@@ -39,4 +59,25 @@ export const eliminarPlantilla = async (id: number): Promise<boolean> => {
         return true;
     }
     return false;
+};
+
+
+export const guardarPlantilla = async (id:number, dataGrapesJson: any) => {
+    try {
+        const data = await updateData(`plantillas/contenido/${id}`, dataGrapesJson);
+        return data; // Devuelve la organización obtenida
+    } catch (error : any) {
+        throw new Error(`Error al guardar plantilla: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
+
+
+export const obtenerContenidoPlantilla = async (id:number) => {
+    try {
+        const contenidoJson = await getData(`plantillas/contenido/${id}`);
+        return contenidoJson.data; // Devuelve la organización obtenida
+    } catch (error) {
+        throw new Error(`Error al guardar la plantilla: ${error}`);
+    }
 };

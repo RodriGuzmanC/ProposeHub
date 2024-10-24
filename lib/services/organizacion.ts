@@ -1,4 +1,5 @@
 import { OrganizacionInterface } from "../utils/definitions";
+import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 
 const OrganizationsDataExample = [
@@ -14,37 +15,54 @@ const OrganizationsDataExample = [
     { id: 10, nombre: "Kappa Labs", telefono: '5552425', correo: "contact@kappa.com" }
 ];
 
+
 // Obtener todas las organizaciones
-export const obtenerOrganizaciones = async () => {
-    return OrganizationsDataExample;
+export const obtenerOrganizaciones = async (): Promise<any[]> => {
+    try {
+        const data = await getData('organizaciones');
+        return data; // Devuelve los datos obtenidos
+    } catch (error) {
+        throw new Error(`Error al obtener organizaciones: ${error}`);
+    }
 };
 
 // Obtener una organización por ID
-export const obtenerOrganizacion = async (id: number) => {
-    return OrganizationsDataExample.find(org => org.id === id) || null;
+export const obtenerOrganizacion = async (id: number): Promise<any> => {
+    try {
+        const data = await getData(`organizaciones/${id}`);
+        return data; // Devuelve la organización obtenida
+    } catch (error) {
+        throw new Error(`Error al obtener la organización: ${error}`);
+    }
 };
 
 // Crear una nueva organización
-export const crearOrganizacion = async (cuerpo: any) => {
-    
-    return true;
+export const crearOrganizacion = async (cuerpo: any): Promise<boolean> => {
+    try {
+        await postData('organizaciones', cuerpo);
+        return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al crear organización: ${error}`);
+    }
 };
 
 // Editar una organización
-export const editarOrganizacion = async (id: number, cuerpo: any) => {
+export const editarOrganizacion = async (id: number, cuerpo: any): Promise<boolean> => {
     try {
-        return true
+        await updateData(`organizaciones/${id}`, cuerpo);
+        return true; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
-        return false
+        throw new Error(`Error al editar organización: ${error}`);
     }
 };
 
 // Eliminar una organización
 export const eliminarOrganizacion = async (id: number): Promise<boolean> => {
-    const index = OrganizationsDataExample.findIndex(org => org.id === id);
-    if (index !== -1) {
-        OrganizationsDataExample.splice(index, 1);
-        return true;
+    try {
+        await deleteData(`organizaciones/${id}`);
+        return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al eliminar organización: ${error}`);
     }
-    return false;
 };
+

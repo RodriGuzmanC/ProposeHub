@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../public/styles/globals.css";
-import React, { Suspense } from 'react';
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import React from 'react';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'; // Importa los estilos en tu componente principal o en tu archivo de estilos globales
 

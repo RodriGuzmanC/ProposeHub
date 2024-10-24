@@ -1,3 +1,4 @@
+import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 const rolesData = [
     { id: 1, nombre: 'editor', descripcion: 'Responsable de la edición de contenido y publicaciones.' },
@@ -6,37 +7,55 @@ const rolesData = [
     { id: 4, nombre: 'diseñador', descripcion: 'Crea y diseña los elementos visuales y la experiencia de usuario.' }
 ];
 
-// Obtener todas las organizaciones
+// Obtener todos los clientes
 export const obtenerRoles = async () => {
-    return rolesData;
+    try {
+        //return await getData('roles')
+        return rolesData;
+    } catch (error) {
+        throw new Error(`Error al obtener usuarios: ${error}`);
+    }
 };
 
-// Obtener una organización por ID
+// Obtener un cliente por ID
 export const obtenerRol = async (id: number) => {
-    return rolesData.find(org => org.id === id) || null;
+    try {
+        const cliente = await getData(`roles/${id}`)
+
+        if (!cliente) throw new Error(`Rol con ID ${id} no encontrado`);
+        return cliente;
+    } catch (error) {
+        throw new Error(`Error al obtener rol: ${error}`);
+    }
 };
+
 
 // Crear una nueva organización
-export const crearRol = async (cuerpo: any) => {
-    
-    return true;
+export const crearRol = async (cuerpo: any): Promise<boolean> => {
+    try {
+        await postData('roles', cuerpo);
+        return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al crear el rol: ${error}`);
+    }
 };
 
 // Editar una organización
-export const editarRol = async (id: number, cuerpo: any) => {
+export const editarRol = async (id: number, cuerpo: any): Promise<boolean> => {
     try {
-        return true
+        await updateData(`roles/${id}`, cuerpo);
+        return true; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
-        return false
+        throw new Error(`Error al editar rol: ${error}`);
     }
 };
 
 // Eliminar una organización
 export const eliminarRol = async (id: number): Promise<boolean> => {
-    const index = rolesData.findIndex(org => org.id === id);
-    if (index !== -1) {
-        rolesData.splice(index, 1);
-        return true;
+    try {
+        await deleteData(`roles/${id}`);
+        return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al eliminar rol: ${error}`);
     }
-    return false;
 };

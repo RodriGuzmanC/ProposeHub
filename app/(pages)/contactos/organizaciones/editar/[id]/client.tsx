@@ -1,11 +1,8 @@
-
-import { Button } from "@/components/ui/button"
+"use client"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Phone, ArrowLeft, MapPin, Building, Users, X, Mail } from 'lucide-react'
+import { User, Phone, Users, Mail } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
-import { postData } from "@/lib/utils/methods"
-import Link from "next/link"
 import { FormEvent } from 'react'
 import BackLink from "@/app/components/global/BackLink"
 import { editarOrganizacion } from "@/lib/services/organizacion"
@@ -16,14 +13,12 @@ interface PageProps {
 }
 
 
-
-
 export default async function EditarOrganizacionesClient({ organizacion }: PageProps) {
+
      const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const formEntries = Object.fromEntries(formData.entries())
-        console.log('Form submitted:', formEntries)
     
         try {
             await editarConToast({

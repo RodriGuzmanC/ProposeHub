@@ -1,7 +1,3 @@
-"use client"
-
-import PersonasServer from './personas/page'
-
 
 export default function Contactos() {
   

@@ -1,24 +1,36 @@
 // components/LoginForm.tsx
 'use client'
 import React, { FormEvent, useState } from 'react'
-import { login } from '@/lib/services/usuario'
+import { loginUsuario } from '@/lib/services/usuario'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
+import { loginConToast } from '@/lib/utils/alertToast'
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState('')
+  const [correo, setCorreo] = useState('')
+  const [clave, setClave] = useState('')
   const router = useRouter()
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log(correo, clave)
+    const userInfo = await loginUsuario(correo, clave)
+    console.log(userInfo)
+    if (userInfo) {
+      document.cookie = `userInfo=${encodeURIComponent(JSON.stringify(userInfo))}; path=/;`;
 
-    const formData = new FormData(e.currentTarget)
-    const formEntries = Object.fromEntries(formData.entries())
-    console.log(formEntries)
-    //const result = await login(username, password)
+      router.push('/contactos/personas')
+    }
+
+    /*await loginConToast({
+      correo: correo,
+      clave: clave,
+      event: loginUsuario
+    })*/
 
     /*if (result.success) {
       // Redirigir al usuario a la página de contactos
@@ -44,10 +56,12 @@ export default function LoginForm() {
           <form onSubmit={handleLogin}>
             <div className="space-y-2">
               <Input
-                type="text"
-                id='user'
-                name='user'
-                placeholder="Username"
+                type="email"
+                value={correo}
+                id='correo'
+                name='correo'
+                onChange={(e)=>{setCorreo(e.currentTarget.value)}}
+                placeholder="Tu correo"
                 className="w-full"
                 required
               />
@@ -55,9 +69,11 @@ export default function LoginForm() {
             <div className="space-y-2">
               <Input
                 type="password"
-                id='password'
-                name='password'
-                placeholder="Password"
+                id='clave'
+                name='clave'
+                value={clave}
+                onChange={(e)=>{setClave(e.currentTarget.value)}}
+                placeholder="Contraseña"
                 className="w-full"
                 required
               />

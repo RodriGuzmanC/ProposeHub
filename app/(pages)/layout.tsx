@@ -1,14 +1,12 @@
 'use client'
 
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Home, Users, Briefcase, MessageSquare, PieChart, LogOut, Menu } from 'lucide-react'
-import { HeightIcon } from '@radix-ui/react-icons'
-import { usePathname } from 'next/navigation'
-import clsx from 'clsx'
+import { Home, Users, Briefcase, LogOut, Menu } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import PagesLoading from '../components/skeletons/PagesLoading'
 
 const navItems = [
@@ -21,14 +19,39 @@ const navItems = [
 ]
 
 interface Props {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export default function ModernNavbar({children}: Props) {
+
+
+export default function ModernNavbar({ children }: Props) {
   const [activeItem, setActiveItem] = useState('inicio')
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [nombreUsuario, setNombreUsuario] = useState('')
+  const [correoUsuario, setCorreoUsuario] = useState('')
 
   const pathName = usePathname()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    document.cookie = 'userInfo=; Max-Age=0; path=/;'; // Eliminar la cookie
+    router.push('/auth/login');
+  };
+
+  useEffect(() => {
+    const userInfo = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('userInfo='))
+      ?.split('=')[1];
+
+    if (userInfo) {
+      const usuario = JSON.parse(decodeURIComponent(userInfo));
+      setNombreUsuario(usuario.nombre)
+      setCorreoUsuario(usuario.correo)
+      // Realiza acciones con la información del usuario
+    }
+
+  }, []);
 
   return (
     <div className="flex min-h-screen overflow-auto">
@@ -65,22 +88,22 @@ export default function ModernNavbar({children}: Props) {
             </Avatar>
             {!isCollapsed && (
               <div>
-                <p className="text-sm font-medium">Usuario</p>
-                <p className="text-xs text-gray-400">usuario@ejemplo.com</p>
+                <p className="text-sm font-medium">{nombreUsuario}</p>
+                <p className="text-xs text-gray-400">{correoUsuario}</p>
               </div>
             )}
           </div>
-          <Button variant="ghost" size="sm" className="w-full mt-4" asChild>
-            <Link href="/logout">
+          <Button onClick={handleLogout} variant="ghost" size="sm" className="w-full mt-4" asChild>
+            <div className="flex items-center">
               <LogOut className="h-4 w-4 mr-2" />
-              {!isCollapsed && "Cerrar sesión"}
-            </Link>
+              {!isCollapsed && <span>Cerrar sesión</span>}
+            </div>
           </Button>
         </div>
       </aside>
       <main className="flex-grow">
         <Suspense fallback={<PagesLoading></PagesLoading>}>
-        {children}
+          {children}
         </Suspense>
       </main>
     </div>
