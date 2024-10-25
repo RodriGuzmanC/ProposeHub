@@ -13,7 +13,7 @@ export const obtenerPlantillas = async () => {
         const data = await getData('plantillas');
         return data; // Devuelve los datos obtenidos
     } catch (error) {
-        throw new Error(`Error al obtener plantillas: ${error}`);
+        throw new Error(`Error al obtener plantillas: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
@@ -23,7 +23,7 @@ export const obtenerPlantilla = async (id: number) => {
         const data = await getData(`plantillas/${id}`);
         return data; // Devuelve la organización obtenida
     } catch (error) {
-        throw new Error(`Error al obtener la organización: ${error}`);
+        throw new Error(`Error al obtener la organización: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
@@ -45,9 +45,29 @@ export const crearPlantilla = async (cuerpo: any) => {
 // Editar una organización
 export const editarPlantilla = async (id: number, cuerpo: any) => {
     try {
-        return true
+        const data = {
+            nombre: cuerpo.nombre ?? null,
+            contenido: cuerpo.contenido ?? null
+        }
+        return await updateData(`plantillas/${id}`, data);
+        //return true; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
-        return false
+        throw new Error(`Error al actualizar la plantilla: ${error instanceof Error ? error.message : String(error)}`);
+
+    }
+};
+
+
+export const editarContenidoPlantilla = async (id: number, cuerpo: any) => {
+    try {
+        const data = {
+            contenido: cuerpo.contenido
+        }
+        return await updateData(`plantillas/${id}`, data);
+        //return true; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al actualizar la plantilla: ${error instanceof Error ? error.message : String(error)}`);
+
     }
 };
 
@@ -78,6 +98,6 @@ export const obtenerContenidoPlantilla = async (id:number) => {
         const contenidoJson = await getData(`plantillas/contenido/${id}`);
         return contenidoJson.data; // Devuelve la organización obtenida
     } catch (error) {
-        throw new Error(`Error al guardar la plantilla: ${error}`);
+        throw new Error(`Error al guardar la plantilla: ${error instanceof Error ? error.message : String(error)}`);
     }
 };

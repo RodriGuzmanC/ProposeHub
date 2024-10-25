@@ -1,5 +1,6 @@
+'use client'
 import Button from '@/app/components/Button';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 interface FormData {
   proposalName: string;
@@ -9,20 +10,27 @@ interface FormData {
 }
 
 interface Paso4Props {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  tituloPropuesta: string;
+  setTituloPropuesta: (e: any) => void
+  orgDescripcion: string
+  setOrgDescripcion: (e: any) => void
+  presupuesto: string
+  setPresupuesto: (e: any) => void
+  instruccionesAi: string
+  setInstruccionesAi: (e: any) => void
+  // Handle
   handleSubmit: () => void
 }
 
-export default function Paso4({ formData, setFormData, handleSubmit }: Paso4Props) {
+export default function Paso4({ 
+  tituloPropuesta, setTituloPropuesta, 
+  orgDescripcion, setOrgDescripcion, 
+  presupuesto, setPresupuesto, 
+  instruccionesAi, setInstruccionesAi, 
+  handleSubmit 
+}: Paso4Props) {
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+
 
   return (
     <div className="w-full">
@@ -31,29 +39,29 @@ export default function Paso4({ formData, setFormData, handleSubmit }: Paso4Prop
 
       <form className="space-y-6">
         <div>
-          <label htmlFor="proposalName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
             Nombre de la propuesta
           </label>
           <input
             type="text"
-            id="proposalName"
-            name="proposalName"
-            value={formData.proposalName}
-            onChange={handleInputChange}
+            id="nombre"
+            name="nombre"
+            value={tituloPropuesta}
+            onChange={(e)=>{setTituloPropuesta(e.currentTarget.value)}}
             placeholder="Propuesta"
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
 
         <div>
-          <label htmlFor="companyDescription" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">
             Descripción de la empresa
           </label>
           <textarea
-            id="companyDescription"
-            name="companyDescription"
-            value={formData.companyDescription}
-            onChange={handleInputChange}
+            id="descripcion"
+            name="descripcion"
+            value={orgDescripcion}
+            onChange={(e)=>{setOrgDescripcion(e.currentTarget.value)}}
             placeholder="Una breve descripción de la empresa"
             rows={4}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -61,30 +69,30 @@ export default function Paso4({ formData, setFormData, handleSubmit }: Paso4Prop
         </div>
 
         <div>
-          <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="presupuesto" className="block text-sm font-medium text-gray-700 mb-1">
             Presupuesto
           </label>
           <input
-            type="text"
-            id="budget"
-            name="budget"
-            value={formData.budget}
-            onChange={handleInputChange}
+            type="number"
+            id="presupuesto"
+            name="presupuesto"
+            value={presupuesto}
+            onChange={(e)=>{setPresupuesto(e.currentTarget.value)}}
             placeholder="Presupuesto de la propuesta"
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
 
         <div>
-          <label htmlFor="additionalComments" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="comentariosAdicionales" className="block text-sm font-medium text-gray-700 mb-1">
             Comentarios adicionales
           </label>
           <textarea
-            id="additionalComments"
-            name="additionalComments"
-            value={formData.additionalComments}
-            onChange={handleInputChange}
-            placeholder="Describe si la AI te deseás agregar"
+            id="comentariosAdicionales"
+            name="comentariosAdicionales"
+            value={instruccionesAi}
+            onChange={(e)=>{setInstruccionesAi(e.currentTarget.value)}}
+            placeholder="Indica en que tiene que poner enfasis la AI."
             rows={4}
             className="w-full p-2 border border-gray-300 rounded-md"
           ></textarea>

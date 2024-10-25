@@ -57,6 +57,8 @@ export async function editarConToast({ id, cuerpo, event }: toastEditInterface) 
 }
 
 
+
+
 export async function loginConToast({ correo, clave, event }: toastLoginInterface) {
     toast.promise(
         () => event(correo, clave),

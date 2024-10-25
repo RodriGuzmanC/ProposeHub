@@ -2,17 +2,18 @@
 import Button from '@/app/components/Button';
 import Card from '@/app/components/Card';
 import { obtenerPlantillas } from '@/lib/services/plantilla';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 
 interface Paso1Props {
+  plantillasData: Array<any>
   plantillaSeleccionada: number | null;
   setPlantillaSeleccionada: (id: number | null) => void;
   nextStep: () => void;
 }
 
-export default function Paso1({ plantillaSeleccionada, setPlantillaSeleccionada, nextStep }: Paso1Props) {
+export default function Paso1({ plantillasData, plantillaSeleccionada, setPlantillaSeleccionada, nextStep }: Paso1Props) {
   const [selectedCard, setSelectedCard] = useState<number | null>(null); // Maneja la tarjeta seleccionada en el padre
   const [plantillas, setPlantillas] = useState<any>([])
 
@@ -24,18 +25,20 @@ export default function Paso1({ plantillaSeleccionada, setPlantillaSeleccionada,
     setPlantillas(await obtenerPlantillas())
   }
 
-  fetchPlantillas()
+  useEffect(()=>{
+    fetchPlantillas()
+  }, [])
 
   return (
     <div className='flex items-center flex-col'>
       <h1 className="text-2xl font-bold mb-6 text-gray-950">Selecciona la plantilla</h1>
       <div className="grid grid-cols-2 gap-6 mb-6">
-        {plantillas.map((plantilla: any) => (
+        {plantillasData.map((plantilla: any) => (
           <Card
             key={plantilla.id}
             id={plantilla.id}
             title={plantilla.nombre}
-            description={plantilla.contenido}
+            description={plantilla.descripcion}
             imageUrl="/imgs/plantilla-ejemplo.png"
             isSelected={plantillaSeleccionada === plantilla.id}
             handleCardSelect={() => handleCardSelect(plantilla.id)}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Breadcrumb from '@/app/components/Breadcrumb';
 import Button from '@/app/components/Button';
 import Tab from '@/app/components/Tab';
@@ -9,16 +9,18 @@ import { obtenerOrganizaciones } from '@/lib/services/organizacion';
 
 
 interface Page2Props {
+  organizacionesData: Array<any>
   selectedContact: any;
   setSelectedContact: (contact: any) => void;
   nextStep: () => void;
 }
 
 
-export default function Page2({ selectedContact, setSelectedContact, nextStep }: Page2Props) {
+export default function Page2({ organizacionesData, selectedContact, setSelectedContact, nextStep }: Page2Props) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [contactos, setContactos] = useState<any>([])
   const [organizaciones, setOrganizaciones] = useState<any>([])
+  const [organizacionesCargadas, setOrganizacionesCargadas] = useState(false); // Estado para controlar la carga
 
   async function fetchContactos(){
     setContactos(await obtenerClientes())
@@ -26,8 +28,11 @@ export default function Page2({ selectedContact, setSelectedContact, nextStep }:
   async function fetchOrganizaciones(){
     setOrganizaciones(await obtenerOrganizaciones())
   }
-  fetchContactos()
-  fetchOrganizaciones()
+  useEffect(()=>{
+    if (!organizacionesCargadas) { // Solo carga si no se han cargado
+      fetchOrganizaciones();
+    }
+  }, [organizacionesCargadas])
 
   return (
     <div className='flex flex-col gap-8'>
@@ -47,7 +52,7 @@ export default function Page2({ selectedContact, setSelectedContact, nextStep }:
       </div>
       <Tab 
         contactsData={contactos} 
-        organizationsData={organizaciones} 
+        organizationsData={organizacionesData} 
         selectedContact={selectedContact}
         setSelectedContact={setSelectedContact}
       />

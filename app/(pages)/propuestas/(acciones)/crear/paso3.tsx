@@ -6,13 +6,14 @@ import React, { useState } from 'react';
 
 
 interface Page3Props {
+  serviciosData: Array<any>
   selectedService: any
   setSelectedService: (id: any) => void;
   nextStep: () => void;
 }
 
 
-export default function Page3({ selectedService, setSelectedService, nextStep }: Page3Props) {
+export default function Page3({ serviciosData, selectedService, setSelectedService, nextStep }: Page3Props) {
   const [servicios, setServicios] = useState<any>([])
 
   async function fetchServicios(){
@@ -23,7 +24,7 @@ export default function Page3({ selectedService, setSelectedService, nextStep }:
   return (
     <div className="flex-col flex gap-6 items-center w-full">
       <h2 className="text-2xl font-bold text-gray-950">Selecciona el Servicio</h2>
-      {servicios.map((servicio: any) => (
+      {serviciosData.map((servicio: any) => (
         <ServiceItem
           key={servicio.id}
           name={servicio.nombre}

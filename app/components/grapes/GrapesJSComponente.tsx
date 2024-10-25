@@ -15,9 +15,11 @@ import { useRouter } from 'next/navigation';
 
 interface gsjs{
     slug: number
+    loadFunction: () => any
+    storeFunction: (GrapesJsContentJSON : any) => any
 }
 
-const GrapesJSComponent = ({slug} : gsjs) => {
+const GrapesJSComponent = ({slug, loadFunction, storeFunction} : gsjs) => {
     const editorRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter()
     const [htmlContent, setHtmlContent] = useState<string>('');
@@ -62,17 +64,14 @@ const GrapesJSComponent = ({slug} : gsjs) => {
             // Guardado
             editor.Storage.add('remote', {
                 async load() {
-                  const content = await obtenerContenidoPlantilla(projectID);
-                  console.log(content)
-                  return content
+                  let data = await loadFunction()
+                  console.log(data)
+                  return data
                 },
               
                 async store(data) {
-                    const cuerpo = {
-                        data: data
-                    }
-                    console.log(cuerpo);
-                    await guardarPlantilla(projectID, cuerpo)
+                    let almacenado = await storeFunction(data)
+                    console.log(almacenado);
                 },
               });
             // Agrega mas bloques

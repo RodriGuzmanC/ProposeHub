@@ -51,7 +51,7 @@ export default function ListPlantillas() {
                     nombre={plantilla.nombre} 
                     elementos={['creacion propia']} 
                     verHref='/plantillas/ver' 
-                    editarHref={`constructor/editar/${plantilla.id}`}
+                    editarHref={`constructor/plantilla/editar/${plantilla.id}`}
                     IconCard={Briefcase}
                     eliminarAction={eliminarFun}
                     ></CustomItemCard>

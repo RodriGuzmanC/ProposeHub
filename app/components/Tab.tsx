@@ -9,10 +9,10 @@ interface TabProps{
 }
 
 export default function Tab({ contactsData, organizationsData, selectedContact, setSelectedContact } : TabProps) {
-  const [activeTab, setActiveTab] = useState('Contactos');
+  const [activeTab, setActiveTab] = useState('Organizacion');
 
   const tabs = [
-    {
+    /*{
       key: 'Contactos',
       label: 'Contactos',
       icon: (
@@ -34,7 +34,7 @@ export default function Tab({ contactsData, organizationsData, selectedContact, 
           ))}
         </div>
       )
-    },
+    },*/
     {
       key: 'Organizacion',
       label: 'Organización',

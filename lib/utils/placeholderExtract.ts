@@ -161,8 +161,14 @@ export function findPlaceholdersInGrapesJS(grapesJS: any): any {
 }*/
 
 
-
-export function decoderGrapesJSBlocks(grapesJS: any) {
+/**
+ * 
+ * @param grapesJS *string
+ * @returns Objec
+ * 
+ * La funcion obtiene la estructura basada en parentesis ( {{}} ) desde grapesJS y devuelve un objeto con la estructura 
+ */
+export function decodificadorEstructuraGrapesJS(grapesJS: any) {
     const grapesJSParsed = JSON.parse(grapesJS);
     const elementosNode: string[] = [];
 
@@ -205,7 +211,7 @@ export function decoderGrapesJSBlocks(grapesJS: any) {
 
 
 
-export function decoderGrapesJSBlocksWithReplacement(grapesJS: any, valores: { [key: string]: string }) {
+export function reemplazarEstructuraGrapesJS(grapesJS: any, valores: { [key: string]: string }) {
     const grapesJSParsed = JSON.parse(grapesJS);
 
     // Función para detectar si el texto está entre doble parentesis
