@@ -1,5 +1,6 @@
 'use client'
 import { obtenerClientes } from '@/lib/services/cliente'
+import { EjemploPrueba } from '@/lib/services/propuesta';
 import React, { useEffect, useState } from 'react'
 
 const sendEmail = async () => {
@@ -25,7 +26,22 @@ export default function Page() {
     const [error, setError] = useState(null);
 
     useEffect(()=>{
-        sendEmail()
+        async function a(){
+            const data = {
+                id_plantilla: 6,
+                id_servicio: 1,
+                id_organizacion: 5,
+                titulo: 'Titulo nuevo',
+                monto: 1222,
+                usar_ai: true,
+                descripcionEmpresa: 'empresa de juguetes',
+                informacion: 'Aqui ira info',
+                id_usuario: 1,
+                id_estado: 1,
+            }
+            await EjemploPrueba(data)
+        }
+        a()
     },[])
 
     return (

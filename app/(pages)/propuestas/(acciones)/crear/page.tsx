@@ -5,7 +5,7 @@ import Paso1 from './paso1';
 import Paso2 from './paso2';
 import Paso3 from './paso3';
 import Paso4 from './paso4';
-import { crearPropuesta } from '@/lib/services/propuesta';
+import { crearPropuesta, EjemploPrueba } from '@/lib/services/propuesta';
 import { obtenerPlantillas } from '@/lib/services/plantilla';
 import { obtenerServicios } from '@/lib/services/servicio';
 import { obtenerOrganizaciones } from '@/lib/services/organizacion';
@@ -37,7 +37,7 @@ export default function Page() {
     
 
     async function postPropuesta() {
-        const propuestaData = {
+        /*const propuestaData = {
             idPlantilla: plantillaSeleccionada,
             idOrganizacion: organizacionSeleccionada,
             idServicio: selectedService,
@@ -46,11 +46,24 @@ export default function Page() {
             usarAi: usarAi,
             orgDescripcion: orgDescripcion,
             instruccionesAdicionales: instruccionesAi
-        };
+        };*/
+        const propuestaData = {
+            id_plantilla: plantillaSeleccionada,
+            id_servicio: selectedService,
+            id_organizacion: organizacionSeleccionada,
+            titulo: tituloPropuesta,
+            monto: parseInt(presupuesto),
+            usar_ai: usarAi,
+            descripcionEmpresa: orgDescripcion,
+            informacion: orgDescripcion,
+            instrucciones_adicionales: instruccionesAi,
+            id_usuario: 1,
+            id_estado: 1,
+        }
         try {
             await crearConToast({
                 cuerpo: propuestaData,
-                event: crearPropuesta
+                event: EjemploPrueba
             })
            //crearPropuesta(propuestaData)
             console.log(propuestaData)

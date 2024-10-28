@@ -67,6 +67,9 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
         }
     }
 
+    async function nada(html: string, css: string){
+        return true
+    }
 
     return (
         <div className="h-screen flex flex-col">
@@ -74,7 +77,7 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
             <div className="flex-grow">
                 {slug !== null ? ( // Verifica si slug está disponible
                     <Suspense fallback={<LoadingFallback />}>
-                        <GrapesJSComponent slug={slug} loadFunction={cargarPlantilla} storeFunction={almacenarPlantilla} />
+                        <GrapesJSComponent launchFunction={nada} slug={slug} loadFunction={cargarPlantilla} storeFunction={almacenarPlantilla} />
                     </Suspense>
                 ) : (
                     <LoadingFallback /> // Muestra un cargador mientras se obtiene el slug
