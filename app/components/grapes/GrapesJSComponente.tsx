@@ -12,14 +12,16 @@ import { AddPdfBlocks } from './AddPdfBlocks';
 import blocksBasic from 'grapesjs-blocks-basic';
 import { guardarPlantilla, obtenerContenidoPlantilla } from '@/lib/services/plantilla';
 import { useRouter } from 'next/navigation';
+import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
 
 interface gsjs{
     slug: number
     loadFunction: () => any
     storeFunction: (GrapesJsContentJSON : any) => any
+    launchFunction: (html: string, css : string) => any
 }
 
-const GrapesJSComponent = ({slug, loadFunction, storeFunction} : gsjs) => {
+const GrapesJSComponent = ({slug, loadFunction, storeFunction, launchFunction} : gsjs) => {
     const editorRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter()
     const [htmlContent, setHtmlContent] = useState<string>('');
@@ -55,8 +57,6 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction} : gsjs) => {
                     stepsBeforeSave: 1,
                     options: {
                         remote: {
-                            urlLoad: projectEndpoint,
-                            urlStore: projectEndpoint,
                         }
                     },
                   }
@@ -71,6 +71,8 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction} : gsjs) => {
               
                 async store(data) {
                     let almacenado = await storeFunction(data)
+                    console.log("Se imprime lo que se esta guardando")
+                    console.log(data)
                     console.log(almacenado);
                 },
               });
@@ -81,15 +83,16 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction} : gsjs) => {
                 id: 'publish-button',
                 className: 'fa fa-upload my-custom-button',
                 label: 'Publicar',
-                command() {
+                command: async () => {
                     const html = editor.getHtml();
-                    const css = editor.getCss();
+                    const css = editor.getCss() ?? '';
 
+                    await launchFunction(html, css)
                     // Almacenar en localStorage
-                    localStorage.setItem('propuestaHtml', html);
-                    localStorage.setItem('propuestaCss', css ?? '');
+                    //localStorage.setItem('propuestaHtml', html);
+                    //localStorage.setItem('propuestaCss', css ?? '');
 
-                    alert('Contenido publicado en localStorage con éxito!');
+                    //alert('Contenido publicado en localStorage con éxito!');
                 },
                 attributes: { title: 'Publicar' },
             });

@@ -82,3 +82,30 @@ export const validarCredencialesCliente = async (correo: string, clave: string):
         throw new Error(`Error al eliminar cliente: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
+
+
+export const enviarCoreoACliente = async (cuerpo: any) => {
+
+    try {
+
+        const data = {
+            to: cuerpo.correo,
+            subject: 'Propuesta Tres media EIRL',
+            body: `
+        <h2 style="color: #333;">Propuesta Comercial</h2>
+        <p>Estimado/a Mario,</p>
+        <p>Espero que este mensaje te encuentre bien. Nos complace compartir contigo una propuesta comercial que hemos preparado específicamente para <strong>Tresmedia</strong>. Creemos que nuestros servicios pueden ser de gran valor para tus necesidades.</p>
+        <p>Puedes revisar la propuesta en línea a través del siguiente enlace:</p>
+        <p><a href="${cuerpo.propuesta_url}" style="color: #007BFF; text-decoration: none;">Ver Propuesta</a></p>
+        <p>Si tienes alguna pregunta o deseas discutir los detalles, no dudes en ponerte en contacto conmigo. Estaré encantado de ayudarte.</p>
+        <p>Agradezco tu atención y espero poder colaborar contigo pronto.</p>
+        <p>Saludos cordiales,</p>
+    `
+        }
+        const response = await postData('enviar-correo', data)
+        return response
+    } catch (error) {
+
+    }
+
+};

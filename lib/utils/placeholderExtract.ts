@@ -255,6 +255,6 @@ export function reemplazarEstructuraGrapesJS(grapesJS: any, valores: { [key: str
         });
     }
 
-    return grapesJSParsed; // Devolver el objeto GrapesJS modificado
+    return JSON.stringify(grapesJSParsed); // Devolver el objeto GrapesJS modificado
 }
 

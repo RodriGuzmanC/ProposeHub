@@ -58,6 +58,26 @@ export async function editarConToast({ id, cuerpo, event }: toastEditInterface) 
 
 
 
+export async function EnviarCorreoConToast({ cuerpo, event }: toastInterface) {
+    toast.promise(
+        () => event(cuerpo),
+        {
+            pending: 'Enviando...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? 'Enviado correctamente';
+                },
+            },
+            error: {
+                render({ data }: any) {
+                    return data?.message ?? 'Error al enviar';
+                },
+            },
+        }
+    );
+}
+
+
 
 export async function loginConToast({ correo, clave, event }: toastLoginInterface) {
     toast.promise(

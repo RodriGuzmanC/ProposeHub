@@ -8,17 +8,17 @@ import { useRouter } from 'next/navigation'
 import { LayoutPropsLib } from '@/lib/utils/definitions'
 
 const proposalStates = [
-  { id: 'en-progreso', label: 'En progreso', icon: Clock },
-  { id: 'abierto', label: 'Abierto', icon: Briefcase },
-  { id: 'aceptado', label: 'Aceptado', icon: CheckCircle },
-  { id: 'declinado', label: 'Declinado', icon: XCircle },
+  { id: '1', label: 'En progreso', icon: Clock },
+  { id: '2', label: 'Abierto', icon: Briefcase },
+  { id: '3', label: 'Aceptado', icon: CheckCircle },
+  { id: '4', label: 'Declinado', icon: XCircle },
 ]
 
 
 
 
 export default function ModernProposalSidebar({children} : LayoutPropsLib) {
-  const [activeState, setActiveState] = useState('abierto')
+  const [activeState, setActiveState] = useState('1')
   const router = useRouter();
 
   const handleStateChange = (state: any) => {

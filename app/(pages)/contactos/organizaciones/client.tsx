@@ -24,7 +24,7 @@ export default function OrganizacionClient({data}: any) {
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex space-x-4 w-full">
 
-                            <FilterComponent data={data} onFilteredDataChange={setFilteredData}>
+                            {/*<FilterComponent data={data} onFilteredDataChange={setFilteredData}>*/}
                                 <h3 className='text-2xl font-bold'>Organizaciones</h3>
                                 <Link href={'organizaciones/crear'}>
                                     <ButtonTheme >
@@ -33,7 +33,7 @@ export default function OrganizacionClient({data}: any) {
                                         <span className="ml-2 bg-white bg-opacity-20 text-xs font-bold py-1 px-2 rounded-full">+</span>
                                     </ButtonTheme>
                                 </Link>
-                            </FilterComponent>
+                            {/*</FilterComponent>*/}
 
                         </div>
                     </div>

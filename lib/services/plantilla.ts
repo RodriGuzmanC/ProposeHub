@@ -1,4 +1,4 @@
-import { getData, postData, updateData } from "../utils/methods";
+import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 const plantillas = [
     { id: 1, nombre: 'Plantilla 1', contenido: 'Descripción corta de la plantilla' },
@@ -73,12 +73,12 @@ export const editarContenidoPlantilla = async (id: number, cuerpo: any) => {
 
 // Eliminar una organización
 export const eliminarPlantilla = async (id: number): Promise<boolean> => {
-    const index = plantillas.findIndex(org => org.id === id);
-    if (index !== -1) {
-        plantillas.splice(index, 1);
-        return true;
+    try {
+        const data = await deleteData(`plantillas/${id}`);
+        return data; // Devuelve la organización obtenida
+    } catch (error : any) {
+        throw new Error(`Error al guardar plantilla: ${error instanceof Error ? error.message : String(error)}`);
     }
-    return false;
 };
 
 

@@ -2,32 +2,35 @@
 import { obtenerClientes } from '@/lib/services/cliente'
 import React, { useEffect, useState } from 'react'
 
+const sendEmail = async () => {
+    const response = await fetch('http://127.0.0.1:8000/api/enviar-correo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            to: 'alondramd.19@gmail.com',
+            subject: 'Prueba de correo',
+            body: 'This is a test email sent from Next.js using Laravel API.'
+        }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+};
+
+
 export default function Page() {
     const [clientes, setClientes] = useState([]);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchClientes = async () => {
-            try {
-                const data = await obtenerClientes();
-                setClientes(data);
-            } catch (error : any) {
-                setError(error.message);
-            }
-        };
-
-        fetchClientes();
-    }, []);
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-    console.log(clientes)
+    useEffect(()=>{
+        sendEmail()
+    },[])
 
     return (
         <div>
-            a
+            se esta enviando el correo
         </div>
     );
 }

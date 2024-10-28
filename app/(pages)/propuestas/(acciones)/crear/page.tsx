@@ -26,6 +26,7 @@ export default function Page() {
     const [orgDescripcion, setOrgDescripcion] = useState('')
     const [presupuesto, setPresupuesto] = useState('')
     const [instruccionesAi, setInstruccionesAi] = useState('')
+    const [usarAi, setUsarAi] = useState(true)
 
     const [formData, setFormData] = useState({
         titulo: '',
@@ -41,8 +42,9 @@ export default function Page() {
             idOrganizacion: organizacionSeleccionada,
             idServicio: selectedService,
             titulo: tituloPropuesta,
-            orgDescripcion: orgDescripcion,
             presupuesto: parseInt(presupuesto),
+            usarAi: usarAi,
+            orgDescripcion: orgDescripcion,
             instruccionesAdicionales: instruccionesAi
         };
         try {
@@ -72,6 +74,7 @@ export default function Page() {
     async function fetchServicios() {
         setServicios(await obtenerServicios())
     }
+
     useEffect(() => {
         const fetchData = async () => {
             await Promise.all([
@@ -123,6 +126,8 @@ export default function Page() {
                         setPresupuesto={setPresupuesto}
                         instruccionesAi={instruccionesAi}
                         setInstruccionesAi={setInstruccionesAi}
+                        usarAi={usarAi}
+                        setUsarAi={setUsarAi}
                         // handle
                         handleSubmit={postPropuesta}
                     />}

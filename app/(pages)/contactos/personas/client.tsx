@@ -21,7 +21,7 @@ export default async function PersonasVistaClient({ data }: any) {
       <main className="flex-1 h-full">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <FilterComponent data={data} onFilteredDataChange={setFilteredData}>
+            {/*<FilterComponent data={data} onFilteredDataChange={setFilteredData}>*/}
               <h3 className='text-2xl font-bold'>Clientes</h3>
               <Link href={'personas/crear'}>
                 <ButtonTheme>
@@ -30,7 +30,7 @@ export default async function PersonasVistaClient({ data }: any) {
                   <span className="ml-2 bg-white bg-opacity-20 text-xs font-bold py-1 px-2 rounded-full">+</span>
                 </ButtonTheme>
               </Link>
-            </FilterComponent>
+            {/*</FilterComponent>*/}
           </div>
           <div className="space-y-4">
             {filteredData.map((cliente: any) => (

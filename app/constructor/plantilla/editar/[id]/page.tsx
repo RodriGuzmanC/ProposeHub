@@ -54,7 +54,7 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
             //const plantilla: any = await editarPlantilla(slug, data)
             const plantilla = await editarConToast({
                 id: slug,
-                cuerpo: data.contenido,
+                cuerpo: data,
                 event: editarContenidoPlantilla
             })
             // Verifica que la propiedad "contenido" exista en el objeto

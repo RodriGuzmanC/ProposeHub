@@ -10,9 +10,9 @@ const ContactosDataExample = [
 ];
 
 // Obtener todos los clientes
-export const obtenerVersionesPropuesta = async () => {
+export const obtenerVersionesPropuesta = async (idPropuesta : number) => {
     try {
-        return await getData('versiones-propuestas')
+        return await getData(`versiones-propuesta/${idPropuesta}`)
         //return ContactosDataExample;
     } catch (error) {
         throw new Error(`Error al obtener las versiones de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
@@ -22,7 +22,7 @@ export const obtenerVersionesPropuesta = async () => {
 // Obtener un cliente por ID
 export const obtenerVersionPropuesta = async (id: number) => {
     try {
-        const cliente = await getData(`versiones-propuestas/${id}`)
+        const cliente = await getData(`version-propuesta/${id}`)
 
         if (!cliente) throw new Error(`Version con ID ${id} no encontrado`);
         return cliente;
@@ -35,11 +35,8 @@ export const obtenerVersionPropuesta = async (id: number) => {
 // Crear una nueva organización
 export const crearVersionPropuesta = async (cuerpo: any): Promise<boolean> => {
     try {
-        const data = {
-            id_propuesta: cuerpo.id,
-            contenido: cuerpo.jsongrapes
-        }
-        await postData('versiones-propuestas', data);
+        
+        await postData('version-propuesta', cuerpo);
         return true; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al crear la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
@@ -47,13 +44,13 @@ export const crearVersionPropuesta = async (cuerpo: any): Promise<boolean> => {
 };
 
 // Editar una organización
-export const editarVersionPropuesta = async (id: number, cuerpo: any): Promise<boolean> => {
+export const editarVersionPropuesta = async (id: number, cuerpo: any): Promise<any> => {
     try {
         const data = {
             contenido: cuerpo.contenido
         }
-        await updateData(`versiones-propuestas/${id}`, data);
-        return true; // Devuelve true si la operación se realiza correctamente
+        const res = await updateData(`version-propuesta/${id}`, data);
+        return res; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al editar la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }

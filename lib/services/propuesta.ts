@@ -1,4 +1,5 @@
-import { postData } from "../utils/methods";
+import { respuestaDeIa } from "../utils/definitions";
+import { getData, postData, updateData } from "../utils/methods";
 import { decodificadorEstructuraGrapesJS, reemplazarEstructuraGrapesJS } from "../utils/placeholderExtract";
 import { obtenerContenidoPlantilla, obtenerPlantilla } from "./plantilla";
 import { crearVersionPropuesta } from "./versionPropuesta";
@@ -23,12 +24,24 @@ const propuestas = [
 
 // Obtener todas las organizaciones
 export const obtenerPropuestas = async () => {
-    return propuestas;
+    try {
+        const res = await getData("propuestas")
+        return res;
+    } catch (error) {
+        
+    }
 };
 
 // Obtener una organización por ID
 export const obtenerPropuesta = async (id: number) => {
-    return propuestas.find(org => org.id === id) || null;
+    try {
+        const propuesta = await getData(`propuestas/${id}`)
+
+        if (!propuesta) throw new Error(`Propuesta con ID ${id} no encontrada`);
+        return propuesta;
+    } catch (error) {
+        console.error(error)
+    }
 };
 
 // Crear una nueva organización
@@ -41,6 +54,7 @@ export const crearPropuesta = async (cuerpo: any) => {
             id_organizacion: cuerpo.idOrganizacion,
             titulo: cuerpo.titulo,
             monto: cuerpo.presupuesto,
+            usar_ai: cuerpo.usarAi,
             descripcionEmpresa: cuerpo.orgDescripcion,
             informacion: 'Aqui ira info',
             id_usuario: 1,
@@ -48,33 +62,25 @@ export const crearPropuesta = async (cuerpo: any) => {
         }
         // Obtenemos la ESTRUCTURA de la plantilla
         const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
-
-        const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
         
-        // Creamos la propuesta
-        //const respuestaDeIa = await postData('obtenerRespuestaAI', data); // NO FUNCIONA
+        let contenidoGrapesJS = grapesJsContent.contenido
 
-        // Aqui deberia de obtenerse la respuesta de la AI usando await, pero por ahora tenemos este objeto
-        const respuestaDeIa = {
-            titulo: 'Propuesta comercial para Loopsy',
-            descripcion: 'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto, y al hacer una búsqueda de "Lorem Ipsum" va a dar por resultado muchos sitios web que usan este texto si se encuentran en estado de desarrollo. Muchas versiones han evolucionado a través de los años, algunas veces por accidente, otras veces a propósito (por ejemplo insertándole humor y cosas por el estilo).',
-            presupuesto: '2000',
-            conclusion: 'Muchas gracias'
+        // Creamos el contenido con AI y lo inyectamos a la plantilla
+        if (data.usar_ai ==  true) {
+            //const respuestaDeIa = await postData('obtenerRespuestaAI', data); // NO FUNCIONA
+            const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
+            contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
         }
-        
         // Una vez obtenida la respuesta podemos proceder a crear la propuesta
         // Creamos la propuesta
         const propuestaCreada = await postData('propuestas', data);
+        
 
-        // INYECTA el contenido generalo por la AI en la plantilla
-        // OJO: La estructura del mensaje que devuelve la AI debe coincidir con la estructura de la plantilla
-        const nuevoGrapesJSContent = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
-        console.log(nuevoGrapesJSContent)
-        console.log(propuestaCreada)
         // Una vez inyectado, ya esta listo para almacenarse como la primera version de esta propuesta
         const cuerpoDeVersionACrear = {
-            id: propuestaCreada.id,
-            jsongrapes: JSON.stringify(nuevoGrapesJSContent)
+            id_propuesta: propuestaCreada.id,
+            contenido: contenidoGrapesJS,
+            en_edicion: 1
         }
         console.log(cuerpoDeVersionACrear)
         await crearVersionPropuesta(cuerpoDeVersionACrear)
@@ -88,9 +94,25 @@ export const crearPropuesta = async (cuerpo: any) => {
 // Editar una organización
 export const editarPropuesta = async (id: number, cuerpo: any) => {
     try {
+        await updateData(`propuestas/${id}`, cuerpo)
         return true
     } catch (error) {
         return false
+    }
+};
+
+export const editarHtmlCssPropuesta = async (id: number, cuerpo: any) => {
+    try {
+        const data = {
+            version_publicada: cuerpo.version_publicada,
+            html: cuerpo.html,
+            css: cuerpo.css
+        }
+        const res = await updateData(`propuestas/${id}`, data)
+        console.log(res)
+        return true
+    } catch (error) {
+        console.log(error)
     }
 };
 
