@@ -76,8 +76,12 @@ export const eliminarCliente = async (id: number): Promise<boolean> => {
 
 export const validarCredencialesCliente = async (correo: string, clave: string): Promise<boolean> => {
     try {
-        //await deleteData(`clientes/${id}`);
-        return true; // Devuelve true si la operación se realiza correctamente
+        const data = {
+            correo: correo,
+            contrasena: clave
+        }
+        const res = await postData(`clientes/login`, data);
+        return res; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al eliminar cliente: ${error instanceof Error ? error.message : String(error)}`);
     }

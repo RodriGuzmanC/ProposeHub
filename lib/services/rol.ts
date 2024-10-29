@@ -10,8 +10,7 @@ const rolesData = [
 // Obtener todos los clientes
 export const obtenerRoles = async () => {
     try {
-        //return await getData('roles')
-        return rolesData;
+        return await getData('roles')
     } catch (error) {
         throw new Error(`Error al obtener usuarios: ${error}`);
     }

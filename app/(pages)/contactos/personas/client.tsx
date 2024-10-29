@@ -10,7 +10,7 @@ import { eliminarCliente } from '@/lib/services/cliente'
 
 
 
-export default async function PersonasVistaClient({ data }: any) {
+export default function PersonasVistaClient({ data }: any) {
   async function eliminarFun(id: number) {
     await eliminarCliente(id)
   }

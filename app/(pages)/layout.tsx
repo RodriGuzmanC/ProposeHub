@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Home, Users, Briefcase, LogOut, Menu } from 'lucide-react'
+import { Home, Users, Briefcase, LogOut, Menu, Group, HandHelping } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import PagesLoading from '../components/skeletons/PagesLoading'
 
@@ -15,7 +15,10 @@ const navItems = [
   { id: 'propuestas', icon: Briefcase, label: 'Propuestas', href: '/propuestas' },
   { id: 'plantillas', icon: Briefcase, label: 'Plantillas', href: '/plantillas' },
   //{ id: 'mensajes', icon: MessageSquare, label: 'Mensajes', href: '/mensajes' },
-  { id: 'usuarios', icon: Users, label: 'Usuarios', href: '/usuarios' }
+  { id: 'usuarios', icon: Users, label: 'Usuarios', href: '/usuarios' },
+  { id: 'roles', icon: Group, label: 'Roles', href: '/roles' },
+  { id: 'servicios', icon: HandHelping, label: 'Servicios', href: '/servicios' },
+
 ]
 
 interface Props {
@@ -40,16 +43,15 @@ export default function ModernNavbar({ children }: Props) {
 
   useEffect(() => {
     const userInfo = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('userInfo='))
-      ?.split('=')[1];
+  .split('; ')
+  .find(row => row.startsWith('userInfo='));
 
-    if (userInfo) {
-      const usuario = JSON.parse(decodeURIComponent(userInfo));
-      setNombreUsuario(usuario.nombre)
-      setCorreoUsuario(usuario.correo)
-      // Realiza acciones con la información del usuario
-    }
+  if (userInfo) {
+    const usuario = JSON.parse(decodeURIComponent(userInfo.split('=')[1]));
+    setNombreUsuario(usuario.nombre);
+    setCorreoUsuario(usuario.correo);
+    // Realiza acciones con la información del usuario
+  }
 
   }, []);
 
@@ -102,9 +104,9 @@ export default function ModernNavbar({ children }: Props) {
         </div>
       </aside>
       <main className="flex-grow">
-        <Suspense fallback={<PagesLoading></PagesLoading>}>
+        {/*<Suspense fallback={<PagesLoading></PagesLoading>}>*/}
           {children}
-        </Suspense>
+        {/*</Suspense>*/}
       </main>
     </div>
   )

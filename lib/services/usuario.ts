@@ -35,12 +35,6 @@ export const obtenerUsuario = async (id: number) => {
 }
 };
 
-// Crear una nueva organización
-export const crearUsuario = async (cuerpo: any) => {
-
-  return true;
-};
-
 // Editar una organización
 export const editarUsuario = async (id: number, cuerpo: any): Promise<boolean> => {
   try {
@@ -74,18 +68,34 @@ export async function loginUsuario(correo: string, contrasena: string) {
       correo: correo,
       contrasena: contrasena
     }
-    //const res = await postData(`login`, data);
-    //return res;
-    const credentials = {
+    const res = await postData(`login`, data);
+
+    return res;
+
+  } catch (error) {
+    throw new Error(`Error al editar usuarios: ${error}`);
+  }
+}
+
+export async function registrarUsuario(cuerpo: any) {
+  try {
+    const data = {
+      nombre: cuerpo.nombre,
+      correo: cuerpo.correo,
+      contrasena: cuerpo.contrasena,
+      id_rol: parseInt(cuerpo.id_rol),
+    }
+    const res = await postData(`register`, data);
+    return res;
+    /*const credentials = {
       id: 1,
       nombre: 'rodrigo',
       correo: 'rodrigo@gmail.com',
       rol_id: 1
     }
 
-    return credentials;
+    return credentials;*/
   } catch (error) {
     throw new Error(`Error al editar usuarios: ${error}`);
   }
 }
-

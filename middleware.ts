@@ -9,6 +9,13 @@ function isAuthenticated(request: NextRequest): boolean {
   return Boolean(userInfo); // Retorna verdadero si hay información del usuario
 }
 
+function isClientAuthenticated(request: NextRequest): boolean {
+  // Obtiene la información del usuario de las cookies
+  const clientInfo = request.cookies.get('clientInfo');
+  return Boolean(clientInfo); // Retorna verdadero si hay información del usuario
+}
+
+
 const publicRoutes = ['/vista/propuesta/login', '/auth/login', '/auth/signin'];
 
 // MIDDLEWARE
@@ -19,6 +26,18 @@ export function middleware(request: NextRequest) {
   if (publicRoutes.includes(pathname)) {
     return NextResponse.next();
   }
+
+  // Comprobar si la ruta comienza con 'vista/propuesta/'
+  const isPropuestaRoute = pathname.startsWith('/vista/propuesta/');
+
+  // Si el usuario no está autenticado y está intentando acceder a una vista de propuestas
+  if (!isAuthenticated(request) && isPropuestaRoute) {
+    if (isClientAuthenticated(request) && isPropuestaRoute) {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL('/vista/propuesta/login', request.url));
+  }
+
 
   // Si el usuario no está autenticado y está intentando acceder a una ruta privada
   if (!isAuthenticated(request) && !publicRoutes.includes(pathname)) {

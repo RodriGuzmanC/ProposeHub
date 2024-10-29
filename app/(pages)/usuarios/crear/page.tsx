@@ -6,33 +6,13 @@ import { User, Building, Users, Mail, Key } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { FormEvent, useEffect, useState } from "react"
 import BackLink from "@/app/components/global/BackLink"
-import { crearUsuario } from "@/lib/services/usuario"
+import { registrarUsuario } from "@/lib/services/usuario"
 import { crearConToast } from "@/lib/utils/alertToast"
 import { obtenerRoles } from "@/lib/services/rol"
 
 
 
-
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const formEntries = Object.fromEntries(formData.entries())
-    console.log('Form submitted:', formEntries)
-
-    try {
-
-        await crearConToast({
-            cuerpo: formEntries,
-            event: crearUsuario
-        });
-
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-
-export default async function Page() {
+export default function Page() {
 
     const [roles, setRoles] = useState<any>([]);
 
@@ -40,6 +20,32 @@ export default async function Page() {
         const data = await obtenerRoles();
         setRoles(data);
     };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        const formEntries = Object.fromEntries(formData.entries())
+        console.log('Form submitted:', formEntries)
+    
+        try {
+            const data = {
+                nombre: formEntries.nombre,
+                correo: formEntries.correo,
+                contrasena: formEntries.clave,
+                id_rol: formEntries.rol,
+              }
+              //console.log(data)
+              
+            const res = await crearConToast({
+                cuerpo: data,
+                event: registrarUsuario
+            });
+            console.log(res)
+    
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     useEffect(() => {
         fetchRoles();

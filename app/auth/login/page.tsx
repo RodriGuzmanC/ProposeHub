@@ -18,19 +18,22 @@ export default function LoginForm() {
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log(correo, clave)
-    const userInfo = await loginUsuario(correo, clave)
+
+    const userInfo = await loginConToast({
+      correo: correo,
+      clave: clave,
+      event: loginUsuario
+    })
+
+    //const userInfo = await loginUsuario(correo, clave)
     console.log(userInfo)
     if (userInfo) {
       document.cookie = `userInfo=${encodeURIComponent(JSON.stringify(userInfo))}; path=/;`;
 
-      router.push('/contactos/personas')
+      window.location.href = '/contactos/personas';
     }
 
-    /*await loginConToast({
-      correo: correo,
-      clave: clave,
-      event: loginUsuario
-    })*/
+    
 
     /*if (result.success) {
       // Redirigir al usuario a la página de contactos

@@ -80,7 +80,7 @@ export async function EnviarCorreoConToast({ cuerpo, event }: toastInterface) {
 
 
 export async function loginConToast({ correo, clave, event }: toastLoginInterface) {
-    toast.promise(
+    return toast.promise(
         () => event(correo, clave),
         {
             pending: 'Validando...',

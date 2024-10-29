@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Mail, Lock } from 'lucide-react'
 import { loginConToast } from '@/lib/utils/alertToast'
 import { validarCredencialesCliente } from '@/lib/services/cliente'
+import { toast } from 'react-toastify'
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState('')
@@ -20,15 +21,22 @@ export default function LoginForm() {
     // Aquí puedes agregar la lógica para manejar el inicio de sesión
     console.log('Nombre:', correo)
     console.log('Clave:', clave)
+
     try {
 
-        await loginConToast({
+        const clienteInfo = await loginConToast({
             correo: correo,
             clave: clave,
             event: validarCredencialesCliente
         })
+        console.log(clienteInfo)
+        // Guardamos los datos del cliente
+        if (clienteInfo) {
+          document.cookie = `clientInfo=${encodeURIComponent(JSON.stringify(clienteInfo))}; path=/;`;
+          toast.success("Vuelve a ingresar a la url")
+        }
         // Por ejemplo, podrías redirigir al usuario después de un inicio de sesión exitoso
-        router.push('/vista/propuesta/')
+        //router.push('/vista/propuesta/')
 
     } catch (error) {
         console.error("Error papa")
