@@ -65,7 +65,7 @@ export default function LoginForm() {
                   id='correo'
                   name='correo'
                   onChange={(e) => { setCorreo(e.currentTarget.value) }}
-                  placeholder="Your email"
+                  placeholder="Tu correo"
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-[#003A61] focus:border-transparent"
                   required
                 />
@@ -80,7 +80,7 @@ export default function LoginForm() {
                   name='clave'
                   value={clave}
                   onChange={(e) => { setClave(e.currentTarget.value) }}
-                  placeholder="Password"
+                  placeholder="Contraseña"
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-[#003A61] focus:border-transparent"
                   required
                 />

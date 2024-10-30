@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Home, Users, Briefcase, LogOut, Menu, Group, HandHelping } from 'lucide-react'
+import { Home, Users, Briefcase, LogOut, Menu, Group, HandHelping, LayoutPanelLeftIcon } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import PagesLoading from '../components/skeletons/PagesLoading'
 
 const navItems = [
   { id: 'contactos', icon: Users, label: 'Contactos', href: '/contactos/personas' },
   { id: 'propuestas', icon: Briefcase, label: 'Propuestas', href: '/propuestas' },
-  { id: 'plantillas', icon: Briefcase, label: 'Plantillas', href: '/plantillas' },
+  { id: 'plantillas', icon: LayoutPanelLeftIcon, label: 'Plantillas', href: '/plantillas' },
   //{ id: 'mensajes', icon: MessageSquare, label: 'Mensajes', href: '/mensajes' },
   { id: 'usuarios', icon: Users, label: 'Usuarios', href: '/usuarios' },
   { id: 'roles', icon: Group, label: 'Roles', href: '/roles' },
@@ -94,7 +94,7 @@ export default function ModernNavbar({ children }: Props) {
               </div>
             )}
           </div>
-          <Button onClick={handleLogout} variant="ghost" size="sm" className="w-full mt-4" asChild>
+          <Button onClick={handleLogout} variant="ghost" size="sm" className="w-full mt-4">
             <div className="flex items-center">
               <LogOut className="h-4 w-4 mr-2" />
               {!isCollapsed && <span>Cerrar sesión</span>}

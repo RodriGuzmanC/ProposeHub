@@ -1,7 +1,7 @@
 "use client"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Phone, Users, Mail } from 'lucide-react'
+import { User, Phone, Users, Mail, HandHelping } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { FormEvent, useEffect, useState } from 'react'
 import BackLink from "@/app/components/global/BackLink"
@@ -74,7 +74,7 @@ export default function EditarServiciosClient({ servicio }: PageProps) {
                         type="submit"
                         className='w-fit'
                     >
-                        <Users className="mr-2 h-4 w-4" />
+                        <HandHelping className="mr-2 h-4 w-4" />
                         Editar Servicio
                     </ButtonTheme>
                 </div>
