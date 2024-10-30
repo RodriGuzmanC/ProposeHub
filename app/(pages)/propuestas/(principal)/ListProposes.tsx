@@ -4,7 +4,7 @@ import CustomItemCard from '@/app/components/global/CustomItemCard';
 import FilterComponent from '@/app/components/global/FilterComponent';
 import ProposeCard from '@/app/components/propuestas/ProposeCard';
 import SendMailProposeModal from '@/app/components/propuestas/SendMailModal';
-import { eliminarPropuesta } from '@/lib/services/propuesta';
+import { eliminarPropuesta, obtenerPropuestas } from '@/lib/services/propuesta';
 import { Briefcase, BriefcaseBusiness } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -33,6 +33,8 @@ export default function ListProposes({ data }: any) {
 
     async function eliminarFun(id: number) {
         await eliminarPropuesta(id)
+        const propuestas = await obtenerPropuestas();
+        setFilteredProposals(propuestas)
     }
 
     /** Carga de propuestas */

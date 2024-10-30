@@ -102,7 +102,7 @@ export default function Page() {
                 <div className='w-full flex justify-end'>
                     <ButtonTheme type="submit" className='w-fit'>
                         <Users className="mr-2 h-4 w-4" />
-                        Crear Contacto
+                        Crear Usuario
                     </ButtonTheme>
                 </div>
             </form>

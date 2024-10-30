@@ -182,7 +182,7 @@ export function decodificadorEstructuraGrapesJS(grapesJS: any) {
         components.forEach((comp: any) => {
             
             // Verificar si tiene type y content
-            if (comp.type && comp.content && (comp.type === "text" || comp.type === "textnode")) {
+            if (comp.type && comp.content && (comp.type == "text" || comp.type == "textnode")) {
                 const texto = comp.content;
                 if (isTextInDoubleBraces(texto)) {
                     elementosNode.push(texto);
@@ -200,7 +200,7 @@ export function decodificadorEstructuraGrapesJS(grapesJS: any) {
         const elementosPage = grapesJSParsed.pages[0].frames[0].component.components;
 
         elementosPage.forEach((seccion: any) => {
-            if (seccion.classes.includes('page') && Array.isArray(seccion.components)) {
+            if ((seccion.classes.includes('page') || seccion.classes.includes('page-container')) && Array.isArray(seccion.components)) {
                 findTextsInComponents(seccion.components);
             }
         });
@@ -249,7 +249,7 @@ export function reemplazarEstructuraGrapesJS(grapesJS: any, valores: { [key: str
         const elementosPage = grapesJSParsed.pages[0].frames[0].component.components;
 
         elementosPage.forEach((seccion: any) => {
-            if (seccion.classes.includes('page') && Array.isArray(seccion.components)) {
+            if ((seccion.classes.includes('page') || seccion.classes.includes('page-container')) && Array.isArray(seccion.components)) {
                 findAndReplaceTextsInComponents(seccion.components);
             }
         });

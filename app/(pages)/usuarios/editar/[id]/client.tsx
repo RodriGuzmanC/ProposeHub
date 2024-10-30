@@ -94,13 +94,7 @@ export default function EditarUsuarioClientPage({ usuario }: any) {
                         </Select>
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="clave">Contraseña</Label>
-                    <div className="relative">
-                        <Key className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                        <Input id="clave" name="clave" type="password" className="pl-8" required />
-                    </div>
-                </div>
+                
                 <div className='w-full flex justify-end'>
                     <ButtonTheme type="submit" className='w-fit'>
                         <Users className="mr-2 h-4 w-4" />

@@ -75,7 +75,7 @@ export default function EditarServiciosClient({ servicio }: PageProps) {
                         className='w-fit'
                     >
                         <Users className="mr-2 h-4 w-4" />
-                        Editar Rol
+                        Editar Servicio
                     </ButtonTheme>
                 </div>
             </form>

@@ -107,9 +107,9 @@ export default function Page() {
         {loading ? (
             <PagesLoading></PagesLoading>
         ) : (
-        <div className='flex justify-center w-full bg-slate-200 py-10'>
+        <div className='flex justify-center w-full bg-slate-200 py-10 h-full overflow-auto'>
             
-                <div className="max-w-2xl mx-auto p-6 bg-white flex-col flex gap-2 items-center rounded-xl">
+                <div className="max-w-2xl h-fit mx-auto p-6 bg-white flex-col flex gap-2 items-center rounded-xl">
                     <Breadcrumb activeIndex={step} onStepChange={setStep} />
 
                     {step === 0 && <Paso1

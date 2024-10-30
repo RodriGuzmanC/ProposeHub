@@ -58,7 +58,7 @@ export default function CreateRolModal({ closeEvent }: CreateTemplateModalProps)
               placeholder="Nombre del rol"
               required
             />
-            <CardDescription className="mb-4">
+            <CardDescription className="mb-4 mt-4">
               Ingresa la descripcion
             </CardDescription>
             <Input

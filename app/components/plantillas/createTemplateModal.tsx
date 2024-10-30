@@ -57,7 +57,7 @@ export default function CreateTemplateModal({ closeEvent }: CreateTemplateModalP
               placeholder="Nombre de la plantilla"
               required
             />
-            <CardDescription className="mb-4">
+            <CardDescription className="mb-4 mt-4">
               Ingresa la descripcion
             </CardDescription>
             <Input

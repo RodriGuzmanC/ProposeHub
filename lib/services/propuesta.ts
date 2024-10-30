@@ -1,5 +1,5 @@
 import { respuestaDeIaEjemplo } from "../utils/definitions";
-import { getData, postData, updateData } from "../utils/methods";
+import { deleteData, getData, postData, updateData } from "../utils/methods";
 import { decodificadorEstructuraGrapesJS, reemplazarEstructuraGrapesJS } from "../utils/placeholderExtract";
 import { obtenerContenidoPlantilla, obtenerPlantilla } from "./plantilla";
 import { crearVersionPropuesta } from "./versionPropuesta";
@@ -28,7 +28,7 @@ export const obtenerPropuestas = async () => {
         const res = await getData("propuestas")
         return res;
     } catch (error) {
-        
+
     }
 };
 
@@ -62,11 +62,11 @@ export const crearPropuesta = async (cuerpo: any) => {
         }
         // Obtenemos la ESTRUCTURA de la plantilla
         const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
-        
+
         let contenidoGrapesJS = grapesJsContent.contenido
 
         // Creamos el contenido con AI y lo inyectamos a la plantilla
-        if (data.usar_ai ==  true) {
+        if (data.usar_ai == true) {
             //const respuestaDeIa = await postData('obtenerRespuestaAI', data); // NO FUNCIONA
             const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
             contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
@@ -74,7 +74,7 @@ export const crearPropuesta = async (cuerpo: any) => {
         // Una vez obtenida la respuesta podemos proceder a crear la propuesta
         // Creamos la propuesta
         const propuestaCreada = await postData('propuestas', data);
-        
+
 
         // Una vez inyectado, ya esta listo para almacenarse como la primera version de esta propuesta
         const cuerpoDeVersionACrear = {
@@ -111,12 +111,14 @@ export const EjemploPrueba = async (cuerpo: any) => {
         }
         // Obtenemos la ESTRUCTURA de la plantilla
         const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
-        
+
         let contenidoGrapesJS = grapesJsContent.contenido
 
         // Creamos el contenido con AI y lo inyectamos a la plantilla
-        if (data.usar_ai ==  true) {
+        if (data.usar_ai == true) {
             const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
+            console.log("Estructura")
+            console.log(estructura)
             const dataParaAi = {
                 id_servicio: data.id_servicio,
                 id_organizacion: data.id_organizacion,
@@ -130,7 +132,7 @@ export const EjemploPrueba = async (cuerpo: any) => {
             const respuestaDeIa = await postData('propuestas/respuesta-ai', dataParaAi); // NO FUNCIONA
             console.log("Desde laravel respuesta")
             console.log(respuestaDeIa)
-            
+
             // Ahora reemplazamos el texto de la plantilla por el texto hecho por la AI
             contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
             console.log(contenidoGrapesJS)
@@ -140,7 +142,7 @@ export const EjemploPrueba = async (cuerpo: any) => {
         console.log("Antes de crear propuesta")
         console.log(data)
         const propuestaCreada = await postData('propuestas', cuerpo);
-        
+
 
         // Una vez inyectado, ya esta listo para almacenarse como la primera version de esta propuesta
         const cuerpoDeVersionACrear = {
@@ -184,10 +186,11 @@ export const editarHtmlCssPropuesta = async (id: number, cuerpo: any) => {
 
 // Eliminar una organización
 export const eliminarPropuesta = async (id: number): Promise<boolean> => {
-    const index = propuestas.findIndex(org => org.id === id);
-    if (index !== -1) {
-        propuestas.splice(index, 1);
-        return true;
+    try {
+
+        const res = await deleteData(`propuestas/${id}`);
+        return res; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error((<Error>error).message);
     }
-    return false;
 };

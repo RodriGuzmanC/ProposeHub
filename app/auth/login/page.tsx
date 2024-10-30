@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { loginConToast } from '@/lib/utils/alertToast'
+import { ArrowRight, Lock, Mail } from 'lucide-react'
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState('')
@@ -45,6 +46,60 @@ export default function LoginForm() {
   }
 
   return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#003A61] to-[#005691]">
+      <Card className="w-full max-w-md overflow-hidden bg-white">
+        <CardHeader className="space-y-1 bg-[#003A61] text-white">
+          <div className="flex justify-center mb-4">
+            <Lock className="h-12 w-12 text-white" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-center">Bienvenido de vuelta</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-6">
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="email"
+                  value={correo}
+                  id='correo'
+                  name='correo'
+                  onChange={(e) => { setCorreo(e.currentTarget.value) }}
+                  placeholder="Your email"
+                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-[#003A61] focus:border-transparent"
+                  required
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="password"
+                  id='clave'
+                  name='clave'
+                  value={clave}
+                  onChange={(e) => { setClave(e.currentTarget.value) }}
+                  placeholder="Password"
+                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-[#003A61] focus:border-transparent"
+                  required
+                />
+              </div>
+            </div>
+            <Button 
+              type="submit" 
+              className="w-full bg-[#003A61] hover:bg-[#004b7d] text-white transition-all duration-300 ease-in-out transform hover:scale-105"
+            >
+              Login
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </form>
+        </CardContent>
+        
+      </Card>
+    </div>
+  )
+  /*return (
     <div className="min-h-screen flex items-center justify-center bg-blue-500">
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -90,5 +145,5 @@ export default function LoginForm() {
         </CardContent>
       </Card>
     </div>
-  )
+  )*/
 }

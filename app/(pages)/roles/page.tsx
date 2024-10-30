@@ -47,7 +47,7 @@ export default function ListRoles() {
                         {isModalOpen && <CreateRolModal closeEvent={closeOpenModal} />}
                         <div className="w-full">
                             <div className="flex space-x-4 mb-6 items-end">
-                                <h3 className='text-2xl font-bold'>Plantillas</h3>
+                                <h3 className='text-2xl font-bold'>Roles</h3>
                                 <ButtonTheme onClick={closeOpenModal}>
                                     <BriefcaseBusiness className="w-5 h-5 mr-2" />
                                     <span>Agregar</span>

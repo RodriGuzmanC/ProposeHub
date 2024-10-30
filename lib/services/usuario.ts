@@ -2,7 +2,7 @@
 
 // lib/usuario.ts
 
-import { getData, postData, updateData } from "../utils/methods";
+import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 
 
@@ -42,7 +42,7 @@ export const editarUsuario = async (id: number, cuerpo: any): Promise<boolean> =
       nombre: cuerpo.nombre,
       correo: cuerpo.correo,
       id_rol: cuerpo.rol,
-      contrasena: cuerpo.clave
+      //contrasena: cuerpo.clave
     }
     await updateData(`usuarios/${id}`, data);
     return true; // Devuelve true si la operación se realiza correctamente
@@ -53,12 +53,13 @@ export const editarUsuario = async (id: number, cuerpo: any): Promise<boolean> =
 
 // Eliminar una organización
 export const eliminarUsuario = async (id: number): Promise<boolean> => {
-  const index = UsuariosDataExample.findIndex(org => org.id === id);
-  if (index !== -1) {
-    UsuariosDataExample.splice(index, 1);
-    return true;
+  try {
+  
+    const res = await deleteData(`usuarios/${id}`);
+    return res; // Devuelve true si la operación se realiza correctamente
+  } catch (error) {
+    throw new Error((<Error>error).message);
   }
-  return false;
 };
 
 

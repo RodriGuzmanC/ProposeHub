@@ -59,7 +59,7 @@ export default function CreateServiceModal({ closeEvent }: CreateTemplateModalPr
               placeholder="Nombre del servicio"
               required
             />
-            <CardDescription className="mb-4">
+            <CardDescription className="mb-4 mt-4">
               Ingresa la descripcion
             </CardDescription>
             <Input

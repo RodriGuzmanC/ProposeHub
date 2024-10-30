@@ -124,7 +124,7 @@
     width: 100%; /* Se asegura de que el slider ocupe todo el ancho */
   }
   
-  .page {
+  .page-container {
     min-width: 100%; /* Cada página ocupa el 100% del ancho del contenedor */
     height: 100vh; /* Ajusta la altura según sea necesario */
     display: flex;

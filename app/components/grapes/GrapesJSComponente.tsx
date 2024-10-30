@@ -78,7 +78,7 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction, launchFunction} :
                     saveTimeout = setTimeout(async () => {
                         console.log('Guardando cambios...');
                         await storeFunction(data);
-                    }, 3000);
+                    }, 6000);
                 },
               });
             // Agrega mas bloques
