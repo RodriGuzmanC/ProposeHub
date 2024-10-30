@@ -2,8 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, Edit, Eye, Trash } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import DeleteFormModal from "../global/DeleteForm";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 interface ContactInfoCardProps {
   id: number;

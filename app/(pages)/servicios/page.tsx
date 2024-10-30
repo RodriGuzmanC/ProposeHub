@@ -5,13 +5,15 @@ import CreateTemplateModal from '@/app/components/plantillas/createTemplateModal
 import CreateRolModal from '@/app/components/roles/createRolModal';
 import EditRolModal from '@/app/components/roles/editRolModal';
 import CreateServiceModal from '@/app/components/servicios/createServiceModal';
+import CardSkeleton from '@/app/components/skeletons/CardSkeleton';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { eliminarPlantilla, obtenerPlantillas } from '@/lib/services/plantilla';
 import { eliminarRol, obtenerRoles } from '@/lib/services/rol';
 import { eliminarServicio, obtenerServicios } from '@/lib/services/servicio';
+import { Fallback } from '@radix-ui/react-avatar';
 import { Briefcase, BriefcaseBusiness } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 
 export default function ListRoles() {
     const [loading, setLoading] = useState(true)
@@ -60,17 +62,16 @@ export default function ListRoles() {
                         </div>
                         <div className="space-y-4">
                             {plantillas.map((plantilla: any) => (
-                                /*<PropuestaCard numero={propuesta.id} monto={propuesta.monto}></PropuestaCard>*/
-                                <CustomItemCard
-                                    key={plantilla.id}
-                                    id={plantilla.id}
-                                    nombre={plantilla.nombre}
-                                    elementos={[plantilla.descripcion]}
-                                    verHref='/plantillas/ver'
-                                    editarHref={`servicios/editar/${plantilla.id}`}
-                                    IconCard={Briefcase}
-                                    eliminarAction={eliminarFun}
-                                ></CustomItemCard>
+                                    <CustomItemCard
+                                        key={plantilla.id}
+                                        id={plantilla.id}
+                                        nombre={plantilla.nombre}
+                                        elementos={[plantilla.descripcion]}
+                                        verHref='/plantillas/ver'
+                                        editarHref={`servicios/editar/${plantilla.id}`}
+                                        IconCard={Briefcase}
+                                        eliminarAction={eliminarFun}
+                                    ></CustomItemCard>
                             ))}
                         </div>
                     </>

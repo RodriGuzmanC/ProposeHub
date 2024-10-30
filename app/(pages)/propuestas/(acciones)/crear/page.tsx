@@ -55,7 +55,7 @@ export default function Page() {
             monto: parseInt(presupuesto),
             usar_ai: usarAi,
             descripcionEmpresa: orgDescripcion,
-            informacion: orgDescripcion,
+            informacion: "nada",
             instrucciones_adicionales: instruccionesAi,
             id_usuario: 1,
             id_estado: 1,

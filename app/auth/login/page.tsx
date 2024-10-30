@@ -51,11 +51,6 @@ export default function LoginForm() {
           <CardTitle className="text-2xl font-semibold text-center">User Login</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {errorMessage && (
-            <div className="text-red-500 text-center">
-              {errorMessage}
-            </div>
-          )}
           <form onSubmit={handleLogin}>
             <div className="space-y-2">
               <Input

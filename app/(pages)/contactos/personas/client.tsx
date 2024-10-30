@@ -1,11 +1,11 @@
 "use client"
 import { User } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FilterComponent from '@/app/components/global/FilterComponent'
 import ButtonTheme from '@/app/components/global/ButtonTheme'
 import CustomItemCard from '@/app/components/global/CustomItemCard'
-import { eliminarCliente } from '@/lib/services/cliente'
+import { eliminarCliente, obtenerClientes } from '@/lib/services/cliente'
 
 
 
@@ -13,8 +13,18 @@ import { eliminarCliente } from '@/lib/services/cliente'
 export default function PersonasVistaClient({ data }: any) {
   async function eliminarFun(id: number) {
     await eliminarCliente(id)
+    cargar()
   }
   const [filteredData, setFilteredData] = useState(data);
+
+  async function cargar(){
+    const data = await obtenerClientes()
+    setFilteredData(data)
+  }
+
+  useEffect(()=>{
+    cargar()
+  }, [])
 
   return (
     <div className="flex flex-col w-full h-screen overflow-auto">

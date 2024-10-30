@@ -35,3 +35,9 @@
     order: -1;
     margin-right: 50px;
   }
+
+
+  .page{
+    overflow: hidden;
+    position: relative;
+  }

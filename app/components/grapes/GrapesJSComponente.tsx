@@ -27,6 +27,7 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction, launchFunction} :
     const [htmlContent, setHtmlContent] = useState<string>('');
     const [projectID, setProjectID] = useState(slug)
     const projectEndpoint = `http://127.0.0.1:8000/api/plantillas/contenido/${projectID}`;
+    let saveTimeout : any; // Para el autoguardado
 
     useEffect(() => {
         if (editorRef.current) {
@@ -70,10 +71,14 @@ const GrapesJSComponent = ({slug, loadFunction, storeFunction, launchFunction} :
                 },
               
                 async store(data) {
-                    let almacenado = await storeFunction(data)
-                    console.log("Se imprime lo que se esta guardando")
-                    console.log(data)
-                    console.log(almacenado);
+                    //let almacenado = await storeFunction(data)
+                    clearTimeout(saveTimeout);
+
+                    // Establece un nuevo timeout
+                    saveTimeout = setTimeout(async () => {
+                        console.log('Guardando cambios...');
+                        await storeFunction(data);
+                    }, 3000);
                 },
               });
             // Agrega mas bloques

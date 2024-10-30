@@ -37,7 +37,7 @@ export default function ModernProposalSidebar({ children }: LayoutPropsLib) {
                             Contactos
                         </h2>
                         {proposalStates.map((state) => (
-                            <Link href={state.href}>
+                            <Link key={state.id} href={state.href}>
                                 <Button
                                     key={state.id}
                                     variant="ghost"

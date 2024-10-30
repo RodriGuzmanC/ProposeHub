@@ -137,6 +137,8 @@ export const EjemploPrueba = async (cuerpo: any) => {
         }
         // Una vez obtenida la respuesta podemos proceder a crear la propuesta
         // Creamos la propuesta
+        console.log("Antes de crear propuesta")
+        console.log(data)
         const propuestaCreada = await postData('propuestas', cuerpo);
         
 

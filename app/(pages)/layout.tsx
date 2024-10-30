@@ -10,7 +10,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import PagesLoading from '../components/skeletons/PagesLoading'
 
 const navItems = [
-  { id: 'inicio', icon: Home, label: 'Inicio', href: '/inicio' },
   { id: 'contactos', icon: Users, label: 'Contactos', href: '/contactos/personas' },
   { id: 'propuestas', icon: Briefcase, label: 'Propuestas', href: '/propuestas' },
   { id: 'plantillas', icon: Briefcase, label: 'Plantillas', href: '/plantillas' },
@@ -38,7 +37,7 @@ export default function ModernNavbar({ children }: Props) {
 
   const handleLogout = () => {
     document.cookie = 'userInfo=; Max-Age=0; path=/;'; // Eliminar la cookie
-    router.push('/auth/login');
+    window.location.href = '/contactos/personas';
   };
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export default function ModernNavbar({ children }: Props) {
         <div className="p-4 border-t border-gray-800">
           <div className="flex items-center gap-4">
             <Avatar>
-              <AvatarImage src="/avatar.png" alt="Usuario" />
+              <AvatarImage src="/imgs/avatar.png" alt="Usuario" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
             {!isCollapsed && (

@@ -6,147 +6,55 @@ export function AddBlocks(editor: any) {
     blockManager.add('page-block', {
         label: 'Página',
         content: `
-            <div class="page" style="width: 100%; height: 100%; background-color: #f0f0f0; position: relative; display: flex; justify-content: center; align-items: center; padding-top: 15px; padding-bottom: 15px;">
-                <div data-page="true" style="margin: 0 auto; height: 297mm; width: 210mm; background: white; border: 1px solid #ccc; box-sizing: border-box; position: relative;">
+            <div class="page-container" style="width: 100%; height: 100%; background-color: #f0f0f0; position: relative; display: flex; justify-content: center; align-items: center; padding-top: 15px; padding-bottom: 15px;">
+                <div class="page" data-page="true" style="margin: 0 auto; height: 297mm; width: 210mm; background: white; border: 1px solid #ccc; box-sizing: border-box; position: relative;">
                     <div style="padding: 10px;">
                         Empieza escribiendo algo....
                     </div>
                 </div>
             </div>
         `,
-        category: 'Primario',
-    });
-    // Bloque de Título
-    blockManager.add('titulo-block', {
-        label: 'Titulo',
-        content: '<h1 class="text-3xl font-bold text-center mt-4">Escribe tu título aquí</h1>',
-        category: 'Otros',
-        activate: true,
+        category: 'Advanced',
     });
     
-    // Bloque de Texto
-    blockManager.add('texto-block', {
-        label: 'Texto',
-        content: '<p class="text-lg text-gray-700 mt-2">Escribe tu texto aquí</p>',
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Botón
     blockManager.add('boton-block', {
-        media: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M20.5 17h-17A2.502 2.502 0 0 1 1 14.5v-4A2.502 2.502 0 0 1 3.5 8h17a2.502 2.502 0 0 1 2.5 2.5v4a2.502 2.502 0 0 1-2.5 2.5zm-17-8A1.502 1.502 0 0 0 2 10.5v4A1.502 1.502 0 0 0 3.5 16h17a1.502 1.502 0 0 0 1.5-1.5v-4A1.502 1.502 0 0 0 20.5 9zM17 12H7v1h10z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>`,
+        media: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M20 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>`,
         label: 'Botón',
-        content: '<button class="bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600">Haz clic aquí</button>',
+        content: '<button style="color: white; background-color: black; padding: 10px; border: none; border-radius: 5px;">Haz clic aquí</button>',
         category: 'Otros',
         activate: true,
     });
     
-    // Bloque de Imagen
-    blockManager.add('imagen-block', {
-        label: 'Imagen',
-        content: '<img class="w-full h-auto rounded shadow" src="https://via.placeholder.com/150" alt="Imagen" />',
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Enlace
-    blockManager.add('link-block', {
-        label: 'Enlace',
-        content: '<a href="#" class="text-blue-500 underline hover:text-blue-700">Haz clic aquí</a>',
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Lista Ordenada
     blockManager.add('lista-ordenada-block', {
+        media: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M6 12h12M6 18h12M6 6h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>`,
         label: 'Lista Ordenada',
-        content: '<ol class="list-decimal pl-5 mt-2"><li>Elemento 1</li><li>Elemento 2</li><li>Elemento 3</li></ol>',
+        content: '<ol style="padding-left: 20px; margin: 10px 0; list-style-type: decimal;"><li>Elemento 1</li><li>Elemento 2</li><li>Elemento 3</li></ol>',
         category: 'Otros',
         activate: true,
     });
     
-    // Bloque de Lista Desordenada
-    blockManager.add('lista-desordenada-block', {
-        label: 'Lista Desordenada',
-        content: '<ul class="list-disc pl-5 mt-2"><li>Elemento A</li><li>Elemento B</li><li>Elemento C</li></ul>',
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Video
-    blockManager.add('video-block', {
-        label: 'Video',
-        content: '<video class="w-full h-auto rounded shadow" controls><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">Tu navegador no soporta el video</video>',
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Tabla
     blockManager.add('tabla-block', {
+        media: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M4 21h15.893c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zm0-2v-5h4v5H4zM14 7v5h-4V7h4zM8 7v5H4V7h4zm2 12v-5h4v5h-4zm6 0v-5h3.894v5H16zm3.893-7H16V7h3.893v5z"></path></svg>`,
         label: 'Tabla',
-        content: `
-        <table class="min-w-full border-collapse border border-gray-200">
-            <thead>
-                <tr>
-                    <th class="border border-gray-200 px-4 py-2">Encabezado 1</th>
-                    <th class="border border-gray-200 px-4 py-2">Encabezado 2</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="border border-gray-200 px-4 py-2">Dato 1</td>
-                    <td class="border border-gray-200 px-4 py-2">Dato 2</td>
-                </tr>
-            </tbody>
-        </table>`,
+        content: '<table style="width: 100%; border-collapse: collapse; margin: 10px 0;"><tr><th style="border: 1px solid #ccc; padding: 8px;">Header 1</th><th style="border: 1px solid #ccc; padding: 8px;">Header 2</th></tr><tr><td style="border: 1px solid #ccc; padding: 8px;">Cell 1</td><td style="border: 1px solid #ccc; padding: 8px;">Cell 2</td></tr></table>',
         category: 'Otros',
         activate: true,
     });
     
-    // Bloque de Separador
     blockManager.add('separador-block', {
+        media: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>`,
         label: 'Separador',
-        content: '<hr class="border-t-2 border-gray-300 my-4" />',
+        content: '<hr style="border: 1px solid #ccc; margin: 20px 0;">',
         category: 'Otros',
         activate: true,
     });
     
-    // Bloque de Cita
     blockManager.add('cita-block', {
+        media: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.318.142-.686.238-1.028.466-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.945-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 6.5 10zm11 0c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 17.5 10z"></path></svg>`,
         label: 'Cita',
-        content: '<blockquote class="border-l-4 border-blue-500 pl-4 italic text-gray-600">Cita textual</blockquote>',
+        content: '<blockquote style="border-left: 2px solid #ccc; padding-left: 10px; margin: 10px 0;">Aquí va una cita interesante.</blockquote>',
         category: 'Otros',
         activate: true,
     });
     
-    // Bloque de Formulario
-    blockManager.add('formulario-block', {
-        label: 'Formulario',
-        content: `
-        <form class="mt-4">
-            <label for="name" class="block text-sm font-medium text-gray-700">Nombre:</label>
-            <input type="text" id="name" name="name" class="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <label for="email" class="block text-sm font-medium text-gray-700 mt-4">Email:</label>
-            <input type="email" id="email" name="email" class="mt-1 block w-full p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <button type="submit" class="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600">Enviar</button>
-        </form>`,
-        category: 'Otros',
-        activate: true,
-    });
-    
-    // Bloque de Icono
-    blockManager.add('icono-block', {
-        label: 'Icono',
-        content: '<i class="fas fa-star text-yellow-500"></i>', // Usando FontAwesome
-        category: 'Otros',
-        activate: true,
-    });
-
-    // Bloque de contenedor
-    blockManager.add('contenedor-block', {
-        label: 'Contenedor',
-        content: '<div class="m-4 w-full"></div>',
-        category: 'Otros',
-        activate: true,
-    });
 }

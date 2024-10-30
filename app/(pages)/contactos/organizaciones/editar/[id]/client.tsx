@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 
-export default async function EditarOrganizacionesClient({ organizacion }: PageProps) {
+export default function EditarOrganizacionesClient({ organizacion }: PageProps) {
 
      const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

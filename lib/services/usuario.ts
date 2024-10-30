@@ -21,7 +21,7 @@ export const obtenerUsuarios = async () => {
     const data = await getData('usuarios');
     return data; // Devuelve los datos obtenidos
   } catch (error) {
-    throw new Error(`Error al obtener organizaciones: ${error}`);
+    throw new Error((<Error>error).message);
   }
 };
 
@@ -30,9 +30,9 @@ export const obtenerUsuario = async (id: number) => {
   try {
     const data = await getData(`usuarios/${id}`);
     return data; // Devuelve la organización obtenida
-} catch (error) {
-    throw new Error(`Error al obtener la organización: ${error}`);
-}
+  } catch (error) {
+    throw new Error((<Error>error).message);
+  }
 };
 
 // Editar una organización
@@ -47,7 +47,7 @@ export const editarUsuario = async (id: number, cuerpo: any): Promise<boolean> =
     await updateData(`usuarios/${id}`, data);
     return true; // Devuelve true si la operación se realiza correctamente
   } catch (error) {
-    throw new Error(`Error al editar usuarios: ${error}`);
+    throw new Error((<Error>error).message);
   }
 };
 
@@ -73,7 +73,7 @@ export async function loginUsuario(correo: string, contrasena: string) {
     return res;
 
   } catch (error) {
-    throw new Error(`Error al editar usuarios: ${error}`);
+    throw new Error((<Error>error).message);
   }
 }
 
@@ -96,6 +96,6 @@ export async function registrarUsuario(cuerpo: any) {
 
     return credentials;*/
   } catch (error) {
-    throw new Error(`Error al editar usuarios: ${error}`);
+    throw new Error((<Error>error).message);
   }
 }
