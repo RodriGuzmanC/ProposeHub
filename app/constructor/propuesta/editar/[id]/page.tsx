@@ -2,7 +2,7 @@
 import LoadingFallback from '@/app/components/grapes/LoadingFallback';
 import { obtenerPlantilla } from '@/lib/services/plantilla';
 import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
-import { editarVersionPropuesta, obtenerVersionesPropuesta, obtenerVersionPropuesta } from '@/lib/services/versionPropuesta';
+import { editarVersionPropuesta, obtenerVersionEnEdicion, obtenerVersionesPropuesta, obtenerVersionPropuesta } from '@/lib/services/versionPropuesta';
 import { editarConToast } from '@/lib/utils/alertToast';
 import dynamic from 'next/dynamic';
 import { lazy, Suspense, useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ interface EditorPageProps{
 // Solo edita las propuestas
 export default function EditorPropuestaPage({params} : EditorPageProps) {
     const [slug, setSlug] = useState<number | null>(parseInt(params.id)); // Inicializa como null
-
+    const [idVersionPropuesta, setIdVersionPropuesta] = useState()
 
     async function getVersionporPropuesta(){
         try {
@@ -27,9 +27,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
                 throw new Error("No se ingreso un parametro")
             }
             // Obtenemos las versiones de la propuesta
-            const versiones: any = await obtenerVersionesPropuesta(slug);
-            // Filtrar las versiones que tienen "en_edicion" igual a 1
-            const versionEnEdicion = versiones.find((version: any) => version.en_edicion === 1);
+            const versionEnEdicion = await obtenerVersionEnEdicion(slug)
             return versionEnEdicion
         } catch (error) {
             console.log(error)
@@ -39,7 +37,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
      * Obtiene el contenido GrapesJS en formato String
      * @returns Devuelve un objeto JSON
      */
-    async function obtenerVersionEnEdicion(){
+    async function obtenerContenidoVersion(){
         try {
             
             const version : any = await getVersionporPropuesta()
@@ -49,7 +47,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
                 return JSON.parse(version.contenido); // Accede directamente a la propiedad "contenido"
             }
         } catch (error) {
-            throw new Error("Hubo un error al momento de obtener la ultima version")
+            throw new Error("Hubo un error al momento de obtener la version en edicion")
         }
     }
 
@@ -119,7 +117,14 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
             <div className="flex-grow">
                 {slug !== null ? ( // Verifica si slug está disponible
                     <Suspense fallback={<LoadingFallback />}>
-                        <GrapesJSComponent slug={slug} loadFunction={obtenerVersionEnEdicion} storeFunction={actualizarVersion} launchFunction={publicarHtmlCss}/>
+                        <GrapesJSComponent 
+                        slug={slug} 
+                        loadFunction={obtenerContenidoVersion} 
+                        storeFunction={actualizarVersion} 
+                        launchFunction={publicarHtmlCss}
+                        isProposeEditor={true}
+                        linkHome={"/propuestas"}
+                        />
                     </Suspense>
                 ) : (
                     <LoadingFallback /> // Muestra un cargador mientras se obtiene el slug

@@ -77,7 +77,13 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
             <div className="flex-grow">
                 {slug !== null ? ( // Verifica si slug está disponible
                     <Suspense fallback={<LoadingFallback />}>
-                        <GrapesJSComponent launchFunction={nada} slug={slug} loadFunction={cargarPlantilla} storeFunction={almacenarPlantilla} />
+                        <GrapesJSComponent
+                        isProposeEditor={false} 
+                        launchFunction={() => console.log("a")} 
+                        slug={slug} 
+                        loadFunction={cargarPlantilla} 
+                        storeFunction={almacenarPlantilla}
+                        linkHome={"/plantillas"} />
                     </Suspense>
                 ) : (
                     <LoadingFallback /> // Muestra un cargador mientras se obtiene el slug

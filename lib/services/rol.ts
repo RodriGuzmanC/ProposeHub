@@ -12,7 +12,7 @@ export const obtenerRoles = async () => {
     try {
         return await getData('roles')
     } catch (error) {
-        throw new Error(`Error al obtener usuarios: ${error}`);
+        throw new Error((<Error>error).message);
     }
 };
 

@@ -66,9 +66,11 @@ export interface EstadoPropuestaInterface {
 
 export interface VersionPropuestaInterface {
     id: number
-    propuestaID: number
-    versionNumero: number
+    id_propuesta: number
+    version_numero: number
     contenido: string
+    fecha_creacion: string
+    en_edicion: boolean
 }
 
 

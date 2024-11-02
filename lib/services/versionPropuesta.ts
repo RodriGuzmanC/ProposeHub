@@ -31,6 +31,29 @@ export const obtenerVersionPropuesta = async (id: number) => {
     }
 };
 
+export const obtenerVersionEnEdicion = async (id: number) => { // Id de la propuesta
+    try {
+        const cliente = await getData(`version-propuesta/en-edicion/${id}`)
+
+        if (!cliente) throw new Error(`Propuesta con ID ${id} no encontrado`);
+        return cliente;
+    } catch (error) {
+        throw new Error(`Error al obtener la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
+
+export const obtenerVersionPublicada = async (id: number) => { // Id de la propuesta
+    try {
+        const cliente = await getData(`version-propuesta/publicada/${id}`)
+
+        if (!cliente) throw new Error(`Propuesta con ID ${id} no encontrado`);
+        return cliente;
+    } catch (error) {
+        throw new Error(`Error al obtener la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
 
 // Crear una nueva organización
 export const crearVersionPropuesta = async (cuerpo: any): Promise<boolean> => {
@@ -50,6 +73,18 @@ export const editarVersionPropuesta = async (id: number, cuerpo: any): Promise<a
             contenido: cuerpo.contenido
         }
         const res = await updateData(`version-propuesta/${id}`, data);
+        return res; // Devuelve true si la operación se realiza correctamente
+    } catch (error) {
+        throw new Error(`Error al editar la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
+export const cambiarEstadoVersionPropuesta = async (idPropuesta: number, cuerpo: any): Promise<any> => {
+    try {
+        const data = {
+            id_version_propuesta: cuerpo.id_version
+        }
+        const res = await updateData(`version-propuesta/en-edicion/${idPropuesta}`, data);
         return res; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al editar la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);

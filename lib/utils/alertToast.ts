@@ -38,7 +38,7 @@ export async function crearConToast({cuerpo, event} : toastInterface){
 }
 
 export async function editarConToast({ id, cuerpo, event }: toastEditInterface) {
-    toast.promise(
+    return toast.promise(
         () => event(id, cuerpo),
         {
             pending: 'Editando...',
