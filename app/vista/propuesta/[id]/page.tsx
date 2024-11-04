@@ -1,4 +1,5 @@
 'use client'
+import { generatePDFNuevo } from '@/app/components/grapes/DownloadPdf';
 import { Button } from '@/components/ui/button';
 import { editarPropuesta, obtenerPropuesta } from '@/lib/services/propuesta';
 import { editarConToast } from '@/lib/utils/alertToast';
@@ -61,8 +62,14 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
         cargarContenido()
     }, []);
 
+    const obtenerHtmlYGenerarPDF = () => {
+        const elements = document.querySelectorAll('.page'); // Selecciona todos los elementos con la clase "page"
+        generatePDFNuevo(elements); // Llama a la función para generar el PDF
+    };
+
     return (
         <div>
+            
             {/* Header fijo con botón "Aceptar propuesta" */}
             <header className="sticky top-0 left-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50 border-b">
                 <div className="container mx-auto px-4">
@@ -75,7 +82,9 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
                             <CheckCircle className="mr-2 h-4 w-4" />
                             Aceptar propuesta
                         </Button>
-
+                        <button onClick={obtenerHtmlYGenerarPDF}>
+                            Descargar pdf
+                        </button>
                     </div>
                 </div>
             </header>
@@ -91,3 +100,4 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
 };
 
 export default PropuestaPage;
+

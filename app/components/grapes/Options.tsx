@@ -33,6 +33,14 @@ editor.Panels.addPanel({
             className: 'fa-solid fa-code-branch', // Icono de versiones (historial)
             attributes: { title: 'Ver versiones' },
         },
+        {
+            id: 'imprimir-pdf',
+            command() {
+                abrirVersionesModal();
+            },
+            className: 'fa-solid fa-code-branch', // Icono de versiones (historial)
+            attributes: { title: 'Descargar pdf' },
+        },
     ],
 });
     /*// Agrega botones en el menu

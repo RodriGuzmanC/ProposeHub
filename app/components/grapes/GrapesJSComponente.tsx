@@ -91,6 +91,53 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                     }
                 },
             },
+            // Configuracion de carga de imagenes
+            assetManager: {
+                assets: [], // Puedes inicializarlo vacío o cargar imágenes si lo prefieres
+                upload: 'http://127.0.0.1:8000/api/subir-imagen', // Ruta en Laravel para subir imágenes
+                uploadName: 'file', // Nombre del campo en el backend
+                autoAdd: true, // Añadir automáticamente al gestor de activos al subir
+                openAssetsOnDrop: true, // Abre el modal de assets cuando se hace drop
+            
+                // Función personalizada para cargar las imágenes desde el servidor
+                customFetch: (url, options) => {
+                  return fetch('http://127.0.0.1:8000/api/subir-imagennn') // Endpoint para obtener imágenes
+                    .then(response => response.json())
+                    .then(images => {
+                      // Formato necesario para GrapesJS
+                      return images.map((img: any) => ({
+                        src: img.url, // URL de la imagen desde el backend
+                        name: img.name, // Nombre de la imagen (opcional)
+                      }));
+                    });
+                },
+            
+                // Función personalizada para la subida de archivos
+                uploadFile: (e: any) => {
+                  const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+                  console.log("Files")
+                  console.log(files)
+                  const formData = new FormData();
+                  for (let i = 0; i < files.length; i++) {
+                    formData.append('image', files[i]); // Nombre del archivo
+                  }
+            
+                  fetch('http://127.0.0.1:8000/api/subir-imagen', { // Endpoint en Laravel para manejar la subida
+                    method: 'POST',
+                    body: formData,
+                  })
+                    .then(res => res.json())
+                    .then(data => {
+                      // Añade cada imagen al gestor de activos
+                      data.forEach((image: any) => editor.AssetManager.add(`http://127.0.0.1:8000${image.url}`));
+                    })
+                    .catch(err => console.error('Error al subir la imagen:', err));
+                },
+            
+                // Otras configuraciones opcionales
+                showUrlInput: true, // Mostrar input para URL
+                multiUpload: true,  // Permite subir múltiples archivos a la vez
+              },
           
             // Configuración de los paneles personalizados
             blockManager: {
