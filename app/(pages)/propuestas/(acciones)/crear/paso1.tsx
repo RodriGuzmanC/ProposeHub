@@ -31,7 +31,7 @@ export default function Paso1({ plantillasData, plantillaSeleccionada, setPlanti
 
   return (
     <div className='flex items-center flex-col'>
-      <h1 className="text-2xl font-bold mb-6 text-gray-950">Selecciona la plantilla</h1>
+      <h1 className="text-2xl font-bold mb-6 text-primary">Selecciona la plantilla</h1>
       <div className="grid grid-cols-2 gap-6 mb-6">
         {plantillasData.map((plantilla: any) => (
           <Card

@@ -124,7 +124,7 @@ body {
 }
 
 @layer base {
-  :root {
+  /*:root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -150,9 +150,49 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+  }*/
+  :root {
+    /* Colores principales */
+    --background: #222831;              /* Fondo oscuro */
+    --foreground: #EEEEEE;              /* Texto claro */
+    --card: #fff;                    /* Fondo de tarjeta (gris oscuro) */
+    --card-foreground: #31363F;         /* Texto de tarjeta (gris claro) */
+    --popover: #76ABAE;                 /* Fondo del popover (verde azulado) */
+    --popover-foreground: #fff;      /* Texto del popover (gris oscuro) */
+  
+    /* Colores primarios */
+    --primary: #222831;                 /* Fondo primario */
+    --primary-foreground: #EEEEEE;      /* Texto primario */
+    --secondary: #31363F;               /* Fondo secundario */
+    --secondary-foreground: #EEEEEE;    /* Texto secundario */
+    --muted: #31363F;                   /* Fondo atenuado */
+    --muted-foreground: #EEEEEE;        /* Texto atenuado (verde azulado) */
+  
+    /* Colores de acento */
+    --accent: #76ABAE;                  /* Acento */
+    --accent-foreground: #222831;       /* Texto de acento */
+    
+    /* Colores destructivos */
+    --destructive: #D32F2F;             /* Rojo destructivo (puedes cambiar este valor si quieres un color diferente) */
+    --destructive-foreground: #EEEEEE;  /* Texto destructivo */
+  
+    /* Colores de borde y entrada */
+    --border: #31363F;                  /* Color del borde */
+    --input: #31363F;                   /* Color de entrada (input) */
+    --ring: #76ABAE;                    /* Color de anillo (focus) */
+  
+    /* Colores del gráfico (esto es opcional, solo si usas gráficos) */
+    --chart-1: #222831;                 /* Primer color gráfico */
+    --chart-2: #31363F;                 /* Segundo color gráfico */
+    --chart-3: #76ABAE;                 /* Tercer color gráfico */
+    --chart-4: #EEEEEE;                 /* Cuarto color gráfico */
+    --chart-5: #76ABAE;                 /* Quinto color gráfico */
+  
+    /* Radio de los bordes */
+    --radius: 0.5rem;
   }
-  .dark {
-    --background: 0 0% 3.9%;
+  /*.dark {
+    --background: #003A61;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -176,7 +216,7 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
+  }*/
 }
 
 @layer base {

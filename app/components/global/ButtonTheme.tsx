@@ -13,7 +13,7 @@ export default function ButtonTheme({children, onClick, className='', type='butt
         <Button
             type={type}
             onClick={onClick}
-            className={`bg-btn-bg hover:bg-btn-hover text-white font-semibold py-5 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none ${className}`}
+            className={`bg-popover text-primary-foreground font-semibold py-5 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none ${className}`}
         >
             {children}
         </Button>

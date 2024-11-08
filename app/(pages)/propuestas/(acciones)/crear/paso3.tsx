@@ -23,7 +23,7 @@ export default function Page3({ serviciosData, selectedService, setSelectedServi
 
   return (
     <div className="flex-col flex gap-6 items-center w-full">
-      <h2 className="text-2xl font-bold text-gray-950">Selecciona el Servicio</h2>
+      <h2 className="text-2xl font-bold text-primary">Selecciona el Servicio</h2>
       {serviciosData.map((servicio: any) => (
         <ServiceItem
           key={servicio.id}

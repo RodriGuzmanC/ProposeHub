@@ -28,18 +28,12 @@ export default function ModernProposalSidebar({children} : LayoutPropsLib) {
 
   return (
     <div className='flex w-full h-screen bg-white'>
-    <aside className="w-64 h-screen bg-principal-800 text-gray-300 p-4 flex flex-col">
+    <aside className="w-64 h-screen bg-popover text-popover-foreground p-4 flex flex-col">
       <div className="relative mb-4">
-        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-        <Input
-          type="search"
-          placeholder="Search"
-          className="w-full pl-8 bg-gray-800 border-gray-700 focus:border-blue-600 text-gray-300 placeholder-gray-500"
-        />
       </div>
       <ScrollArea className="flex-grow">
         <nav className="space-y-1">
-          <h2 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <h2 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider">
             Estados de Propuesta
           </h2>
           {proposalStates.map((state) => (
@@ -48,8 +42,8 @@ export default function ModernProposalSidebar({children} : LayoutPropsLib) {
               variant="ghost"
               className={`w-full justify-start px-2 py-1.5 ${
                 activeState === state.id
-                  ? 'bg-blue-600/20 text-white'
-                  : 'text-gray-400 hover:bg-blue-600/10 hover:text-white'
+                  ? 'bg-secondary text-secondary-foreground'
+                  : 'text-primary-foreground'
               }`}
               onClick={() => handleStateChange(state.id)}
             >
@@ -70,7 +64,9 @@ export default function ModernProposalSidebar({children} : LayoutPropsLib) {
         </nav>
       </ScrollArea>
     </aside>
-    {children}
+      <div className='text-primary w-full'>
+      {children}
+      </div>
     </div>
   )
 }

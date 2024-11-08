@@ -52,7 +52,7 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="container mx-auto px-8 py-8">
+        <div className="container mx-auto px-8 py-8 bg-white text-primary">
             <BackLink href="/usuarios">Volver a usuarios</BackLink>
             <h1 className="text-3xl font-bold mb-6">Crear Nuevo Usuario</h1>
             <form onSubmit={handleSubmit} className="space-y-6">

@@ -33,7 +33,7 @@ export default function ListPlantillas() {
     const closeOpenModal = () => setIsModalOpen(!isModalOpen);
 
     return (
-        <div className="flex flex-col w-full h-screen overflow-auto p-6">
+        <div className="flex flex-col w-full h-screen overflow-auto p-6 bg-white text-primary">
             {loading ? <PagesLoading></PagesLoading> :
                 (
                     <>

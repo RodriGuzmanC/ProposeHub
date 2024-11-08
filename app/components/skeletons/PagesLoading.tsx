@@ -4,7 +4,7 @@ import '../../../public/styles/loadingPage.css'
 
 export default function PagesLoading() {
   return (
-    <div className="flex flex-col items-center w-full justify-center min-h-screen bg-background">
+    <div className="flex flex-col items-center w-full justify-center min-h-screen bg-white">
       {/*<div className="text-center space-y-4">
         <Loader2 className="w-16 h-16 animate-spin text-primary mx-auto" />
         <h2 className="text-2xl font-semibold text-foreground">Cargando...</h2>

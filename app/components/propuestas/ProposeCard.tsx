@@ -29,12 +29,12 @@ export default function ProposeCard({ id, nombre, elementos, modalCorreo, editar
       )}
       <CardContent className="p-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="bg-principal-100 p-2 rounded-full">
-            <IconCard className="h-6 w-6 text-white" />
+          <div className="bg-popover p-2 rounded-full">
+            <IconCard className="h-6 w-6 text-popover-foreground" />
           </div>
           <div>
             <h3 className="text-lg font-semibold">{nombre}</h3>
-            <div className="flex space-x-2 text-sm text-muted-foreground info-list">
+            <div className="flex space-x-2 text-sm info-list">
               {elementos.map((elemento, index) => (
                 <span key={index}>{elemento}</span>
               ))}

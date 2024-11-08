@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import grapesjs, { usePlugin } from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import '../../../public/styles/grapesjscustom.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 import LoadingFallback from './LoadingFallback';
 import { AddBlocks } from './Blocks';
@@ -60,7 +61,8 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
     if (isProposeEditor) {
         plugins.push(usePlugin(AddOptions, {
             launchFunction: launchFunction,
-            abrirVersionesModal: abrirVersionesModal
+            abrirVersionesModal: abrirVersionesModal,
+            storeFunction: storeFunction
         }));
     }
     
@@ -85,7 +87,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             storageManager: {
                 type: 'remote',
                 // ...
-                stepsBeforeSave: 1,
+                stepsBeforeSave: 6,
                 options: {
                     remote: {
                     }
@@ -178,7 +180,8 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                     <div className="panel__left">
                         <div className="panel__basic-actions">
                             <div className="panel__action-basic"></div>
-                            <div className="panel__action-buttons"></div>
+                            <div className="panel__action-buttons ml-2"></div>
+                            <div className="panel__action-autosave ml-2"></div>
                         </div>
                     </div>
                     <div className="panel__center">

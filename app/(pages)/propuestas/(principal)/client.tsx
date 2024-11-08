@@ -11,7 +11,7 @@ export default function PropuestasClient({ data }: { data: Array<any> }) {
         <div className="flex flex-col w-full h-screen overflow-auto">
 
             <main className="flex-1 h-full">
-                <div className="h-full p-6">
+                <div className="h-full p-6 overflow-auto">
                     <ListProposes data={data}></ListProposes>
                 </div>
             </main>

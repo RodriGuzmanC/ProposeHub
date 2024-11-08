@@ -24,18 +24,18 @@ export default function CustomItemCard({ id, nombre, elementos, verHref, editarH
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full overflow-hidden">
       {showDeleteModal && (
         <DeleteFormModal userId={id} userName={nombre} closeEvent={showHideDeleteForm} deleteEvent={eliminarAction}></DeleteFormModal>
       )}
-      <CardContent className="p-4 flex items-center justify-between">
+      <CardContent className="p-4 flex items-center justify-between bg-card text-card-foreground">
         <div className="flex items-center space-x-4">
-          <div className="bg-principal-100 p-2 rounded-full">
+          <div className="bg-popover p-2 rounded-full">
             <IconCard className="h-6 w-6 text-white" />
           </div>
           <div>
             <h3 className="text-lg font-semibold">{nombre}</h3>
-            <div className="flex space-x-2 text-sm text-muted-foreground info-list">
+            <div className="flex space-x-2 text-sm info-list">
               {elementos.map((elemento, index) => (
                 <span key={index}>{elemento}</span>
               ))}
@@ -49,7 +49,7 @@ export default function CustomItemCard({ id, nombre, elementos, verHref, editarH
             </Button>
           </Link>*/}
           <Link href={editarHref}>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-popover hover:text-popover-foreground">
               <Edit className="h-4 w-4" />
             </Button>
           </Link>

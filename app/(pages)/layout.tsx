@@ -56,7 +56,7 @@ export default function ModernNavbar({ children }: Props) {
 
   return (
     <div className="flex min-h-screen overflow-auto">
-      <aside className={`flex flex-col h-screen bg-principal-900 text-gray-100 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
+      <aside className={`flex flex-col h-screen bg-primary text-gray-100 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
         <div className="flex items-center justify-between p-4">
           {!isCollapsed && <h1 className="text-xl font-bold">ProposeHub</h1>}
           <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)}>

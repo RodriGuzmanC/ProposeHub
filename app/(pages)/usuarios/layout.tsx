@@ -1,0 +1,10 @@
+import { LayoutPropsLib } from '@/lib/utils/definitions'
+import React from 'react'
+
+export default function layout({children} : LayoutPropsLib)  {
+  return (
+    <div className='bg-white h-full'>
+      {children}
+    </div>
+  )
+}

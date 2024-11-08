@@ -67,7 +67,7 @@ export default function Tab({ contactsData, organizationsData, selectedContact, 
             key={tab.key}
             className={`py-2 px-4 font-semibold ${
               activeTab === tab.key
-                ? 'color-principal border-b-2 border-principal'
+                ? 'text-black border-b-2 border-principal'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
             onClick={() => setActiveTab(tab.key)}

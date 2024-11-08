@@ -37,17 +37,17 @@ export default function Page2({ organizacionesData, selectedContact, setSelected
   return (
     <div className='flex flex-col gap-8'>
       <div className='flex gap-10 items-center'>
-        <div className='texto-contenido'>
-          <h2 className='text-gray-950 font-bold text-2xl'>Selecciona el contacto</h2>
-          <p className='text-gray-900 text-sm'>Asigna quienes recibirán la propuesta que vas a crear</p>
+        <div className='texto-contenido text-primary'>
+          <h2 className='font-bold text-2xl'>Selecciona el contacto</h2>
+          <p className='text-sm'>Asigna quienes recibirán la propuesta que vas a crear</p>
         </div>
         <Button
             disabled={false}
-          variant='purple'
+          variant='secondary'
           onClick={() => console.log("B")}
-          href={'/crear/contacto'}
+          href={'contactos/organizaciones/crear'}
         >
-          Crear contacto
+          Crear Organizacion
         </Button>
       </div>
       <Tab 

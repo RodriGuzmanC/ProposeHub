@@ -27,7 +27,7 @@ export default function UsuariosClientPage({ usuarios }: any) {
       }, [usuarios]);
 
     return (
-        <div className="flex flex-col w-full h-screen overflow-auto">
+        <div className="flex flex-col w-full h-screen overflow-auto bg-white text-primary">
             <main className="flex-1 h-full">
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">

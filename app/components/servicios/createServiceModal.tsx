@@ -34,7 +34,7 @@ export default function CreateServiceModal({ closeEvent }: CreateTemplateModalPr
 
   return (
     <ModalBackground>
-      <Card className="w-[90%] max-w-md mx-auto">
+      <Card className="w-[90%] max-w-md mx-auto bg-white text-primary">
       <form onSubmit={handleCreate}>
 
         <CardHeader className="flex flex-row items-center">
@@ -71,7 +71,7 @@ export default function CreateServiceModal({ closeEvent }: CreateTemplateModalPr
           </CardContent>
         
         <CardFooter className="flex justify-end space-x-2">
-          <Button variant="outline" onClick={closeEvent}>
+          <Button variant="ghost" onClick={closeEvent}>
             Cancelar
           </Button>
           <Button type="submit">

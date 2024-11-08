@@ -32,7 +32,7 @@ export default function Paso4({
 }: Paso4Props) {
 
   return (
-    <div className="w-full">
+    <div className="w-full text-primary">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Información General</CardTitle>
         <CardDescription className="text-center">potenciado con AI</CardDescription>

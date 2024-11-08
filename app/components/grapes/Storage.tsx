@@ -21,13 +21,10 @@ export const AddStorage: Plugin<AddStorageInter> = (editor, options) => {
       
         async store(data: any) {
             //let almacenado = await storeFunction(data)
-            clearTimeout(saveTimeout);
 
             // Establece un nuevo timeout
-            saveTimeout = setTimeout(async () => {
-                console.log('Guardando cambios...');
-                await storeFunction(data);
-            }, 6000);
+            console.log('Guardando cambios...');
+            await storeFunction(data);
         },
       });
 }
