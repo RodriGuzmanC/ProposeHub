@@ -100,3 +100,19 @@ export async function registrarUsuario(cuerpo: any) {
     throw new Error((<Error>error).message);
   }
 }
+
+
+
+export async function actualizarContrasenaUsuario(id: number, cuerpo: any) {
+  try {
+    const data = {
+      contrasena_actual: cuerpo.contrasena_actual,
+      contrasena_nueva: cuerpo.contrasena_nueva,
+    }
+    const res = await updateData(`usuarios/cambiar-clave/${id}`, data);
+    return res;
+    
+  } catch (error) {
+    throw new Error((<Error>error).message);
+  }
+}

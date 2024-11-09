@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { loginConToast } from '@/lib/utils/alertToast'
 import { ArrowRight, Lock, Mail } from 'lucide-react'
+import { setSession } from '@/lib/services/auth/auth'
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState('')
@@ -18,7 +19,6 @@ export default function LoginForm() {
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(correo, clave)
 
     const userInfo = await loginConToast({
       correo: correo,
@@ -29,7 +29,7 @@ export default function LoginForm() {
     //const userInfo = await loginUsuario(correo, clave)
     console.log(userInfo)
     if (userInfo) {
-      document.cookie = `userInfo=${encodeURIComponent(JSON.stringify(userInfo))}; path=/;`;
+      setSession(userInfo);
 
       window.location.href = '/contactos/personas';
     }

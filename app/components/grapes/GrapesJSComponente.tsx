@@ -19,6 +19,7 @@ import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
 import HistorialVersionesModal from '../propuestas/HistorialVersionesModal';
 import { cambiarEstadoVersionPropuesta } from '@/lib/services/versionPropuesta';
 import { AddPanels } from './Panels';
+import { OptionsPlantilla } from './OptionsPlantilla';
 
 interface gsjs {
     slug: number
@@ -64,6 +65,10 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             abrirVersionesModal: abrirVersionesModal,
             storeFunction: storeFunction
         }));
+    } else{
+      plugins.push(usePlugin(OptionsPlantilla, {
+        storeFunction: storeFunction
+    }));
     }
     
 
@@ -93,25 +98,58 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                     }
                 },
             },
+            
             // Configuracion de carga de imagenes
             assetManager: {
-                assets: [], // Puedes inicializarlo vacío o cargar imágenes si lo prefieres
-                upload: 'http://127.0.0.1:8000/api/subir-imagen', // Ruta en Laravel para subir imágenes
+                assets: [
+                  { 
+                    src: 'http://127.0.0.1:8000/storage/images/GHkZ0I4mUchtGgkVpikOQUSAalHFB1crTPThV3Hb.png', 
+                    name: 'Imagen 1' 
+                  },
+                  { 
+                    src: 'http://127.0.0.1:8000/storage/images/rMApPXgQmYWDR2UHta0ANex97zVAFmZCCfnKICix.png', 
+                    name: 'Imagen 2' 
+                  },
+                ], // Puedes inicializarlo vacío o cargar imágenes si lo prefieres
+                upload: 'http://127.0.0.1:8000/api/imagenes', // Ruta en Laravel para subir imágenes
                 uploadName: 'file', // Nombre del campo en el backend
                 autoAdd: true, // Añadir automáticamente al gestor de activos al subir
                 openAssetsOnDrop: true, // Abre el modal de assets cuando se hace drop
             
                 // Función personalizada para cargar las imágenes desde el servidor
                 customFetch: (url, options) => {
-                  return fetch('http://127.0.0.1:8000/api/subir-imagennn') // Endpoint para obtener imágenes
-                    .then(response => response.json())
-                    .then(images => {
-                      // Formato necesario para GrapesJS
-                      return images.map((img: any) => ({
-                        src: img.url, // URL de la imagen desde el backend
-                        name: img.name, // Nombre de la imagen (opcional)
-                      }));
-                    });
+                  console.log("aaaaaaaaa")
+
+                  // Devolver una promesa que resuelve los assets
+                  return new Promise((resolve, reject) => {
+                    // Realizar la solicitud para obtener las imágenes
+                    fetch('http://127.0.0.1:8000/api/imagenes')
+                      .then(response => {
+                        if (!response.ok) {
+                          // Si la respuesta no es exitosa, rechazamos la promesa
+                          reject(`Error en la respuesta del servidor: ${response.status} ${response.statusText}`);
+                        }
+                        return response.json();
+                      })
+                      .then(images => {
+                        // Mapeamos las imágenes a la estructura que GrapesJS espera
+                        const assets = images.map((img : any) => ({
+                          src: `http://127.0.0.1:8000${img.url}`,
+                          name: `Imagen ${img.id}`,
+                          type: 'image',
+                        }));
+                
+                        console.log("Imágenes obtenidas:", assets);
+                
+                        // Resolvemos la promesa con los assets
+                        resolve(assets);
+                      })
+                      .catch(error => {
+                        // Si ocurre algún error en la solicitud, rechazamos la promesa
+                        console.error("Error al cargar las imágenes:", error);
+                        reject(error);
+                      });
+                  });
                 },
             
                 // Función personalizada para la subida de archivos
@@ -124,7 +162,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                     formData.append('image', files[i]); // Nombre del archivo
                   }
             
-                  fetch('http://127.0.0.1:8000/api/subir-imagen', { // Endpoint en Laravel para manejar la subida
+                  fetch('http://127.0.0.1:8000/api/imagenes', { // Endpoint en Laravel para manejar la subida
                     method: 'POST',
                     body: formData,
                   })
@@ -158,6 +196,30 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
               appendTo: '.panel__devices',
             } as any,
           });
+
+          editor.on('load', () => {
+            console.log('Editor cargado, agregando imágenes al AssetManager...');
+            
+            // Aquí agregamos imágenes dinámicamente, por ejemplo, desde tu API
+            fetch('http://127.0.0.1:8000/api/imagenes')
+              .then(response => response.json())
+              .then(images => {
+                // Mapeamos las imágenes obtenidas a un formato compatible con GrapesJS
+                images.forEach((img:any) => {
+                  editor.AssetManager.add({
+                    src: `http://127.0.0.1:8000${img.url}`,  // La URL completa de la imagen
+                    name: `Imagen ${img.nombre ?? img.id}`, // Nombre opcional
+                    type: 'image',  // Tipo de asset
+                  });
+                });
+          
+                console.log('Imágenes añadidas:', images);
+              })
+              .catch(error => {
+                console.error('Error al cargar las imágenes:', error);
+              });
+          });
+          // Carga imagenes
 
           editorGrapesRef.current = editor;
           

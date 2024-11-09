@@ -11,6 +11,7 @@ import { obtenerServicios } from '@/lib/services/servicio';
 import { obtenerOrganizaciones } from '@/lib/services/organizacion';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { crearConToast } from '@/lib/utils/alertToast';
+import { getUserIdFromSession } from '@/lib/services/auth/auth';
 
 export default function Page() {
     {/** Breadcrumb */ }
@@ -37,16 +38,7 @@ export default function Page() {
     
 
     async function postPropuesta() {
-        /*const propuestaData = {
-            idPlantilla: plantillaSeleccionada,
-            idOrganizacion: organizacionSeleccionada,
-            idServicio: selectedService,
-            titulo: tituloPropuesta,
-            presupuesto: parseInt(presupuesto),
-            usarAi: usarAi,
-            orgDescripcion: orgDescripcion,
-            instruccionesAdicionales: instruccionesAi
-        };*/
+        
         const propuestaData = {
             id_plantilla: plantillaSeleccionada,
             id_servicio: selectedService,
@@ -57,7 +49,7 @@ export default function Page() {
             descripcionEmpresa: orgDescripcion,
             informacion: "nada",
             instrucciones_adicionales: instruccionesAi,
-            id_usuario: 1,
+            id_usuario: getUserIdFromSession(),
             id_estado: 1,
         }
         try {

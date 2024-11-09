@@ -6,12 +6,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CheckCircle, Download, Menu, X } from "lucide-react"
 import Image from 'next/image'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { logoutClientSession } from '@/lib/services/auth/auth'
 
 export default function HeaderVistaPropuesta({ aceptarPropuestaFun, obtenerHtmlYGenerarPDF }: { 
   aceptarPropuestaFun: () => void, 
   obtenerHtmlYGenerarPDF: () => void 
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  function logout(){
+    logoutClientSession()
+  }
 
   return (
     <header className="sticky top-0 left-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50 border-b">
@@ -30,10 +35,7 @@ export default function HeaderVistaPropuesta({ aceptarPropuestaFun, obtenerHtmlY
                   
                 </SheetHeader>
                 <nav className="flex flex-col space-y-4 mt-8">
-                  <Button variant="outline" onClick={() => {
-                    // Lógica para salir
-                    setIsMenuOpen(false)
-                  }}>
+                  <Button variant="outline" onClick={logout}>
                     Salir
                   </Button>
                   <Button variant="outline" onClick={() => {

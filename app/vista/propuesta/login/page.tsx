@@ -10,6 +10,7 @@ import { Mail, Lock, ArrowRight } from 'lucide-react'
 import { loginConToast } from '@/lib/utils/alertToast'
 import { validarCredencialesCliente } from '@/lib/services/cliente'
 import { toast } from 'react-toastify'
+import { setClientSession } from '@/lib/services/auth/auth'
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState('')
@@ -32,7 +33,8 @@ export default function LoginForm() {
         console.log(clienteInfo)
         // Guardamos los datos del cliente
         if (clienteInfo) {
-          document.cookie = `clientInfo=${encodeURIComponent(JSON.stringify(clienteInfo))}; path=/;`;
+          //document.cookie = `clientInfo=${encodeURIComponent(JSON.stringify(clienteInfo))}; path=/;`;
+          setClientSession(clienteInfo)
           toast.success("Vuelve a ingresar a la url")
         }
         // Por ejemplo, podrías redirigir al usuario después de un inicio de sesión exitoso

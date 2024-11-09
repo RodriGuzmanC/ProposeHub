@@ -5,9 +5,10 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Home, Users, Briefcase, LogOut, Menu, Group, HandHelping, LayoutPanelLeftIcon } from 'lucide-react'
+import { Home, Users, Briefcase, LogOut, Menu, Group, HandHelping, LayoutPanelLeftIcon, Settings } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import PagesLoading from '../components/skeletons/PagesLoading'
+import { getUserFromSession, logoutSession, setSession } from '@/lib/services/auth/auth'
 
 const navItems = [
   { id: 'contactos', icon: Users, label: 'Contactos', href: '/contactos/personas' },
@@ -17,6 +18,7 @@ const navItems = [
   { id: 'usuarios', icon: Users, label: 'Usuarios', href: '/usuarios' },
   { id: 'roles', icon: Group, label: 'Roles', href: '/roles' },
   { id: 'servicios', icon: HandHelping, label: 'Servicios', href: '/servicios' },
+  { id: 'configuraciones', icon: Settings, label: 'Configuraciones', href: '/configuraciones' },
 
 ]
 
@@ -31,26 +33,24 @@ export default function ModernNavbar({ children }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [nombreUsuario, setNombreUsuario] = useState('')
   const [correoUsuario, setCorreoUsuario] = useState('')
+  const [rolUsuario, setRolUsuario] = useState()
 
   const pathName = usePathname()
   const router = useRouter()
 
   const handleLogout = () => {
-    document.cookie = 'userInfo=; Max-Age=0; path=/;'; // Eliminar la cookie
-    window.location.href = '/contactos/personas';
+    // Cierra sesion
+    logoutSession()
   };
 
   useEffect(() => {
-    const userInfo = document.cookie
-  .split('; ')
-  .find(row => row.startsWith('userInfo='));
-
-  if (userInfo) {
-    const usuario = JSON.parse(decodeURIComponent(userInfo.split('=')[1]));
-    setNombreUsuario(usuario.nombre);
-    setCorreoUsuario(usuario.correo);
-    // Realiza acciones con la información del usuario
-  }
+    
+    const usuario = getUserFromSession();
+    if (usuario) {
+      setNombreUsuario(usuario.nombre);
+      setCorreoUsuario(usuario.correo);
+      setRolUsuario(usuario.id_rol)
+    }
 
   }, []);
 
@@ -65,7 +65,11 @@ export default function ModernNavbar({ children }: Props) {
         </div>
         <ScrollArea className="flex-grow">
           <nav className="p-4 space-y-2">
-            {navItems.map((item) => (
+            {/* Recorre el menu */}
+            {navItems
+            .filter(item => item.id !== 'usuarios' || rolUsuario != 1)
+            .map((item) => (
+              
               <Button
                 key={item.id}
                 variant={pathName.startsWith(item.href) ? "secondary" : "ghost"}
@@ -104,7 +108,7 @@ export default function ModernNavbar({ children }: Props) {
       </aside>
       <main className="flex-grow">
         {/*<Suspense fallback={<PagesLoading></PagesLoading>}>*/}
-          {children}
+        {children}
         {/*</Suspense>*/}
       </main>
     </div>
