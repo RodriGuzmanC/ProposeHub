@@ -10,6 +10,7 @@ import { enviarCoreoACliente, obtenerClientes } from "@/lib/services/cliente";
 import { EnviarCorreoConToast } from "@/lib/utils/alertToast";
 
 export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion, urlPropuesta }: { cerrarModalEvent: () => void, idOrganizacion: number | undefined, urlPropuesta: string }) {
+
     const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
     const [clientesData, setClientesData] = useState<any[]>([]);
@@ -19,15 +20,14 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
         async function obtenerClientesDeOrganizacion() {
             try {
                 const clientes = await obtenerClientes();
-                console.log("Clientes");
+                console.log("Clientes obtenidos de bd");
                 console.log(clientes);
 
-                const clientesDeOrganizacion = clientes.filter((cliente: any) => 
+                const clientesDeOrganizacion = clientes.filter((cliente: any) =>
                     cliente.id_organizacion === Number(idOrganizacion) // Fuerza la conversión de `idOrganizacion` a número
                 );
                 setClientesData(clientesDeOrganizacion);  // Actualiza el estado con los datos filtrados
                 setLoading(false);  // Deja de mostrar el estado de "Cargando"
-                console.log(idOrganizacion)
             } catch (error) {
                 console.error("Error al obtener clientes:", error);
                 setLoading(false);  // En caso de error también cambia el estado de carga
@@ -52,6 +52,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
             const data = {
                 correo: cliente.correo,
                 contrasena: cliente.contrasena_hash,
+                organizacion: cliente.organizacion,
                 propuesta_url: urlPropuesta
             };
             await EnviarCorreoConToast({
@@ -111,7 +112,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
                                                     id={client.id}
                                                     checked={selectedClients.includes(client.id)}
                                                     onCheckedChange={(checked: any) => handleClientChange(client.id, checked as boolean)}
-                                                    className="border-2 border-gray-300"
+                                                    className=""
                                                 />
                                                 <Label htmlFor={client.id} className="flex-grow cursor-pointer text-gray-700">{client.nombre}</Label>
                                             </div>
@@ -126,7 +127,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
                     <CardFooter className="bg-gray-50">
                         <Button
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 ease-in-out transform hover:scale-105"
+                            className="w-full bg-primary text-white transition-all duration-300 ease-in-out transform hover:scale-105"
                         >
                             Enviar
                         </Button>

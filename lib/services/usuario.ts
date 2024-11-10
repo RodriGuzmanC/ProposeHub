@@ -87,15 +87,27 @@ export async function registrarUsuario(cuerpo: any) {
       id_rol: parseInt(cuerpo.id_rol),
     }
     const res = await postData(`register`, data);
-    return res;
-    /*const credentials = {
-      id: 1,
-      nombre: 'rodrigo',
-      correo: 'rodrigo@gmail.com',
-      rol_id: 1
-    }
 
-    return credentials;*/
+    const contenido = {
+      to: cuerpo.correo,
+      subject: 'Bienvenido a ProposeHub',
+      body: `
+        <h2 style="color: #333;">Bienvenido/a a ProposeHub</h2>
+        <p>Estimado/a ${data.nombre},</p>
+        <p>Nos complace informarte que tu cuenta ha sido creada en <strong>ProposeHub</strong>. A continuación, encontrarás tus credenciales de acceso:</p>
+        <p><strong>Usuario:</strong> ${data.correo}</p>
+        <p><strong>Contraseña:</strong> ${data.contrasena}</p>
+        <p>Para ingresar al sistema, utiliza el siguiente enlace:</p>
+        <p><a href="http://localhost:3000/" style="color: #007BFF; text-decoration: none;">Ingresar al Sistema</a></p>
+        <p>(Recuerda cambiar tu contraseña después del primer inicio de sesión y no compartirla con nadie.)</p>
+        <p>Si tienes alguna pregunta o necesitas asistencia, no dudes en ponerte en contacto con nuestro equipo. Estaremos encantados de ayudarte.</p>
+        <p>Saludos cordiales,</p>
+        <p>Tresmedia E.I.R.L</p>
+      `
+      }
+      const response = await postData('enviar-correo', contenido)
+      return response
+    
   } catch (error) {
     throw new Error((<Error>error).message);
   }
@@ -116,3 +128,5 @@ export async function actualizarContrasenaUsuario(id: number, cuerpo: any) {
     throw new Error((<Error>error).message);
   }
 }
+
+

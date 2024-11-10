@@ -3,6 +3,7 @@ import { generatePDFNuevo } from '@/app/components/grapes/DownloadPdf';
 import HeaderVistaPropuesta from '@/app/components/propuestas/HeaderVista';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { Button } from '@/components/ui/button';
+import { getClientIdFromSession } from '@/lib/services/auth/auth';
 import { editarPropuesta, obtenerPropuesta } from '@/lib/services/propuesta';
 import { editarConToast } from '@/lib/utils/alertToast';
 import { CheckCircle } from 'lucide-react';
@@ -20,8 +21,8 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     const [slug, setSlug] = useState<number | null>(parseInt(params.id));
     const [htmlContent, setHtmlContent] = useState<string | null>(null);
     const [cssContent, setCssContent] = useState<string | null>(null);
-    const router = useRouter()
-    const [botonAceptar, setBotonAceptar] = useState(true)
+    const [error, setError] = useState("")
+    const [datosPropuesta, setDatosPropuesta] = useState()
 
     // Estado por si el id de propuesta pasado no es correcto
     const [contenidoEstaCargado, setContenidoEstaCargado] = useState(false)
@@ -29,9 +30,11 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     async function aceptarPropuestaFun(){
         try {
             const data = {
+                id_cliente: getClientIdFromSession(),
                 id_estado: 3
             }
             if (slug == null) {
+                setError("El id pasado es invalido o no existe")
                 throw new Error("El id pasado es invalido o no existe")
             }
             await editarConToast({
@@ -51,10 +54,16 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
             try {
                 // Obtener el contenido de localStorage
                 if (slug == null) {
+                    setError("El id pasado es invalido o no existe")
                     throw new Error("El id pasado es invalido o no existe")
                 }
                 
                 const propuesta = await obtenerPropuesta(slug)
+
+                if (!propuesta){
+                    setError('El contenido no esta disponible, intentalo mas tarde')
+                    throw new Error('El contenido no esta disponible, intentalo mas tarde')
+                }
 
                 const storedHtml = propuesta.html
                 const storedCss = propuesta.css
@@ -78,17 +87,26 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
 
     return (
         <div>
-            
-            {/* Header fijo con botón "Aceptar propuesta" */}
-            <HeaderVistaPropuesta aceptarPropuestaFun={aceptarPropuestaFun} obtenerHtmlYGenerarPDF={obtenerHtmlYGenerarPDF}></HeaderVistaPropuesta>
-            
-            {htmlContent && (
+            {/* Mostrar mensaje de error si existe */}
+            {error ? (
+                <div className="error-message h-screen w-screen flex justify-center items-center font-semibold ">
+                    {error}
+                </div>
+            ) : htmlContent ? (
                 <div>
+                    {/* Header fijo con botón "Aceptar propuesta" */}
+                    <HeaderVistaPropuesta 
+                        slug={slug}
+                        aceptarPropuestaFun={aceptarPropuestaFun} 
+                        obtenerHtmlYGenerarPDF={obtenerHtmlYGenerarPDF}
+                    />
+                    
                     <style>{cssContent}</style>
                     <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
                 </div>
+            ) : (
+                <PagesLoading />
             )}
-            {!htmlContent && <PagesLoading></PagesLoading>}
         </div>
     );
 };

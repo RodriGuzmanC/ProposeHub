@@ -153,7 +153,7 @@ body {
   }*/
   :root {
     /* Colores principales */
-    --background: #222831;              /* Fondo oscuro */
+    --background: #fff;              /* Fondo oscuro */
     --foreground: #EEEEEE;              /* Texto claro */
     --card: #fff;                    /* Fondo de tarjeta (gris oscuro) */
     --card-foreground: #31363F;         /* Texto de tarjeta (gris claro) */
@@ -166,7 +166,7 @@ body {
     --secondary: #31363F;               /* Fondo secundario */
     --secondary-foreground: #EEEEEE;    /* Texto secundario */
     --muted: #31363F;                   /* Fondo atenuado */
-    --muted-foreground: #EEEEEE;        /* Texto atenuado (verde azulado) */
+    --muted-foreground: #31363F;        /* Texto atenuado (verde azulado) */
   
     /* Colores de acento */
     --accent: #76ABAE;                  /* Acento */
@@ -219,11 +219,11 @@ body {
   }*/
 }
 
-@layer base {
+/*@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
+}*/

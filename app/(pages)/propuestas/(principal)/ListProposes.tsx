@@ -44,6 +44,8 @@ export default function ListProposes({ data }: any) {
     useEffect(() => {
         const search = searchParams.get('estado') ?? '1';
         const filteredPropuestas = data.filter((propuesta: any) => propuesta.id_estado.toString() === search);
+        console.log("Propuestas")
+        console.log(filteredPropuestas)
         setFilteredProposals(filteredPropuestas);
     }, [searchParams, data]);
 

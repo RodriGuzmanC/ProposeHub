@@ -67,7 +67,7 @@ export default function ModernNavbar({ children }: Props) {
           <nav className="p-4 space-y-2">
             {/* Recorre el menu */}
             {navItems
-            .filter(item => item.id !== 'usuarios' || rolUsuario != 1)
+            .filter(item => item.id !== 'usuarios' || rolUsuario == 1)
             .map((item) => (
               
               <Button

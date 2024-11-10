@@ -95,18 +95,18 @@ export const enviarCoreoACliente = async (cuerpo: any) => {
 
         const data = {
             to: cuerpo.correo,
-            subject: 'Propuesta Tres media EIRL',
+            subject: 'Propuesta Tresmedia EIRL',
             body: `
         <h2 style="color: #333;">Propuesta Comercial</h2>
         <p>Estimado/a Usuario,</p>
-        <p>Espero que este mensaje te encuentre bien. Nos complace compartir contigo una propuesta comercial que hemos preparado específicamente para <strong>Tresmedia</strong>. Creemos que nuestros servicios pueden ser de gran valor para tus necesidades.</p>
+        <p>Espero que este mensaje te encuentre bien. Nos complace compartir contigo una propuesta comercial que hemos preparado específicamente para <strong>${cuerpo.organizacion}</strong>. Creemos que nuestros servicios pueden ser de gran valor para sus necesidades.</p>
         <p>Puedes revisar la propuesta en línea a través del siguiente enlace:</p>
         <p><a href="${cuerpo.propuesta_url}" style="color: #007BFF; text-decoration: none;">Ver Propuesta</a></p>
-        <p>Para loguearte ingresa la siguiente contraseña: ${cuerpo.contrasena}</p>
-        <p>(Recuerda no compartir tu contraseña con nadie mas)</p>
+        <p>Para loguearte ingresa la siguiente contraseña: <strong>${cuerpo.contrasena}</strong></p>
+        <p><strong>(Recuerda no compartir tu contraseña con nadie mas)</strong></p>
         <p>Si tienes alguna pregunta o deseas discutir los detalles, no dudes en ponerte en contacto conmigo. Estaré encantado de ayudarte.</p>
         <p>Agradezco tu atención y espero poder colaborar contigo pronto.</p>
-        <p>Saludos cordiales,</p>
+        <p>Saludos cordiales.</p>
     `
         }
         const response = await postData('enviar-correo', data)
