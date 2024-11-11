@@ -185,7 +185,8 @@ export function decodificadorEstructuraGrapesJS(grapesJS: any) {
             if (comp.type && comp.content && (comp.type == "text" || comp.type == "textnode")) {
                 const texto = comp.content;
                 if (isTextInDoubleBraces(texto)) {
-                    elementosNode.push(texto);
+                    let textoLimpio = texto.slice(2, -2);
+                    elementosNode.push(textoLimpio);
                 }
             }
             if (Array.isArray(comp.components)) {

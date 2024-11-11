@@ -116,7 +116,7 @@ export const EjemploPrueba = async (cuerpo: any) => {
 
         // Creamos el contenido con AI y lo inyectamos a la plantilla
         if (data.usar_ai == true) {
-            const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
+            const estructura = decodificadorEstructuraGrapesJS(contenidoGrapesJS) // ['titulo', 'saludo']
             console.log("Estructura")
             console.log(estructura)
             const dataParaAi = {
@@ -134,7 +134,7 @@ export const EjemploPrueba = async (cuerpo: any) => {
             console.log(respuestaDeIa)
 
             // Ahora reemplazamos el texto de la plantilla por el texto hecho por la AI
-            contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
+            contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, JSON.parse(respuestaDeIa))
             console.log(contenidoGrapesJS)
         }
         // Una vez obtenida la respuesta podemos proceder a crear la propuesta
@@ -158,6 +158,54 @@ export const EjemploPrueba = async (cuerpo: any) => {
         throw new Error(`Ocurrio un error al crear la propuesta ${error instanceof Error ? error.message : String(error)}`)
     }
 };
+
+export const llamarGeminiApi = async (cuerpo: any) => {
+    try{
+        const data = {
+            id_plantilla: cuerpo.id_plantilla,
+            id_servicio: cuerpo.id_servicio,
+            id_organizacion: cuerpo.id_organizacion,
+            titulo: cuerpo.titulo,
+            monto: cuerpo.monto,
+            usar_ai: cuerpo.usar_ai,
+            descripcionEmpresa: cuerpo.descripcionEmpresa,
+            instrucciones_adicionales: ' no hay indicaciones',
+            informacion: cuerpo.descripcionEmpresa,
+            indicaciones: 'no hay indicaciones',
+            id_usuario: 1,
+            id_estado: 1,
+        }
+        const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
+        // Creamos el contenido con AI y lo inyectamos a la plantilla
+        if (data.usar_ai == true) {
+            const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
+            console.log("Estructura de la plantilla")
+            console.log(estructura)
+            
+            const dataParaAi = {
+                id_servicio: data.id_servicio,
+                id_organizacion: data.id_organizacion,
+                titulo: data.titulo,
+                monto: data.monto,
+                descripcionEmpresa: data.descripcionEmpresa,
+                indicaciones: data.instrucciones_adicionales,
+                estructura: estructura
+            }
+            //console.log(dataParaAi)
+            console.log("antes de llamar a gemini")
+            const respuestaDeIa = await postData('propuestas/respuesta-ai', dataParaAi); // NO FUNCIONA
+            console.log("Desde laravel respuesta")
+            console.log(respuestaDeIa)
+
+            // Ahora reemplazamos el texto de la plantilla por el texto hecho por la AI
+            let contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, JSON.parse(respuestaDeIa))
+            console.log("Ya reemplazado")
+            console.log(contenidoGrapesJS)
+        }
+    } catch (error) {
+        throw new Error(`Ocurrio un error al lalmar a gemini ${error instanceof Error ? error.message : String(error)}`)
+    }
+}
 
 // Editar una organización
 export const editarPropuesta = async (id: number, cuerpo: any) => {

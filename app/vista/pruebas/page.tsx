@@ -1,6 +1,8 @@
 'use client'
 import { obtenerClientes } from '@/lib/services/cliente'
-import { EjemploPrueba } from '@/lib/services/propuesta';
+import { obtenerPlantilla } from '@/lib/services/plantilla';
+import { EjemploPrueba, llamarGeminiApi } from '@/lib/services/propuesta';
+import { decodificadorEstructuraGrapesJS, reemplazarEstructuraGrapesJS } from '@/lib/utils/placeholderExtract';
 import React, { useEffect, useState } from 'react'
 
 const sendEmail = async () => {
@@ -26,27 +28,28 @@ export default function Page() {
     const [error, setError] = useState(null);
 
     useEffect(()=>{
-        async function a(){
+        async function a() : Promise<any>{
             const data = {
-                id_plantilla: 6,
+                id_plantilla: 14,
                 id_servicio: 1,
-                id_organizacion: 5,
-                titulo: 'Titulo nuevo',
+                id_organizacion: 1,
+                titulo: 'Propuesta Tienda Virtual Loopsy.pe',
                 monto: 1222,
                 usar_ai: true,
-                descripcionEmpresa: 'empresa de juguetes',
-                informacion: 'Aqui ira info',
+                descripcionEmpresa: 'loopsy es una empresa de venta y alquiler de juguetes para niños.',
+                informacion: 'No hay indicaciones',
                 id_usuario: 1,
                 id_estado: 1,
             }
-            await EjemploPrueba(data)
+            return await llamarGeminiApi(data)
         }
-        a()
+        
+        const res = a()
     },[])
 
     return (
         <div>
-            se esta enviando el correo
+            Se obtiene respuesta de la AI
         </div>
     );
 }

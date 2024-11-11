@@ -135,7 +135,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
                 versionesPropuesta.map((versionActual) => (
                   <Card
                     key={versionActual.id ?? ''}
-                    className="hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="hover:bg-accent hover:text-foreground transition-colors"
                   >
                     <div
                       className="cursor-pointer"
@@ -146,7 +146,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
                           {versionActual.id}
                           <div className="flex gap-2">
                             <div className="flex gap-2">
-                              {versionActual.en_edicion == true ? <Badge variant="outline" className="text-xs">En edición</Badge> : ''}
+                              {versionActual.en_edicion == true ? <Badge variant="secondary" className="text-xs">En edición</Badge> : ''}
                               {versionPublicada && versionActual.id == versionPublicada.id ? <Badge variant="default" className="text-xs">Publicada</Badge> : ''}
                             </div>
 

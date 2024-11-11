@@ -42,7 +42,7 @@ export const generatePDFNuevo = async (elements: any) => {
         const element = elements[i];
 
         // Convierte el elemento HTML a una imagen usando html2canvas
-        const canvas = await html2canvas(element, { scale: 1, useCORS: true, allowTaint: true });
+        const canvas = await html2canvas(element, { scale: 2, useCORS: true, allowTaint: true });
         const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
         // Define las dimensiones de la imagen en el PDF
@@ -62,6 +62,7 @@ export const generatePDFNuevo = async (elements: any) => {
     // Guarda el PDF
     pdf.save('document.pdf');
 };
+
 
 
 
