@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { logoutClientSession } from '@/lib/services/auth/auth'
 import AcceptModal from './AcceptModal'
 import { obtenerPropuesta } from '@/lib/services/propuesta'
+import { PropuestaInterface } from '@/lib/utils/definitions'
 
 export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtenerHtmlYGenerarPDF }: {
   slug: number | null,
@@ -18,6 +19,8 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false)
   const [isButtonActive, setIsButtonActive] = useState(true)
+  const [propuestaObjeto, setPropuestaObjeto] = useState<PropuestaInterface>()
+
 
   function logout() {
     logoutClientSession()
@@ -32,6 +35,9 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
     async function cargar() {
       if (slug != null) {
         const propuesta = await obtenerPropuesta(slug)
+        console.log("Propuesta objeto:")
+        console.log(propuesta)
+        setPropuestaObjeto(propuesta)
         if (propuesta.id_cliente != null) {
           setIsButtonActive(false)
         }
@@ -46,8 +52,8 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
       {isAcceptModalOpen ? <AcceptModal
         isOpen={isAcceptModalOpen}
         onClose={() => setIsAcceptModalOpen(false)}
-        proposalName="Propuesta A"
-        organizationName="Organización XYZ"
+        proposalName={propuestaObjeto?.titulo ?? ''}
+        organizationName={"a"}
         acceptFun={aceptarPropuestaFunc}
       /> : ''}
       <div className="container mx-auto">

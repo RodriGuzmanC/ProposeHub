@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { getClientIdFromSession } from '@/lib/services/auth/auth';
 import { editarPropuesta, obtenerPropuesta } from '@/lib/services/propuesta';
 import { editarConToast } from '@/lib/utils/alertToast';
+import { downloadRequest, postData } from '@/lib/utils/methods';
 import { CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -80,9 +81,11 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
         cargarContenido()
     }, []);
 
-    const obtenerHtmlYGenerarPDF = () => {
-        const elements = document.querySelectorAll('[data-page="true"]'); // Selecciona todos los elementos con la clase "page"
-        generatePDFNuevo(elements); // Llama a la función para generar el PDF
+    const obtenerHtmlYGenerarPDF = async () => {
+        //const elements = document.querySelectorAll('[data-page="true"]'); // Selecciona todos los elementos con la clase "page"
+        //generatePDFNuevo(elements); // Llama a la función para generar el PDF
+        const res = await downloadRequest('generar-pdf', {id: slug});
+        //console.log(res)
     };
 
     return (
@@ -100,9 +103,10 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
                         aceptarPropuestaFun={aceptarPropuestaFun} 
                         obtenerHtmlYGenerarPDF={obtenerHtmlYGenerarPDF}
                     />
-                    
-                    <style>{cssContent}</style>
-                    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                    <div>
+                        <style>{cssContent}</style>
+                        <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                    </div>
                 </div>
             ) : (
                 <PagesLoading />

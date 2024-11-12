@@ -124,3 +124,34 @@ export async function deleteData(tipo: string) {
     }
 }
 
+
+export async function downloadRequest(endpoint: string, data: object){
+    try {
+        const res = await fetch(`${urlApi}${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error('Error al descargar el archivo');
+
+        // Crear un Blob con el contenido de la respuesta
+        const blob = await res.blob();
+        
+        // Crear un enlace de descarga
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'archivo.pdf';
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpiar
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Error al descargar el PDF:', error);
+    }
+}

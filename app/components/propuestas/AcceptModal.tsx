@@ -53,10 +53,10 @@ export default function AcceptModal({
               <div id="proposal" className="p-2 bg-gray-100 rounded-md text-gray-700">{proposalName}</div>
             </div>
 
-            <div className="space-y-2">
+            {/*<div className="space-y-2">
               <Label htmlFor="organization">Organización</Label>
               <div id="organization" className="p-2 bg-gray-100 rounded-md text-gray-700">{organizationName}</div>
-            </div>
+            </div>*/}
 
             <div className="space-y-2">
               <Label htmlFor="date">Fecha</Label>
