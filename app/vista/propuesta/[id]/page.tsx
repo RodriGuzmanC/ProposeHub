@@ -1,5 +1,6 @@
 'use client'
 import { generatePDFNuevo } from '@/app/components/grapes/DownloadPdf';
+import CarouselVista from '@/app/components/propuestas/CarouselVista';
 import HeaderVistaPropuesta from '@/app/components/propuestas/HeaderVista';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     // Estado por si el id de propuesta pasado no es correcto
     const [contenidoEstaCargado, setContenidoEstaCargado] = useState(false)
 
+    
     async function aceptarPropuestaFun(){
         try {
             const data = {
@@ -105,7 +107,10 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
                     />
                     <div>
                         <style>{cssContent}</style>
+
+
                         <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                        {/*<CarouselVista items={htmlContent}></CarouselVista>*/}
                     </div>
                 </div>
             ) : (

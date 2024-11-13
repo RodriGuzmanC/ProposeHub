@@ -21,6 +21,7 @@ const publicRoutes = ['/vista/propuesta/login', '/auth/login', '/auth/signin'];
 // MIDDLEWARE
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const url = request.nextUrl.clone(); // Clonamos la url
 
   // Si la ruta es pública, permite el acceso
   if (publicRoutes.includes(pathname)) {
@@ -34,9 +35,21 @@ export function middleware(request: NextRequest) {
   if (!isAuthenticated(request) && isPropuestaRoute) {
     if (isClientAuthenticated(request) && isPropuestaRoute) {
       return NextResponse.next();
+      
     }
-    return NextResponse.redirect(new URL('/vista/propuesta/login', request.url));
-  }
+    // Crear una respuesta de redirección
+    const response = NextResponse.redirect(new URL('/vista/propuesta/login', request.url));
+
+    response.cookies.set({
+      name: 'redirect_to',
+      value: pathname,
+      httpOnly: false,
+      path: '/',
+    });
+
+    return response;
+    //return NextResponse.redirect(new URL('/vista/propuesta/login', request.url));
+  } 
 
 
   // Si el usuario no está autenticado y está intentando acceder a una ruta privada

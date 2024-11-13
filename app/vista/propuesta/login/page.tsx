@@ -11,7 +11,8 @@ import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { loginConToast } from '@/lib/utils/alertToast'
 import { validarCredencialesCliente } from '@/lib/services/cliente'
 import { toast } from 'react-toastify'
-import { setClientSession } from '@/lib/services/auth/auth'
+import { getRedirection, setClientSession } from '@/lib/services/auth/auth'
+import { deleteCookie, getCookie } from '@/lib/services/auth/cookies'
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState('')
@@ -33,7 +34,16 @@ export default function LoginForm() {
       console.log(clienteInfo)
       if (clienteInfo) {
         setClientSession(clienteInfo)
-        toast.success("Vuelve a ingresar a la url")
+        //const redirectTo = getCookie('redirect_to') || '/vista/propuesta/login';
+      
+        // Limpia la cookie después de redirigir
+        //deleteCookie('redirect_to');
+        
+        // Redirige a la URL de destino o a la página principal
+        const redirectTo = getRedirection()
+        router.push(redirectTo);
+        //console.log(redirectTo)
+        toast.success("Pronto seras redireccionado a la pagina inicial..")
       }
     } catch (error) {
       console.error("Error en el inicio de sesión")
