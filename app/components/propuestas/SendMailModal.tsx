@@ -8,6 +8,76 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Loader2, X } from "lucide-react";
 import { enviarCoreoACliente, obtenerClientes } from "@/lib/services/cliente";
 import { EnviarCorreoConToast } from "@/lib/utils/alertToast";
+import type { Plugin } from 'grapesjs';
+import ReactDOM from 'react-dom'; // Asegúrate de importar ReactDOM correctamente
+
+interface OptionsInterface{
+    idOrgnizacion: number,
+    urlPropuesta: string
+}
+
+export const MailModalPlugin: Plugin<OptionsInterface> = (editor, opts) => {
+    // Referencia al modal que se crea para contener al plugin
+    let modalContainer: HTMLDivElement | null = null;
+    // Obtener el panel de acción donde están los botones
+    const actionButtonsPanel = editor.Panels.getPanel('action-buttons');
+    
+    // Verificar si el panel ya contiene botones
+    const existingButtons = actionButtonsPanel ? actionButtonsPanel.get('buttons') : [];
+
+    
+    // Panel de botones en el panel de acción de GrapesJS
+    editor.Panels.addPanel({
+        id: 'enviar-correo-boton',
+        el: '.panel__action-buttons', // Asegúrate de que esta clase exista en tu HTML
+        buttons: [
+            {
+                id: 'enviar-correo',
+                command() {
+                    if (!modalContainer) {
+                        // Crear un contenedor para el modal solo si no existe
+                        modalContainer = document.createElement("div");
+                        modalContainer.id = "modal-container";  // Puedes agregar un id si lo deseas
+                        document.body.appendChild(modalContainer);  // Lo añadimos al body del documento
+                    }
+
+                    // Renderizar el modal dentro del contenedor
+                    abrirModalCorreo(modalContainer);
+                },
+                className: '', // Cambié el icono a uno más adecuado
+                attributes: { title: 'Enviar Propuesta' },
+                label: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M20 4H6c-1.103 0-2 .897-2 2v5h2V8l6.4 4.8a1.001 1.001 0 0 0 1.2 0L20 8v9h-8v2h8c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-7 6.75L6.666 6h12.668L13 10.75z"></path><path d="M2 12h7v2H2zm2 3h6v2H4zm3 3h4v2H7z"></path></svg>`  // El texto que aparece junto al ícono
+            },
+        ],
+    });
+
+    // Función para montar el modal dentro del contenedor creado
+    const abrirModalCorreo = (container: HTMLDivElement) => {
+        const { idOrgnizacion, urlPropuesta } = opts;
+
+        // Renderizar el modal de React en el contenedor dinámico
+        ReactDOM.render(
+            <SendMailProposeModal
+                cerrarModalEvent={() => cerrarModalCorreo(container)}
+                idOrganizacion={idOrgnizacion}
+                urlPropuesta={urlPropuesta}
+            />,
+            container
+        );
+    };
+
+    // Función para cerrar el modal y limpiar el contenedor
+    const cerrarModalCorreo = (container: HTMLDivElement) => {
+        // Desmontar el componente React
+        ReactDOM.unmountComponentAtNode(container);
+        // Eliminar el contenedor del DOM
+        document.body.removeChild(container);
+        // Opcional: Reiniciar la referencia del contenedor
+        modalContainer = null;
+    };
+
+};
+
 
 export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion, urlPropuesta }: { cerrarModalEvent: () => void, idOrganizacion: number | undefined, urlPropuesta: string }) {
 

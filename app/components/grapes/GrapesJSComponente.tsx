@@ -20,6 +20,10 @@ import HistorialVersionesModal from '../propuestas/HistorialVersionesModal';
 import { cambiarEstadoVersionPropuesta } from '@/lib/services/versionPropuesta';
 import { AddPanels } from './Panels';
 import { OptionsPlantilla } from './OptionsPlantilla';
+import { CustomToolbars } from './Toolbars';
+import { MailModalPlugin } from '../propuestas/SendMailModal';
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
+import { PdfPreviewModalPlugin } from './PdfPreviewPlugin';
 
 interface gsjs {
     slug: number
@@ -47,10 +51,19 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
     const plugins = [
         blocksBasic,
         AddBlocks,
+        //CustomToolbars,
         usePlugin(AddPanels, {
             // Parámetros 
             linkHome: linkHome,
         }),
+        usePlugin(PdfPreviewModalPlugin, {
+          
+        }),
+        usePlugin(MailModalPlugin, {
+          // Parámetros 
+          idOrgnizacion: 1,
+          urlPropuesta: 'asd'
+      }),
         usePlugin(AddStorage, {
             // Parámetros 
             loadFunction: loadFunction,
@@ -63,7 +76,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
         plugins.push(usePlugin(AddOptions, {
             launchFunction: launchFunction,
             abrirVersionesModal: abrirVersionesModal,
-            storeFunction: storeFunction
+            storeFunction: storeFunction,
         }));
     } else{
       plugins.push(usePlugin(OptionsPlantilla, {
@@ -88,6 +101,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             pluginsOpts: {
                 blocksBasic: { /* Opciones del plugin */ },
             },
+            
             // Configuración de almacenamiento y carga
             storageManager: {
                 type: 'remote',
@@ -242,7 +256,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                     <div className="panel__left">
                         <div className="panel__basic-actions">
                             <div className="panel__action-basic"></div>
-                            <div className="panel__action-buttons ml-2"></div>
+                            <div className="panel__action-buttons ml-2" style={{display: 'flex'}}></div>
                             <div className="panel__action-autosave ml-2"></div>
                         </div>
                     </div>

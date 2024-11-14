@@ -155,3 +155,29 @@ export async function downloadRequest(endpoint: string, data: object){
         console.error('Error al descargar el PDF:', error);
     }
 }
+
+
+
+export async function downloadRequestPdf(endpoint: string, data: object) {
+    try {
+        const res = await fetch(`${urlApi}${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!res.ok) throw new Error('Error al descargar el archivo');
+
+        // Crear un Blob con el contenido de la respuesta
+        const blob = await res.blob();
+
+        // Crear un enlace de descarga
+        const url = window.URL.createObjectURL(blob);
+        return url  // Actualiza el estado con la URL del PDF para previsualizarlo
+
+    } catch (error) {
+        console.error('Error al descargar el PDF:', error);
+    }
+}
