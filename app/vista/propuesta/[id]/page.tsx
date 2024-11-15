@@ -84,10 +84,7 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     }, []);
 
     const obtenerHtmlYGenerarPDF = async () => {
-        //const elements = document.querySelectorAll('[data-page="true"]'); // Selecciona todos los elementos con la clase "page"
-        //generatePDFNuevo(elements); // Llama a la función para generar el PDF
         const res = await downloadRequest('generar-pdf', {id: slug});
-        //console.log(res)
     };
 
     return (

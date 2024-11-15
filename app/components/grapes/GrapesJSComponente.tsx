@@ -24,6 +24,7 @@ import { CustomToolbars } from './Toolbars';
 import { MailModalPlugin } from '../propuestas/SendMailModal';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import { PdfPreviewModalPlugin } from './PdfPreviewPlugin';
+import { GaleryPlugin } from './GaleryPlugin';
 
 interface gsjs {
     slug: number
@@ -57,6 +58,9 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             linkHome: linkHome,
         }),
         usePlugin(PdfPreviewModalPlugin, {
+          
+        }),
+        usePlugin(GaleryPlugin, {
           
         }),
         usePlugin(MailModalPlugin, {
@@ -115,6 +119,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             
             // Configuracion de carga de imagenes
             assetManager: {
+                custom: true,
                 assets: [
                   { 
                     src: 'http://127.0.0.1:8000/storage/images/GHkZ0I4mUchtGgkVpikOQUSAalHFB1crTPThV3Hb.png', 
@@ -189,8 +194,8 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
                 },
             
                 // Otras configuraciones opcionales
-                showUrlInput: true, // Mostrar input para URL
-                multiUpload: true,  // Permite subir múltiples archivos a la vez
+                showUrlInput: true,
+                multiUpload: true, 
               },
           
             // Configuración de los paneles personalizados

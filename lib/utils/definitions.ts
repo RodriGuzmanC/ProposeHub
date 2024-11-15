@@ -49,7 +49,7 @@ export interface PlantillaInterface{
 
 export interface PropuestaInterface {
     id: number
-    clienteID: number
+    clienteID: number | null
     organizacionID: number
     titulo: string
     monto: number
@@ -57,6 +57,12 @@ export interface PropuestaInterface {
     plantillaID: number
     servicioID: number
     usuarioID: number
+    informacion: string | null
+    createdAt: string
+    updatedAt: string
+    versionPublicadaID: number | null
+    html: string | null
+    css: string | null
 }
 
 export interface EstadoPropuestaInterface {

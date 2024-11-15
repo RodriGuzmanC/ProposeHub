@@ -19,6 +19,21 @@ export const obtenerClientes = async () => {
     }
 };
 
+
+export const obtenerClientesDeOrganizacion = async (idOrganizacion: number) => {
+    try {
+        // Obtienes los datos de los clientes
+        const clientes = await getData('clientes');
+        
+        // Filtras los clientes que coincidan con el id de organización proporcionado
+        const clientesFiltrados = clientes.filter((cliente: { id_organizacion: number }) => cliente.id_organizacion === idOrganizacion);
+        
+        return clientesFiltrados;
+    } catch (error) {
+        throw new Error(`Error al obtener usuarios: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
 // Obtener un cliente por ID
 export const obtenerCliente = async (id: number) => {
     try {

@@ -6,20 +6,25 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CheckCircle, Download, Menu, X } from "lucide-react"
 import Image from 'next/image'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { logoutClientSession } from '@/lib/services/auth/auth'
+import { getClientIdFromSession, logoutClientSession } from '@/lib/services/auth/auth'
 import AcceptModal from './AcceptModal'
 import { obtenerPropuesta } from '@/lib/services/propuesta'
 import { PropuestaInterface } from '@/lib/utils/definitions'
+import { obtenerClientes, obtenerClientesDeOrganizacion } from '@/lib/services/cliente'
 
-export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtenerHtmlYGenerarPDF }: {
+interface headerInt{
   slug: number | null,
   aceptarPropuestaFun: () => void,
   obtenerHtmlYGenerarPDF: () => void
-}) {
+}
+
+export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtenerHtmlYGenerarPDF }: headerInt) {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false)
-  const [isButtonActive, setIsButtonActive] = useState(true)
-  const [propuestaObjeto, setPropuestaObjeto] = useState<PropuestaInterface>()
+  const [isButtonActive, setIsButtonActive] = useState(false)
+
+  const [Propuesta, setPropuesta] = useState<Partial<PropuestaInterface>>()
 
 
   function logout() {
@@ -37,9 +42,16 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
         const propuesta = await obtenerPropuesta(slug)
         console.log("Propuesta objeto:")
         console.log(propuesta)
-        setPropuestaObjeto(propuesta)
-        if (propuesta.id_cliente != null) {
-          setIsButtonActive(false)
+        setPropuesta(propuesta)
+        
+        const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion)
+        const clienteIdSession = getClientIdFromSession()
+        // Buscar si el cliente actual esta en la lista permitida
+        const esPermitido = clientesDeOrganizacion.find((cliente : any)=> Number(cliente.id) === Number(clienteIdSession))
+
+        console.log(clientesDeOrganizacion)
+        if (propuesta.id_cliente == null && esPermitido !== undefined) {
+          setIsButtonActive(true)
         }
       }
 
@@ -52,7 +64,7 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
       {isAcceptModalOpen ? <AcceptModal
         isOpen={isAcceptModalOpen}
         onClose={() => setIsAcceptModalOpen(false)}
-        proposalName={propuestaObjeto?.titulo ?? ''}
+        proposalName={Propuesta?.titulo ?? ''}
         organizationName={"a"}
         acceptFun={aceptarPropuestaFunc}
       /> : ''}

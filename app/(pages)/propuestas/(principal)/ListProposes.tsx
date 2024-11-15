@@ -5,6 +5,7 @@ import FilterComponent from '@/app/components/global/FilterComponent';
 import ProposeCard from '@/app/components/propuestas/ProposeCard';
 import SendMailProposeModal from '@/app/components/propuestas/SendMailModal';
 import { eliminarPropuesta, obtenerPropuestas } from '@/lib/services/propuesta';
+import { formatearFecha, formatearFechaSimple } from '@/lib/utils/datetimeFormater';
 import { Briefcase, BriefcaseBusiness } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -74,7 +75,11 @@ export default function ListProposes({ data }: any) {
                             key={filteredProposal.id}
                             id={filteredProposal.id}
                             nombre={filteredProposal.titulo}
-                            elementos={[filteredProposal.monto, filteredProposal.estado_nombre, filteredProposal.plantilla_nombre, filteredProposal.servicio_nombre, filteredProposal.usuario_nombre]}
+                            elementos={
+                                [`S/${filteredProposal.monto}`, 
+                                    filteredProposal.servicio_nombre, 
+                                    formatearFechaSimple(filteredProposal.fecha_creacion)
+                                ]}
                             modalCorreo={()=> {
                                 mostrarModal(filteredProposal.id_organizacion, `${window.location.origin}/vista/propuesta/${filteredProposal.id}`)
                             }}
