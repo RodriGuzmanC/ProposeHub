@@ -5,7 +5,7 @@ const urlApi = process.env.NEXT_PUBLIC_API_URL;
 export async function postData(tipo: string, data: object) {
 
     try {
-        const response = await fetch(`${urlApi}${tipo}`, {
+        const response = await fetch(`${urlApi}/${tipo}`, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -35,7 +35,7 @@ export async function postData(tipo: string, data: object) {
 
 export async function getData(tipo: string) {
     try {
-        const response = await fetch(`${urlApi}${tipo}`, {
+        const response = await fetch(`${urlApi}/${tipo}`, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
@@ -66,7 +66,7 @@ export async function getData(tipo: string) {
 
 export async function updateData(tipo: string, data: object) {
     try {
-        const response = await fetch(`${urlApi}${tipo}`, {
+        const response = await fetch(`${urlApi}/${tipo}`, {
             method: 'PUT',
             mode: 'cors',
             cache: 'no-cache',
@@ -97,7 +97,7 @@ export async function updateData(tipo: string, data: object) {
 
 export async function deleteData(tipo: string) {
     try {
-        const response = await fetch(`${urlApi}${tipo}`, {
+        const response = await fetch(`${urlApi}/${tipo}`, {
             method: 'DELETE',
             mode: 'cors',
             cache: 'no-cache',
@@ -127,7 +127,7 @@ export async function deleteData(tipo: string) {
 
 export async function downloadRequest(endpoint: string, data: object){
     try {
-        const res = await fetch(`${urlApi}${endpoint}`, {
+        const res = await fetch(`${urlApi}/${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ export async function downloadRequest(endpoint: string, data: object){
 
 export async function downloadRequestPdf(endpoint: string, data: object) {
     try {
-        const res = await fetch(`${urlApi}${endpoint}`, {
+        const res = await fetch(`${urlApi}/${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

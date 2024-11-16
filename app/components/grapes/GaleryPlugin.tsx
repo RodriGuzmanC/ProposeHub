@@ -4,16 +4,24 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Upload } from 'lucide-react'
+import { Images, LucideUploadCloud, Upload } from 'lucide-react'
 import Image from "next/image"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { buscarAssets, obtenerAssets } from "@/lib/services/imagenes";
+import UploadImage from "./AssetsManager/Upload";
+import LoadImages from "./AssetsManager/Load";
 
 export const GaleryPlugin: Plugin = (editor) => {
     // Referencia al modal que se crea para contener al plugin
     let modalContainer: HTMLDivElement | null = null;
 
+    async function esl() {
+        return await cargarAssets()
+    }
+
+    let editorInstance = editor
     // Escuchar el evento cuando el Asset Manager se abre o se cierra
-    editor.on('asset:custom', (props) => {
+    editor.on('asset:custom', async (props) => {
         const { open, assets, close, container } = props;
 
         // Si el Asset Manager está abierto, mostramos la galería
@@ -22,8 +30,11 @@ export const GaleryPlugin: Plugin = (editor) => {
             if (!modalContainer) {
                 modalContainer = document.createElement('div');
                 modalContainer.classList.add('gjs-gallery-modal');
+                const selected = editor.getSelected();
                 ReactDOM.render(
-                    <GaleryUI></GaleryUI>,
+                    <GaleryUI
+                        editor={editorInstance}
+                    ></GaleryUI>,
                     container
                 );
                 container.appendChild(modalContainer);
@@ -101,13 +112,16 @@ export const GaleryPlugin: Plugin = (editor) => {
                     "url": "/storage/images/PNYy07QMVXHKKWfbRQapypyy6KBU0MJ1Gxy4JgO4.gif"
                 }
             ]
+
+            const ele = await esl()
             // Renderizar las imágenes en el modal
-            renderGallery(assetsPropios);
+            //renderGallery(assetsPropios);
         } else {
             // Si el Asset Manager se cierra, eliminar la galería
             if (modalContainer) {
                 modalContainer.innerHTML = ''; // Limpiar contenido
             }
+
         }
     });
 
@@ -118,32 +132,60 @@ export const GaleryPlugin: Plugin = (editor) => {
         // Limpiar el modal antes de actualizarlo
         modalContainer.innerHTML = '';
 
-        // Crear un contenedor para la galería
+        // Crear un contenedor para la galería si no existe
         const gallery = document.getElementById('gallery-content');
-        console.log("Galeria contenid")
-        console.log(gallery)
-        // Agregar cada imagen a la galería
+        console.log("Galeria contenido");
+        console.log(gallery);
+
+        if (gallery) {
+            console.log("Galería encontrada.");
+            renderImagesInGallery(assets, gallery);
+        } else {
+            console.log("Esperando que se cargue el contenedor...");
+
+            // Si no existe, intentamos nuevamente después de un breve retraso
+            setTimeout(() => {
+                renderGallery(assets); // Volver a intentar
+            }, 100); // Esperar 100ms antes de intentar otra vez
+        }
+
+    };
+
+    const renderImagesInGallery = (assets: any[], gallery: HTMLElement) => {
+        // Agregar las imágenes al contenedor de la galería
         assets.forEach((asset) => {
             const img = document.createElement('img');
             img.src = `http://127.0.0.1:8000${asset.url}`;
             img.alt = asset.name;
             img.classList.add('gallery-image');
+            gallery.appendChild(img);
+        });
 
-            // Agregar evento de selección para usar la imagen en el editor
-            img.addEventListener('click', () => {
-                editor.AssetManager.add(asset.src);
+        // Agregar eventos de clic a las imágenes
+        let imagenes = document.getElementsByClassName('gallery-image');
+        Array.from(imagenes).forEach((imagen: any) => {
+            imagen.addEventListener('click', () => {
+                const selected = editor.getSelected();
+                if (selected && selected.get('type') === 'image') {
+                    selected.set('src', imagen.src); // Cambiar el src del componente seleccionado
+                }
+
+                // Opcional: Cerrar el Asset Manager
+                editor.Modal.close();
                 editor.Commands.run('core:open-assets');
-            });
 
-            gallery?.appendChild(img);
+            });
         });
     };
 };
 
+const cargarAssets = async () => {
+    //const data = await obtenerAssets(); // Esperamos la promesa
+    return ''; // Actualizamos el estado con los activos obtenidos
+};
 
 
-
-function obtenerAssets() {
+/*function obtenerAssets() {
     console.log("aaaaaaaaa");
 
     // Realizar la solicitud para obtener las imágenes
@@ -172,14 +214,46 @@ function obtenerAssets() {
             console.error("Error al cargar las imágenes:", error);
             return [];  // Devolvemos un array vacío en caso de error
         });
-}
+}*/
 
 
 
 
 // Interfaz básica de la galería (esto se agrega dinámicamente al modal)
-const GaleryUI = () => {
+
+const GaleryUI = ({ editor }: { editor: any }) => {
     const [Assets, setAssets] = useState<any[]>([])
+    const galleryRef = useRef<HTMLDivElement | null>(null);
+
+
+    useEffect(() => {
+        if (true) {
+            // Obtenemos las imágenes dentro de galleryRef
+            const imagenes = document.getElementsByClassName('img-galeria');
+
+            // Iteramos sobre las imágenes y les añadimos el evento de clic
+            Array.from(imagenes).forEach((imagen: Element) => {
+                const imgElement = imagen as HTMLImageElement;
+
+                imgElement.addEventListener('click', () => {
+                    console.log("antes de seleccionar");
+                    const selected = editor.getSelected();
+                    if (selected && selected.is('image')) {
+                        // Actualizamos el src del componente seleccionado con la imagen clickeada
+                        //editor.set('src', imgElement.src); 
+                        selected.set('src', imgElement.src);  // Usar 'set' para actualizar el atributo 'src'
+                        console.log("Imagen seleccionada y actualizada");
+                        //selected.addAttributes({ src: imgElement.src });
+
+                    }
+                    console.log("después de seleccionar");
+
+                    // Si lo deseas, puedes hacer que se cierre el Asset Manager
+                    editor.Commands.run('core:open-assets');
+                });
+            });
+        }
+    }, [Assets]); // Solo ejecutamos este efecto cuando `Assets` cambia
 
     useEffect(() => {
         const cargarAssets = async () => {
@@ -189,75 +263,80 @@ const GaleryUI = () => {
 
         cargarAssets(); // Llamamos a la función asíncrona
     }, []);
+
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+
+        const formData = new FormData(event.currentTarget);
+        const searchQuery = formData.get('search')?.toString() || '';
+
+        try {
+            let data = await buscarAssets(searchQuery)
+            console.log(data)
+            setAssets(data)
+        } catch (error) {
+            console.error('Error al realizar la búsqueda:', error);
+        }
+    };
+
     return (
         <Card className="border-none w-full mx-auto bg-transparent text-white">
             <Tabs defaultValue="upload" className="w-full bg-transparent text-white">
                 <TabsList className="w-fit h-auto bg-transparent text-white flex">
                     <TabsTrigger
                         value="upload"
-                        className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center pb-2 relative"
+                        className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center py-3 relative"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="mb-1">
-                            <path d="M13 19v-4h3l-4-5-4 5h3v4z"></path>
-                            <path d="M7 19h2v-2H7c-1.654 0-3-1.346-3-3 0-1.404 1.199-2.756 2.673-3.015l.581-.102.192-.558C8.149 8.274 9.895 7 12 7c2.757 0 5 2.243 5 5v1h1c1.103 0 2 .897 2 2s-.897 2-2 2h-3v2h3c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5z"></path>
-                        </svg>
+                        <LucideUploadCloud className="mb-1"></LucideUploadCloud>
                         Upload asset
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary opacity-0 transition-opacity data-[state=active]:opacity-100"></div>
                     </TabsTrigger>
                     <TabsTrigger
                         value="files"
-                        className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center pb-2 relative"
+                        className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center py-3 relative"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="mb-1">
-                            <path d="M20 2H8c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM8 16V4h12l.002 12H8z"></path>
-                            <path d="M4 8H2v12c0 1.103.897 2 2 2h12v-2H4V8z"></path>
-                            <path d="m12 12-1-1-2 3h10l-4-6z"></path>
-                        </svg>
+                        <Images className="mb-1"></Images>
                         My files
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary opacity-0 transition-opacity data-[state=active]:opacity-100"></div>
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value="upload" className="mt-4 bg-transparent text-white w-full">
-                    <div className="border-2 border-dashed rounded-lg p-12 text-center w-full">
-                        <div className="mx-auto w-full">
-                            <Upload className="h-12 w-12 mx-auto" />
-                            <p className="mt-2 text-sm">Drag and Drop assets here</p>
-                            <div className="mt-2">Or</div>
-                            <Button size="sm" className="mt-2">
-                                Browse
-                            </Button>
-                            <input
-                                type="file"
-                                className="hidden"
-                                accept="image/*"
-                                id="file-upload"
-                                multiple
-                            />
-                        </div>
-                    </div>
+                    <UploadImage></UploadImage>
                 </TabsContent>
                 <TabsContent value="files" className="mt-4 bg-transparent text-white w-full h-[calc(100vh-200px)] overflow-auto">
-                    <div className="space-y-4">
+                    {/*<div className="space-y-4">
                         <div className="relative">
-                            <Input
-                                type="search"
-                                placeholder="Search files..."
-                                className="w-full"
-                            />
+                            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                                <input
+                                    type="search"
+                                    name="search"
+                                    placeholder="Search files..."
+                                    className="w-full px-4 py-2 border rounded-md"
+                                />
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                                >
+                                    Buscar
+                                </button>
+                            </form>
                         </div>
                         <div id="gallery-content" className="grid grid-cols-2 md:grid-cols-6 gap-4">
                             {Assets && Assets.length > 0 ? (
                                 Assets.map((asset: any, i: number) => (
                                     <div key={i} className="aspect-square relative group cursor-pointer">
-                                        <img src={asset.src} />
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+                                        <img className="img-galeria" src={asset.src} />
+
                                     </div>
                                 ))
                             ) : (
                                 <p>No hay imágenes disponibles.</p>
                             )}
                         </div>
-                    </div>
+                    </div>*/}
+                    <LoadImages editor={editor}></LoadImages>
+                    {/*<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />*/}
                 </TabsContent>
             </Tabs>
         </Card>

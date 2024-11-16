@@ -17,6 +17,13 @@ interface toastLoginInterface{
     event: (correo: string, clave: string) => any
 }
 
+
+interface toastSubirImagenInterface{
+    body: any
+    event: (body: any) => any
+}
+
+
 export async function crearConToast({cuerpo, event} : toastInterface){
     toast.promise(
       () => event(cuerpo),
@@ -92,6 +99,25 @@ export async function loginConToast({ correo, clave, event }: toastLoginInterfac
             error: {
                 render({ data }: any) {
                     return data?.message ?? 'Error al loguearse';
+                },
+            },
+        }
+    );
+}
+
+export async function subirImagenConToast({body, event }: toastSubirImagenInterface) {
+    return toast.promise(
+        () => event(body),
+        {
+            pending: 'Guardando...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? 'Guardado correctamente';
+                },
+            },
+            error: {
+                render({ data }: any) {
+                    return data?.message ?? 'Error al guardar el recurso';
                 },
             },
         }
