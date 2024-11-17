@@ -41,14 +41,14 @@ const UploadImage = () => {
     return (
         <div className="border-2 border-dashed rounded-lg p-12 text-center w-full">
             <Upload className="h-12 w-12 mx-auto" />
-            <p className="mt-2 text-sm">Drag and Drop assets here</p>
-            <div className="mt-2">Or</div>
+            <p className="mt-2 text-sm">Sube tus imagenes aqui</p>
+            <div className="mt-2">O</div>
             <Button
                 size="sm"
                 className="mt-2"
                 onClick={() => document.getElementById('file-upload')?.click()}
             >
-                Browse
+                Buscar
             </Button>
             <input
                 type="file"

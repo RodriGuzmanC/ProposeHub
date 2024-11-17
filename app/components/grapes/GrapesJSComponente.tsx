@@ -25,6 +25,8 @@ import { MailModalPlugin } from '../propuestas/SendMailModal';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import { PdfPreviewModalPlugin } from './PdfPreviewPlugin';
 import { GaleryPlugin } from './GaleryPlugin';
+// @ts-ignore
+import es from 'grapesjs/locale/es.js';
 
 interface gsjs {
     slug: number
@@ -98,6 +100,12 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
             height: '100%',
             width: '100%',
             panels: { defaults: [] }, // Deja vacío para evitar paneles predeterminados
+            i18n: {
+              // locale: 'en', // default locale
+              // detectLocale: true, // by default, the editor will detect the language
+              // localeFallback: 'en', // default fallback
+              messages: { es },
+            },
             selectorManager: {
                 componentFirst: true,
             },

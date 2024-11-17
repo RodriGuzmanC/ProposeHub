@@ -222,63 +222,7 @@ const cargarAssets = async () => {
 // Interfaz básica de la galería (esto se agrega dinámicamente al modal)
 
 const GaleryUI = ({ editor }: { editor: any }) => {
-    const [Assets, setAssets] = useState<any[]>([])
-    const galleryRef = useRef<HTMLDivElement | null>(null);
-
-
-    useEffect(() => {
-        if (true) {
-            // Obtenemos las imágenes dentro de galleryRef
-            const imagenes = document.getElementsByClassName('img-galeria');
-
-            // Iteramos sobre las imágenes y les añadimos el evento de clic
-            Array.from(imagenes).forEach((imagen: Element) => {
-                const imgElement = imagen as HTMLImageElement;
-
-                imgElement.addEventListener('click', () => {
-                    console.log("antes de seleccionar");
-                    const selected = editor.getSelected();
-                    if (selected && selected.is('image')) {
-                        // Actualizamos el src del componente seleccionado con la imagen clickeada
-                        //editor.set('src', imgElement.src); 
-                        selected.set('src', imgElement.src);  // Usar 'set' para actualizar el atributo 'src'
-                        console.log("Imagen seleccionada y actualizada");
-                        //selected.addAttributes({ src: imgElement.src });
-
-                    }
-                    console.log("después de seleccionar");
-
-                    // Si lo deseas, puedes hacer que se cierre el Asset Manager
-                    editor.Commands.run('core:open-assets');
-                });
-            });
-        }
-    }, [Assets]); // Solo ejecutamos este efecto cuando `Assets` cambia
-
-    useEffect(() => {
-        const cargarAssets = async () => {
-            const data = await obtenerAssets(); // Esperamos la promesa
-            setAssets(data); // Actualizamos el estado con los activos obtenidos
-        };
-
-        cargarAssets(); // Llamamos a la función asíncrona
-    }, []);
-
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
-
-        const formData = new FormData(event.currentTarget);
-        const searchQuery = formData.get('search')?.toString() || '';
-
-        try {
-            let data = await buscarAssets(searchQuery)
-            console.log(data)
-            setAssets(data)
-        } catch (error) {
-            console.error('Error al realizar la búsqueda:', error);
-        }
-    };
+    
 
     return (
         <Card className="border-none w-full mx-auto bg-transparent text-white">
@@ -289,7 +233,7 @@ const GaleryUI = ({ editor }: { editor: any }) => {
                         className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center py-3 relative"
                     >
                         <LucideUploadCloud className="mb-1"></LucideUploadCloud>
-                        Upload asset
+                        Subir imagen
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary opacity-0 transition-opacity data-[state=active]:opacity-100"></div>
                     </TabsTrigger>
                     <TabsTrigger
@@ -297,7 +241,7 @@ const GaleryUI = ({ editor }: { editor: any }) => {
                         className="flex-1 bg-transparent data-[state=active]:text-primary flex flex-col items-center py-3 relative"
                     >
                         <Images className="mb-1"></Images>
-                        My files
+                        Mis imagenes
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary opacity-0 transition-opacity data-[state=active]:opacity-100"></div>
                     </TabsTrigger>
                 </TabsList>

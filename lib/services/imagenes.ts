@@ -6,21 +6,9 @@ export const obtenerAssets = async () => {
     try {
         // Obtienes los datos de los clientes
         const imagenes = await getData('imagenes')
-        /*const assets = imagenes.map((img: any) => ({
-            src: `${urlStorage}${img.url}`,
-            name: `Imagen ${img.id}`,
-            type: 'image',
-        }));*/
-        // Añadir el prefijo a cada URL de las imágenes en data
-        const assets = imagenes.data.map((img: any) => ({
-            ...img, // Mantener los otros datos de cada imagen
-            url: `${urlStorage}${img.url}`, // Modificar la URL añadiendo el prefijo
-        }));
         
-        return {
-            ...imagenes, // Regresar todo el objeto original
-            data: assets, // Sobrescribir data con las URLs actualizadas
-        };
+        
+        return imagenes
     } catch (error) {
         throw new Error(`Error al obtener imagenes: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -33,16 +21,16 @@ export const cargarAssetsExtras = async (nextPageUrl: string) => {
         const response = await fetch(nextPageUrl);
         const imagenes = await response.json();
         
-        // Añadir el prefijo a cada URL de las imágenes en data
-        const assets = imagenes.data.map((img: any) => ({
-            ...img, // Mantener los otros datos de cada imagen
-            url: `${urlStorage}${img.url}`, // Modificar la URL añadiendo el prefijo
-        }));
-        
-        return {
-            ...imagenes, // Regresar todo el objeto original
-            data: assets, // Sobrescribir data con las URLs actualizadas
-        };
+        const dataNormalizada = Array.isArray(imagenes.data)
+            ? imagenes.data // Ya es iterable, lo dejas como está
+            : Object.entries(imagenes.data).map(([key, value]: [string, any]) => ({
+                id: key, // Usamos la clave como ID
+                ...value, // Los valores originales del objeto
+            }));
+            return {
+                ...imagenes,
+                data: dataNormalizada, // Sobrescribimos 'data' con el formato normalizado
+            };
     } catch (error) {
         throw new Error(`Error al obtener imagenes: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -51,13 +39,8 @@ export const cargarAssetsExtras = async (nextPageUrl: string) => {
 export const buscarAssets = async (nombre: string) => {
     try {
         // Obtienes los datos de los clientes
-        const imagenes = await postData('imagenes/buscar', {nombre: nombre})
-        const assets = imagenes.map((img: any) => ({
-            src: `${urlStorage}${img.path}`,
-            name: `Imagen ${img.id}`,
-            type: 'image',
-        }));
-        return assets;
+        const imagenes = await getData(`imagenes/buscar/${nombre}`)
+        return imagenes
     } catch (error) {
         throw new Error(`Error al obtener imagenes: ${error instanceof Error ? error.message : String(error)}`);
     }
