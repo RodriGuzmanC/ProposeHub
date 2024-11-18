@@ -6,14 +6,14 @@ import { useState, useEffect } from "react";
 import ModalBackground from "../global/ModalBackground";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, X } from "lucide-react";
-import { enviarCoreoACliente, obtenerClientes } from "@/lib/services/cliente";
+import { enviarCoreoACliente, obtenerClientes, obtenerClientesDeOrganizacion } from "@/lib/services/cliente";
 import { EnviarCorreoConToast } from "@/lib/utils/alertToast";
 import type { Plugin } from 'grapesjs';
 import ReactDOM from 'react-dom'; // Asegúrate de importar ReactDOM correctamente
+import { obtenerPropuesta } from "@/lib/services/propuesta";
 
 interface OptionsInterface{
-    idOrgnizacion: number,
-    urlPropuesta: string
+    slug: number,
 }
 
 export const MailModalPlugin: Plugin<OptionsInterface> = (editor, opts) => {
@@ -53,14 +53,13 @@ export const MailModalPlugin: Plugin<OptionsInterface> = (editor, opts) => {
 
     // Función para montar el modal dentro del contenedor creado
     const abrirModalCorreo = (container: HTMLDivElement) => {
-        const { idOrgnizacion, urlPropuesta } = opts;
+        const { slug } = opts;
 
         // Renderizar el modal de React en el contenedor dinámico
         ReactDOM.render(
             <SendMailProposeModal
                 cerrarModalEvent={() => cerrarModalCorreo(container)}
-                idOrganizacion={idOrgnizacion}
-                urlPropuesta={urlPropuesta}
+                slug={slug}
             />,
             container
         );
@@ -79,7 +78,7 @@ export const MailModalPlugin: Plugin<OptionsInterface> = (editor, opts) => {
 };
 
 
-export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion, urlPropuesta }: { cerrarModalEvent: () => void, idOrganizacion: number | undefined, urlPropuesta: string }) {
+export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerrarModalEvent: () => void, slug: number | undefined }) {
 
     const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
@@ -87,15 +86,21 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
     const [loading, setLoading] = useState(true);  // Agregar estado de carga
 
     useEffect(() => {
-        async function obtenerClientesDeOrganizacion() {
+        async function cargarClientesDeOrganizacion() {
             try {
-                const clientes = await obtenerClientes();
-                console.log("Clientes obtenidos de bd");
-                console.log(clientes);
+                if (!slug) {
+                    throw new Error("No se porporciono el id de la propuesta")
+                    
+                }
+                const propuesta = await obtenerPropuesta(slug)
 
-                const clientesDeOrganizacion = clientes.filter((cliente: any) =>
+                const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion);
+                console.log("Clientes obtenidos de bd");
+                console.log(clientesDeOrganizacion);
+
+                /*const clientesDeOrganizacion = clientes.filter((cliente: any) =>
                     cliente.id_organizacion === Number(idOrganizacion) // Fuerza la conversión de `idOrganizacion` a número
-                );
+                );*/
                 setClientesData(clientesDeOrganizacion);  // Actualiza el estado con los datos filtrados
                 setLoading(false);  // Deja de mostrar el estado de "Cargando"
             } catch (error) {
@@ -104,11 +109,11 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
             }
         }
 
-        if (idOrganizacion) {
+        if (slug) {
             setLoading(true);  // Cuando se hace una nueva llamada, activamos el estado de carga
-            obtenerClientesDeOrganizacion();  // Llamar a la función aquí
+            cargarClientesDeOrganizacion();  // Llamar a la función aquí
         }
-    }, [idOrganizacion]);
+    }, [slug]);
 
     const handleClientChange = (clientId: string, isChecked: boolean) => {
         setSelectedClients((prev) =>
@@ -123,7 +128,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, idOrganizacion,
                 correo: cliente.correo,
                 contrasena: cliente.contrasena_hash,
                 organizacion: cliente.organizacion,
-                propuesta_url: urlPropuesta
+                propuesta_url: `${process.env.NEXT_PUBLIC_ROOT}/vista/propuesta/${slug}`
             };
             await EnviarCorreoConToast({
                 cuerpo: data,

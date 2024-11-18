@@ -42,6 +42,7 @@ export const editarUsuario = async (id: number, cuerpo: any): Promise<boolean> =
       nombre: cuerpo.nombre,
       correo: cuerpo.correo,
       id_rol: cuerpo.rol,
+      id_usuario: cuerpo.id_usuario
       //contrasena: cuerpo.clave
     }
     await updateData(`usuarios/${id}`, data);
@@ -84,7 +85,8 @@ export async function registrarUsuario(cuerpo: any) {
       nombre: cuerpo.nombre,
       correo: cuerpo.correo,
       contrasena: cuerpo.contrasena,
-      id_rol: parseInt(cuerpo.id_rol),
+      id_rol: cuerpo.id_rol,
+      id_usuario: cuerpo.id_usuario
     }
     const res = await postData(`register`, data);
 

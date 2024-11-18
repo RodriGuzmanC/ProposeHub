@@ -7,12 +7,13 @@ import { toast } from "react-toastify";
 interface DeleteFormModalProps {
   userId: number;
   userName: string;
+  importantMessage?: string | null;
   closeEvent: () => void;
   deleteEvent: (id: number) => any;
 }
 
 
-export default function DeleteFormModal({userId, userName, closeEvent, deleteEvent} : DeleteFormModalProps) {
+export default function DeleteFormModal({userId, userName, importantMessage = '', closeEvent, deleteEvent} : DeleteFormModalProps) {
   function eliminarConToast(id: number){
     toast.promise(
       () => deleteEvent(id),
@@ -53,6 +54,9 @@ export default function DeleteFormModal({userId, userName, closeEvent, deleteEve
           </div>
           <p className="text-sm text-center">
             Esta acción no se puede deshacer.
+          </p>
+          <p>
+            {importantMessage}
           </p>
         </CardContent>
         <CardFooter className="flex justify-end space-x-4 pt-6">

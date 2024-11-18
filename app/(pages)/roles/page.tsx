@@ -66,6 +66,7 @@ export default function ListRoles() {
                                     elementos={[plantilla.descripcion]}
                                     verHref='/plantillas/ver'
                                     editarHref={`roles/editar/${plantilla.id}`}
+                                    importantMessage={'Al eliminar este rol, se eliminarán los usuarios asignados. Asegúrate de reasignar el rol de los usuarios antes de proceder.'}
                                     IconCard={Group}
                                     eliminarAction={eliminarFun}
                                 ></CustomItemCard>

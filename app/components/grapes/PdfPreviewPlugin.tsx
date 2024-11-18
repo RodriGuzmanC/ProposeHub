@@ -11,7 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Download, X } from "lucide-react";
 
 
-export const PdfPreviewModalPlugin: Plugin = (editor) => {
+interface PdfPrevInterface{
+    slug: number
+}
+
+export const PdfPreviewModalPlugin: Plugin<PdfPrevInterface> = (editor, options) => {
+    const { slug } = options
     // Referencia al modal que se crea para contener al plugin
     let modalContainer: HTMLDivElement | null = null;
     // Obtener el panel de acción donde están los botones
@@ -48,7 +53,7 @@ export const PdfPreviewModalPlugin: Plugin = (editor) => {
 
     // Función para montar el modal dentro del contenedor creado
     const abrirModalCorreo = async (container: HTMLDivElement) => {
-        const url = await downloadRequestPdf('generar-pdf', { id: 19 })
+        const url = await downloadRequestPdf('generar-pdf', { id: slug })
         if (!url) {
             return null;
         }

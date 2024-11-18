@@ -100,7 +100,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
                 cuerpo: data,
                 event: editarHtmlCssPropuesta
             })
-            const url = `http://localhost:3000/vista/propuesta/${slug}`;
+            const url = `${process.env.NEXT_PUBLIC_ROOT}/vista/propuesta/${slug}`;
             toast.success(
                 <div>Accede aquí: <a href={`${url}`} target='blank'>{`${url}`}</a>
                 </div>

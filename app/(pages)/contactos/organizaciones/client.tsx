@@ -44,7 +44,8 @@ export default function OrganizacionClient({data}: any) {
                             <CustomItemCard 
                             key={organization.id} 
                             IconCard={Building} 
-                            editarHref={`organizaciones/editar/${organization.id}`} 
+                            editarHref={`organizaciones/editar/${organization.id}`}
+                            importantMessage={'Al eliminar esta organización, también se eliminarán todos sus clientes. Asegúrate de moverlos antes de proceder.'}
                             verHref={`organizaciones/ver/${organization.id}`} id={organization.id} 
                             eliminarAction={eliminarFun}
                             nombre={organization.nombre} 

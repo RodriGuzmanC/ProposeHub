@@ -12,11 +12,12 @@ interface ContactInfoCardProps {
   elementos: Array<string | number>; // Array de información genérica
   verHref: string;
   editarHref: string;
+  importantMessage?: string | null;
   eliminarAction: (id: number) => void;
   IconCard: React.ElementType;
 }
 
-export default function CustomItemCard({ id, nombre, elementos, verHref, editarHref, IconCard, eliminarAction }: ContactInfoCardProps) {
+export default function CustomItemCard({ id, nombre, elementos, verHref, editarHref, importantMessage = '', IconCard, eliminarAction }: ContactInfoCardProps) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const showHideDeleteForm = () => {
@@ -26,7 +27,7 @@ export default function CustomItemCard({ id, nombre, elementos, verHref, editarH
   return (
     <Card className="w-full overflow-hidden">
       {showDeleteModal && (
-        <DeleteFormModal userId={id} userName={nombre} closeEvent={showHideDeleteForm} deleteEvent={eliminarAction}></DeleteFormModal>
+        <DeleteFormModal userId={id} userName={nombre} closeEvent={showHideDeleteForm} deleteEvent={eliminarAction} importantMessage={importantMessage}></DeleteFormModal>
       )}
       <CardContent className="p-4 flex items-center justify-between bg-card text-card-foreground">
         <div className="flex items-center space-x-4">

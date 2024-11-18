@@ -56,15 +56,18 @@ export const obtenerVersionPublicada = async (id: number) => { // Id de la propu
 
 
 // Crear una nueva organización
-export const crearVersionPropuesta = async (cuerpo: any): Promise<boolean> => {
+export const crearVersionPropuesta = async (cuerpo: any): Promise<any> => {
     try {
         
-        await postData('version-propuesta', cuerpo);
-        return true; // Devuelve true si la operación se realiza correctamente
+        const res = await postData('version-propuesta', cuerpo);
+        return res; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al crear la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
+
+
+
 
 // Editar una organización
 export const editarVersionPropuesta = async (id: number, cuerpo: any): Promise<any> => {

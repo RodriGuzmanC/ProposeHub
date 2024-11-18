@@ -119,18 +119,18 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
 
 
   return (
-    <div className="fixed inset-0 bg-background text-foreground flex flex-col z-50">
+    <div className="fixed inset-0 bg-background text-foreground flex flex-col z-50 h-screen">
       <header className="p-4 bg-primary text-primary-foreground flex justify-between items-center">
         <h1 className="text-2xl font-bold">Historial de Versiones</h1>
         <Button variant="ghost" size="icon" onClick={onClose} aria-label="Cerrar">
           <X className="h-6 w-6" />
         </Button>
       </header>
-      <div className="flex-grow flex">
+      <div className="flex-grow flex h-[calc(100vh-64px)]">
         {/* Versiones en la columna izquierda */}
-        <div className="w-1/4 border-r">
+        <div className="w-1/4 border-r h-full">
           <ScrollArea className="h-full">
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-4 overflow-auto">
               {versionesPropuesta ? (
                 versionesPropuesta.map((versionActual) => (
                   <Card

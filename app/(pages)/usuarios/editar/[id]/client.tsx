@@ -10,6 +10,7 @@ import BackLink from "@/app/components/global/BackLink"
 import { editarUsuario } from "@/lib/services/usuario"
 import { editarConToast } from "@/lib/utils/alertToast"
 import { obtenerRoles } from "@/lib/services/rol"
+import { getUserIdFromSession } from "@/lib/services/auth/auth"
 
 
 
@@ -20,10 +21,17 @@ export default function EditarUsuarioClientPage({ usuario }: any) {
         const formData = new FormData(e.currentTarget);
         const formEntries = Object.fromEntries(formData.entries());
         console.log(formEntries)
+
+        const updatedFormEntries = {
+            ...formEntries,               // Copiar todos los campos actuales de formEntries
+            id_usuario: getUserIdFromSession()  // Agregar el nuevo campo 'id_usuario'
+        };
+        console.log("Actu")
+        console.log(updatedFormEntries)
         try {
             await editarConToast({
                 id: usuario.id,
-                cuerpo: formEntries, 
+                cuerpo: updatedFormEntries, 
                 event: editarUsuario 
             });
             

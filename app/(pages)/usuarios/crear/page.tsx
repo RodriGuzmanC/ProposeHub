@@ -9,6 +9,7 @@ import BackLink from "@/app/components/global/BackLink"
 import { registrarUsuario } from "@/lib/services/usuario"
 import { crearConToast, EnviarCorreoConToast } from "@/lib/utils/alertToast"
 import { obtenerRoles } from "@/lib/services/rol"
+import { getUserIdFromSession } from "@/lib/services/auth/auth"
 
 
 
@@ -33,9 +34,10 @@ export default function Page() {
                 correo: formEntries.correo,
                 contrasena: formEntries.clave,
                 id_rol: formEntries.rol,
-              }
-              //console.log(data)
-              
+                id_usuario: getUserIdFromSession()
+            }
+            //console.log(data)
+            
             const res = await crearConToast({
                 cuerpo: data,
                 event: registrarUsuario

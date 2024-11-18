@@ -1,9 +1,11 @@
+import { cambiarEstadoVersionPropuesta, crearVersionPropuesta, obtenerVersionEnEdicion } from '@/lib/services/versionPropuesta';
 import type { Plugin } from 'grapesjs';
 
 interface AddOptionsInter {
     launchFunction: (html: string, css: string) => any
     abrirVersionesModal: () => void
     storeFunction: (data: any) => any
+    projectID: number
 }
 
 export const AddOptions: Plugin<AddOptionsInter> = (editor, options) => {
@@ -11,6 +13,7 @@ export const AddOptions: Plugin<AddOptionsInter> = (editor, options) => {
     const launchFunction = options.launchFunction
     const abrirVersionesModal = options.abrirVersionesModal
     const storeFunction = options.storeFunction
+    const projectID = options.projectID
 
 // Segundo panel para Publicar y Ver versiones
 editor.Panels.addPanel({
@@ -23,6 +26,18 @@ editor.Panels.addPanel({
                 const html = editor.getHtml();
                 const css = editor.getCss() ?? '';
                 await launchFunction(html, css);
+                // Obtiene la version en edicion actual
+                let versionEnEdicion = await obtenerVersionEnEdicion(projectID)
+                //  Crea la version
+                let versionCreada = await crearVersionPropuesta({
+                    id_propuesta: projectID,
+                    contenido: versionEnEdicion.contenido,
+                    en_edicion: true
+                }) 
+                // Cambia el estado de la nueva version
+                await cambiarEstadoVersionPropuesta(projectID, {
+                    id_version: versionCreada.id
+                })
             },
             className: '', // Icono de publicación
             attributes: { title: 'Publicar' },

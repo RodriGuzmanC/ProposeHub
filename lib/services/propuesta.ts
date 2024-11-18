@@ -225,8 +225,8 @@ export const editarHtmlCssPropuesta = async (id: number, cuerpo: any) => {
             css: cuerpo.css
         }
         const res = await updateData(`propuestas/${id}`, data)
-        console.log(res)
-        return true
+        
+        return res
     } catch (error) {
         console.log(error)
     }
