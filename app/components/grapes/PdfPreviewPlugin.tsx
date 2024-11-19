@@ -4,11 +4,11 @@ import type { Plugin } from 'grapesjs';
 import ReactDOM from 'react-dom'; // Asegúrate de importar ReactDOM correctamente
 import { downloadRequest, downloadRequestPdf } from "@/lib/utils/methods";
 import { Document, Page } from 'react-pdf';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { Button } from "@/components/ui/button";
-import { Download, X } from "lucide-react";
+import { Download, Loader2, X } from "lucide-react";
 
 
 interface PdfPrevInterface{
@@ -53,15 +53,15 @@ export const PdfPreviewModalPlugin: Plugin<PdfPrevInterface> = (editor, options)
 
     // Función para montar el modal dentro del contenedor creado
     const abrirModalCorreo = async (container: HTMLDivElement) => {
-        const url = await downloadRequestPdf('generar-pdf', { id: slug })
+        /*const url = await downloadRequestPdf('generar-pdf', { id: slug })
         if (!url) {
             return null;
         }
-        console.log(url)
+        console.log(url)*/
         // Renderizar el modal de React en el contenedor dinámico
         ReactDOM.render(
             <PdfPreview
-                pdfUrl={url}
+                slug={slug}
                 closeEvent={()=>cerrarModalCorreo(container)}
             />,
             container
@@ -82,22 +82,31 @@ export const PdfPreviewModalPlugin: Plugin<PdfPrevInterface> = (editor, options)
 
 
 
-const PdfPreview = ({ pdfUrl, closeEvent }: { pdfUrl: string, closeEvent: () => void }) => {
+const PdfPreview = ({ slug, closeEvent }: { slug: number, closeEvent: () => void }) => {
     const [numPages, setNumPages] = useState(null);
-    const [scale, setScale] = useState(1);  // Escala inicial en 1 (tamaño original)
+    const [isLoading, setIsLoading] = useState(true);
+    const [url, setUrl] = useState('')
 
-    const onLoadSuccess = ({ numPages }: { numPages: any }) => {
-        setNumPages(numPages);
+    const handleLoadSuccess = ({ numPages }: { numPages: number }) => {
+        setIsLoading(false);
     };
 
-    // Función para ajustar el escalado
-    const handleZoomIn = () => {
-        setScale(scale + 0.25);  // Aumenta el zoom
-    };
+    useEffect(()=>{
+        async function cargarDatos(){
+            const url = await downloadRequestPdf('generar-pdf', { id: slug })
+            if (!url) {
+                return null;
+            }
+            setUrl(url)
+            setIsLoading(false);
+        }
+        cargarDatos()
 
-    const handleZoomOut = () => {
-        setScale(scale - 0.25);  // Disminuye el zoom
-    };
+    }, [])
+
+    const handleDownload = () => {
+        downloadRequest('generar-pdf', { id: slug });
+      };
 
     const styles = {
         pdfContainer: {
@@ -115,30 +124,47 @@ const PdfPreview = ({ pdfUrl, closeEvent }: { pdfUrl: string, closeEvent: () => 
 
     return (
         <ModalBackground>
-            <div style={styles.pdfContainer}>
-                <div className="flex justify-between mb-4 sticky top-2 left-3 z-10">
-                    <Button
-                        onClick={() => downloadRequest('generar-pdf', { id: 19 })}
-                        variant={'outline'}
-                    >
-                        Descargar PDF
-                        <Download></Download>
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={closeEvent}
-                        className="rounded-full hover:bg-gray-200 transition-colors"
-                    >
-                        <X className="h-6 w-6 text-gray-500" />
-                        <span className="sr-only">Cerrar</span>
-                    </Button>
-                </div>
-                <Worker workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`}>
-                    <Viewer fileUrl={pdfUrl} defaultScale={scale} />
-                </Worker>
-
+          <div className="w-[80%] max-w-[1200px] max-h-[80vh] bg-white p-4 rounded-lg overflow-auto relative z-[1001]">
+            
+            
+            {isLoading ? (
+                <div>
+                    
+              <div className="flex flex-col items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="mt-2 text-lg text-gray-600">Cargando PDF...</span>
+              </div>
+              </div>
+            ) : (
+                <div>
+                    <div className="flex justify-between mb-4 sticky top-2 left-3 z-10">
+              <Button
+                onClick={handleDownload}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                Descargar PDF
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={closeEvent}
+                className="rounded-full hover:bg-gray-200 transition-colors"
+              >
+                <X className="h-6 w-6 text-gray-500" />
+                <span className="sr-only">Cerrar</span>
+              </Button>
             </div>
+              <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js">
+                <Viewer 
+                  fileUrl={url} 
+                  defaultScale={1}
+                />
+              </Worker>
+              </div>
+            )}
+          </div>
         </ModalBackground>
-    );
+      );
 };
