@@ -23,6 +23,19 @@ interface toastSubirImagenInterface{
     event: (body: any) => any
 }
 
+interface toastRecuperarContrasenaInterface{
+    correo: string
+    recuperarRuta: string
+    event: (correo: string, recuperarRuta: string) => any
+}
+
+interface cambiarContrasenaInterface{
+    id_usuario: number
+    contrasena: string
+    event: (id_usuario: number, contrasena: string) => any
+}
+
+
 
 export async function crearConToast({cuerpo, event} : toastInterface){
     toast.promise(
@@ -120,6 +133,50 @@ export async function subirImagenConToast({body, event }: toastSubirImagenInterf
                     return data?.message ?? 'Error al guardar el recurso';
                 },
             },
+        }
+    );
+}
+
+
+export async function recuperarContrasenaConToast({correo, recuperarRuta, event }: toastRecuperarContrasenaInterface) {
+    return toast.promise(
+        () => event(correo, recuperarRuta),
+        {
+            pending: 'Estamos procesando tu solicitud, por favor espera...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? '¡Listo! Te hemos enviado un correo con las instrucciones para recuperar tu contraseña.';
+                },
+            },
+            error: {
+                render({ data }: any) {
+                    return data?.message ?? 'Hubo un problema al procesar tu solicitud. Intenta nuevamente más tarde.';
+                },
+            },
+            
+        }
+    )
+    ;
+}
+
+
+
+export async function cambiarContrasenaConToast({id_usuario, contrasena, event }: cambiarContrasenaInterface) {
+    return toast.promise(
+        () => event(id_usuario, contrasena),
+        {
+            pending: 'Estamos procesando tu solicitud, por favor espera...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? '¡Listo! Tu contraseña ha sido actualizada, intenta iniciar sesion';
+                },
+            },
+            error: {
+                render({ data }: any) {
+                    return data?.message ?? 'Hubo un problema al procesar tu solicitud. Intenta nuevamente más tarde.';
+                },
+            },
+            
         }
     );
 }

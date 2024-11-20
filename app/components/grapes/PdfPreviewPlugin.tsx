@@ -140,7 +140,7 @@ const PdfPreview = ({ slug, closeEvent }: { slug: number, closeEvent: () => void
                     <div className="flex justify-between mb-4 sticky top-2 left-3 z-10">
               <Button
                 onClick={handleDownload}
-                variant="outline"
+                variant="default"
                 className="flex items-center gap-2"
               >
                 Descargar PDF

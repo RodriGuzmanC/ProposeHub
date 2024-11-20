@@ -53,16 +53,10 @@ export default function LoginForm() {
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/2 relative hidden md:block">
-      <img
-  src="https://enzyme.biz/hs-fs/hubfs/soluciones-empresariales.jpg?width=1215&name=soluciones-empresariales.jpg"
-  alt="Login illustration"
-  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-/>
-      </div>
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-primary">
+      <div className="w-full flex items-center justify-center bg-primary">
         <Card className="w-full max-w-md mx-4">
-          <CardHeader className="space-y-1">
+          <CardHeader className="space-y-1 flex flex-col items-center justify-center">
+            <img className='mb-3' src='https://th.bing.com/th/id/OIP.BMdzpSRYQGL8y7ioWhckVgHaBR?rs=1&pid=ImgDetMain' width={250}></img>
             <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -94,14 +94,14 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button variant="default" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => setIsAcceptModalOpen(true)}
+            <Button variant="default" className="bg-primary text-white" onClick={() => setIsAcceptModalOpen(true)}
               disabled={!isButtonActive} // Deshabilita el botón cuando isButtonActive es false
 
             >
               <CheckCircle className="mr-2 h-4 w-4" />
               Aceptar propuesta
             </Button>
-            <Button variant="outline" size="icon" onClick={obtenerHtmlYGenerarPDF}>
+            <Button className='hover:border-none' variant="outline" size="icon" onClick={obtenerHtmlYGenerarPDF}>
               <Download className="h-4 w-4" />
             </Button>
           </div>

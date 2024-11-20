@@ -170,7 +170,7 @@ body {
   
     /* Colores de acento */
     --accent: #76ABAE;                  /* Acento */
-    --accent-foreground: #222831;       /* Texto de acento */
+    --accent-foreground: #fff;       /* Texto de acento */
     
     /* Colores destructivos */
     --destructive: #D32F2F;             /* Rojo destructivo (puedes cambiar este valor si quieres un color diferente) */

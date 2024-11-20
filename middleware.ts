@@ -16,7 +16,7 @@ function isClientAuthenticated(request: NextRequest): boolean {
 }
 
 
-const publicRoutes = ['/vista/propuesta/login', '/auth/login', '/auth/signin'];
+const publicRoutes = ['/vista/propuesta/login', '/auth/login', '/auth/signin', '/auth/recovery', '/auth/recovery/reset'];
 
 // MIDDLEWARE
 export function middleware(request: NextRequest) {

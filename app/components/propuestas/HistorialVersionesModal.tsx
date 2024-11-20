@@ -128,7 +128,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
       </header>
       <div className="flex-grow flex h-[calc(100vh-64px)]">
         {/* Versiones en la columna izquierda */}
-        <div className="w-1/4 h-full">
+        <div className="w-1/4 h-full border-r-2">
           <ScrollArea className="h-full">
             <div className="p-4 space-y-4 overflow-auto">
               {versionesPropuesta ? (
