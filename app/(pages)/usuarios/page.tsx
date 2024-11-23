@@ -34,7 +34,7 @@ export default function UsuariosClientPage() {
         <div className="flex flex-col w-full h-screen overflow-auto bg-white text-primary">
             <main className="flex-1 h-full">
                 <div className="p-6">
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-center">
                         <FilterComponent data={data} onFilteredDataChange={setFilteredData}>
                             <h3 className='text-2xl font-bold'>Usuarios del Sistema</h3>
                             <Link href={'usuarios/crear'}>

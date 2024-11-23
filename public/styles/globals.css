@@ -179,7 +179,7 @@ body {
     /* Colores de borde y entrada */
     --border: #31363F;                  /* Color del borde */
     --input: #31363F;                   /* Color de entrada (input) */
-    --ring: #76ABAE;                    /* Color de anillo (focus) */
+    --ring: #8a8a8a;                    /* Color de anillo (focus) */
   
     /* Colores del gráfico (esto es opcional, solo si usas gráficos) */
     --chart-1: #222831;                 /* Primer color gráfico */
@@ -189,7 +189,7 @@ body {
     --chart-5: #76ABAE;                 /* Quinto color gráfico */
   
     /* Radio de los bordes */
-    --radius: 0.5rem;
+    --radius: 0.4rem;
   }
   /*.dark {
     --background: #003A61;
