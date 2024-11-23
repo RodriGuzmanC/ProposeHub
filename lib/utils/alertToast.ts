@@ -1,35 +1,35 @@
 import { toast } from "react-toastify";
 
-interface toastInterface{
+interface toastInterface {
     cuerpo: any
     event: (cuerpo: any) => any
 }
 
-interface toastEditInterface{
+interface toastEditInterface {
     id: number
     cuerpo: any
     event: (id: number, cuerpo: any) => any
 }
 
-interface toastLoginInterface{
+interface toastLoginInterface {
     correo: string
     clave: string
     event: (correo: string, clave: string) => any
 }
 
 
-interface toastSubirImagenInterface{
+interface toastSubirImagenInterface {
     body: any
     event: (body: any) => any
 }
 
-interface toastRecuperarContrasenaInterface{
+interface toastRecuperarContrasenaInterface {
     correo: string
     recuperarRuta: string
     event: (correo: string, recuperarRuta: string) => any
 }
 
-interface cambiarContrasenaInterface{
+interface cambiarContrasenaInterface {
     id_usuario: number
     contrasena: string
     event: (id_usuario: number, contrasena: string) => any
@@ -37,23 +37,23 @@ interface cambiarContrasenaInterface{
 
 
 
-export async function crearConToast({cuerpo, event} : toastInterface){
+export async function crearConToast({ cuerpo, event }: toastInterface) {
     toast.promise(
-      () => event(cuerpo),
-      {
-        pending: 'Creando...',
-        success: {
-            render({data} : any) {
-                return data?.message ?? 'Creado correctamente ';
+        () => event(cuerpo),
+        {
+            pending: 'Creando...',
+            success: {
+                render({ data }: any) {
+                    return data?.message ?? 'Creado correctamente ';
+                },
             },
-        },
-        error: {
-          render({ data } : any) {
-            // Aquí 'data' contiene el error rechazado
-            return data?.message ?? 'Error al crear'; // Usa el mensaje de error o un mensaje predeterminado
-        },
-        },
-    }
+            error: {
+                render({ data }: any) {
+                    // Aquí 'data' contiene el error rechazado
+                    return data?.message ?? 'Error al crear'; // Usa el mensaje de error o un mensaje predeterminado
+                },
+            },
+        }
     )
 }
 
@@ -118,7 +118,7 @@ export async function loginConToast({ correo, clave, event }: toastLoginInterfac
     );
 }
 
-export async function subirImagenConToast({body, event }: toastSubirImagenInterface) {
+export async function subirImagenConToast({ body, event }: toastSubirImagenInterface) {
     return toast.promise(
         () => event(body),
         {
@@ -138,7 +138,7 @@ export async function subirImagenConToast({body, event }: toastSubirImagenInterf
 }
 
 
-export async function recuperarContrasenaConToast({correo, recuperarRuta, event }: toastRecuperarContrasenaInterface) {
+export async function recuperarContrasenaConToast({ correo, recuperarRuta, event }: toastRecuperarContrasenaInterface) {
     return toast.promise(
         () => event(correo, recuperarRuta),
         {
@@ -153,15 +153,15 @@ export async function recuperarContrasenaConToast({correo, recuperarRuta, event 
                     return data?.message ?? 'Hubo un problema al procesar tu solicitud. Intenta nuevamente más tarde.';
                 },
             },
-            
+
         }
     )
-    ;
+        ;
 }
 
 
 
-export async function cambiarContrasenaConToast({id_usuario, contrasena, event }: cambiarContrasenaInterface) {
+export async function cambiarContrasenaConToast({ id_usuario, contrasena, event }: cambiarContrasenaInterface) {
     return toast.promise(
         () => event(id_usuario, contrasena),
         {
@@ -176,9 +176,52 @@ export async function cambiarContrasenaConToast({id_usuario, contrasena, event }
                     return data?.message ?? 'Hubo un problema al procesar tu solicitud. Intenta nuevamente más tarde.';
                 },
             },
-            
+
         }
     );
 }
 
+
+
+
+export const notificacionToast = {
+    success: (message: string) => {
+        toast.success(message);
+    },
+    error: (message: string) => {
+        toast.error(message);
+    },
+    info: (message: string) => {
+        toast.info(message);
+    },
+    warn: (message: string) => {
+        toast.warn(message);
+    },
+};
+
+// Función asíncrona para manejar operaciones con promesas
+export async function notificacionAsyncrona(promise: Promise<void>, loadingMessage = 'Cargando...', successMessage = 'Operación exitosa', errorMessage = 'Hubo un error') {
+    const toastId = toast.loading(loadingMessage); // Mostrar un toast de carga
+
+    try {
+        // Esperamos la promesa
+        await promise;
+
+        // Si la promesa se resuelve con éxito, mostramos un toast de éxito
+        toast.update(toastId, {
+            render: successMessage,
+            type: 'success',
+            isLoading: false,
+            autoClose: 5000
+        });
+    } catch (error) {
+        // Si la promesa falla, mostramos un toast de error
+        toast.update(toastId, {
+            render: errorMessage,
+            type: 'error',
+            isLoading: false,
+            autoClose: 5000
+        });
+    }
+}
 

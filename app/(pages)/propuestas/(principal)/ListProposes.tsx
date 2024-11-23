@@ -1,7 +1,5 @@
 'use client'
 import ButtonTheme from '@/app/components/global/ButtonTheme';
-import CustomItemCard from '@/app/components/global/CustomItemCard';
-import FilterComponent from '@/app/components/global/FilterComponent';
 import ProposeCard from '@/app/components/propuestas/ProposeCard';
 import SendMailProposeModal from '@/app/components/propuestas/SendMailModal';
 import { eliminarPropuesta, obtenerPropuestas } from '@/lib/services/propuesta';
@@ -31,7 +29,6 @@ export default function ListProposes({ data }: any) {
 
     }
 
-
     async function eliminarFun(id: number) {
         await eliminarPropuesta(id)
         const propuestas = await obtenerPropuestas();
@@ -52,7 +49,7 @@ export default function ListProposes({ data }: any) {
 
     return (
         <div>
-            {modalEnviarCorreo ? <SendMailProposeModal urlPropuesta={urlPropuesta} idOrganizacion={organizacionActual} cerrarModalEvent={cerrarModal}></SendMailProposeModal> : ''}
+            {/*modalEnviarCorreo ? <SendMailProposeModal urlPropuesta={urlPropuesta} idOrganizacion={organizacionActual} cerrarModalEvent={cerrarModal}></SendMailProposeModal> : ''*/}
             <div className="w-full">
                 <div className="flex space-x-4 mb-6 items-end">
                     <h3 className='text-2xl font-bold'>Propuestas</h3>

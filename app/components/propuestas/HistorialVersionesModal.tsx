@@ -143,7 +143,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
                     >
                       <CardHeader className="p-4">
                         <CardTitle className="text-lg flex justify-between items-center">
-                          {versionActual.id}
+                          {versionActual.version_numero}
                           <div className="flex gap-2">
                             <div className="flex gap-2">
                               {versionActual.en_edicion == true ? <Badge variant="secondary" className="text-xs">En edición</Badge> : ''}

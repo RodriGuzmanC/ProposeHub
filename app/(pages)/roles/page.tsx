@@ -1,6 +1,7 @@
 'use client'
 import ButtonTheme from '@/app/components/global/ButtonTheme';
 import CustomItemCard from '@/app/components/global/CustomItemCard';
+import ErrorInterface from '@/app/components/global/ErrorInterface';
 import CreateTemplateModal from '@/app/components/plantillas/createTemplateModal';
 import CreateRolModal from '@/app/components/roles/createRolModal';
 import EditRolModal from '@/app/components/roles/editRolModal';
@@ -10,39 +11,26 @@ import { eliminarRol, obtenerRoles } from '@/lib/services/rol';
 import { Briefcase, BriefcaseBusiness, Group } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
+import useSWR from 'swr';
 
 export default function ListRoles() {
-    const [loading, setLoading] = useState(true)
     /** Elimina la plantilla seleccionada */
     async function eliminarFun(id: number) {
         await eliminarRol(id)
-        fetchPlantillas()
+        mutate()
     }
-    /* Obtiene las plantillas */
-    const [plantillas, setPlantillas] = useState<any>([]);
-
-    async function fetchPlantillas() {
-        setPlantillas(await obtenerRoles());
-    }
-
-    useEffect(() => {
-        fetchPlantillas()
-        setLoading(false)
-    }, [])
 
     /** Abre y cierra el modal */
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const closeOpenModal = () => setIsModalOpen(!isModalOpen);
 
-    /** Abre cierra modal de editar */
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const closeOpenEditModal = () => setIsEditModalOpen(!isModalOpen);
-
+    /** Carga los datos */
+    const { data, error, isLoading, mutate } = useSWR<any>('/roles', obtenerRoles)
+    if (error) return <ErrorInterface></ErrorInterface>
+    if (isLoading) return <PagesLoading></PagesLoading>
     return (
         <div className="flex flex-col w-full h-screen overflow-auto p-6">
-            {loading ? <PagesLoading></PagesLoading> :
-                (
+            
                     <>
                         {isModalOpen && <CreateRolModal closeEvent={closeOpenModal} />}
                         <div className="w-full">
@@ -57,7 +45,7 @@ export default function ListRoles() {
                             </div>
                         </div>
                         <div className="space-y-4">
-                            {plantillas.map((plantilla: any) => (
+                            {data.map((plantilla: any) => (
                                 /*<PropuestaCard numero={propuesta.id} monto={propuesta.monto}></PropuestaCard>*/
                                 <CustomItemCard
                                     key={plantilla.id}
@@ -73,8 +61,7 @@ export default function ListRoles() {
                             ))}
                         </div>
                     </>
-                )
-            }
+                
 
         </div>
     )

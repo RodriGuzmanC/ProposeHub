@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { AlertTriangle, UserX } from "lucide-react"
 import ModalBackground from "./ModalBackground"
 import { toast } from "react-toastify";
+import { notificacionAsyncrona } from "@/lib/utils/alertToast";
 
 interface DeleteFormModalProps {
   userId: number;
@@ -15,7 +16,7 @@ interface DeleteFormModalProps {
 
 export default function DeleteFormModal({userId, userName, importantMessage = '', closeEvent, deleteEvent} : DeleteFormModalProps) {
   function eliminarConToast(id: number){
-    toast.promise(
+    /*toast.promise(
       () => deleteEvent(id),
       {
         pending: 'Eliminando...',
@@ -32,7 +33,9 @@ export default function DeleteFormModal({userId, userName, importantMessage = ''
         },
         },
     }
-    )
+    )*/
+   
+    notificacionAsyncrona(deleteEvent(id), 'Eliminando....', 'Eliminado correctamente', 'Ha ocurrido un error al momento de eliminar')
   }
   return (
     <ModalBackground>
