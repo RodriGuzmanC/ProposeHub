@@ -1,4 +1,4 @@
-import { respuestaDeIaEjemplo } from "../utils/definitions";
+import { Propuesta, VersionPropuesta } from "../utils/definitions";
 import { deleteData, getData, postData, updateData } from "../utils/methods";
 import { decodificadorEstructuraGrapesJS, reemplazarEstructuraGrapesJS } from "../utils/placeholderExtract";
 import { obtenerContenidoPlantilla, obtenerPlantilla } from "./plantilla";
@@ -23,29 +23,31 @@ const propuestas = [
 ]
 
 // Obtener todas las organizaciones
-export const obtenerPropuestas = async () => {
+export const obtenerPropuestas = async (estado: string): Promise<Propuesta[]> => {
     try {
-        const res = await getData("propuestas")
+        const res = await getData(`propuestas?estado=${estado}`)
         return res;
     } catch (error) {
+        throw new Error(`Error al obtener plantillas: ${error instanceof Error ? error.message : String(error)}`);
 
     }
 };
 
 // Obtener una organización por ID
-export const obtenerPropuesta = async (id: number) => {
+export const obtenerPropuesta = async (id: number): Promise<Propuesta> => {
     try {
         const propuesta = await getData(`propuestas/${id}`)
 
         if (!propuesta) throw new Error(`Propuesta con ID ${id} no encontrada`);
         return propuesta;
     } catch (error) {
-        console.error(error)
+        throw new Error(`Error al obtener plantillas: ${error instanceof Error ? error.message : String(error)}`);
+
     }
 };
 
 // Crear una nueva organización
-export const crearPropuesta = async (cuerpo: any) => {
+/*export const crearPropuesta = async (usar_ai: Boolean, descripcionEmpresa: string, propuesta: Propuesta): Promise<Propuesta> => {
     try {
         // Preparamos los datos
         const data = {
@@ -60,13 +62,18 @@ export const crearPropuesta = async (cuerpo: any) => {
             id_usuario: 1,
             id_estado: 1,
         }
+        // Extraemos los datos necesarios del objeto
+        const { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado } = propuesta;
+        // Creamos el cuerpo
+        const cuerpo = { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado };
+        // Realizamos la solicitud
         // Obtenemos la ESTRUCTURA de la plantilla
-        const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
+        const grapesJsContent = await obtenerPlantilla(id_plantilla)
 
         let contenidoGrapesJS = grapesJsContent.contenido
 
         // Creamos el contenido con AI y lo inyectamos a la plantilla
-        if (data.usar_ai == true) {
+        if (usar_ai == true) {
             //const respuestaDeIa = await postData('obtenerRespuestaAI', data); // NO FUNCIONA
             const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
             contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, respuestaDeIa)
@@ -89,14 +96,19 @@ export const crearPropuesta = async (cuerpo: any) => {
     } catch (error) {
         throw new Error(`Ocurrio un error al crear la propuesta ${error instanceof Error ? error.message : String(error)}`)
     }
-};
+};*/
 
 
 
-export const EjemploPrueba = async (cuerpo: any) => {
+export const crearPropuesta = async (
+    usar_ai: boolean,
+    descripcionEmpresa: string,
+    instrucciones_adicionales: string,
+    propuesta: Partial<Propuesta>
+): Promise<Propuesta> => {
     try {
         // Preparamos los datos
-        const data = {
+        /*const data = {
             id_plantilla: cuerpo.id_plantilla,
             id_servicio: cuerpo.id_servicio,
             id_organizacion: cuerpo.id_organizacion,
@@ -108,52 +120,60 @@ export const EjemploPrueba = async (cuerpo: any) => {
             informacion: cuerpo.descripcionEmpresa,
             id_usuario: 1,
             id_estado: 1,
-        }
+        }*/
+        // Extraemos los datos necesarios del objeto
+        const { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado, informacion } = propuesta;
+        // Creamos el cuerpo
+        const cuerpo = { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado, informacion };
+        
+        // Realizamos la solicitud
+        if (!id_plantilla) throw new Error("No se ha encontrado el id de la plantilla proporcionada")
         // Obtenemos la ESTRUCTURA de la plantilla
-        const grapesJsContent = await obtenerPlantilla(data.id_plantilla)
-
+        const grapesJsContent = await obtenerPlantilla(id_plantilla)
         let contenidoGrapesJS = grapesJsContent.contenido
 
-        // Creamos el contenido con AI y lo inyectamos a la plantilla
-        if (data.usar_ai == true) {
+        /** Creamos el contenido con AI y lo inyectamos a la plantilla SI ES QUE SE INDICO QUE SE USARA IA */
+        if (usar_ai == true) {
             const estructura = decodificadorEstructuraGrapesJS(contenidoGrapesJS) // ['titulo', 'saludo']
             console.log("Estructura")
             console.log(estructura)
+
             const dataParaAi = {
-                id_servicio: data.id_servicio,
-                id_organizacion: data.id_organizacion,
-                titulo: data.titulo,
-                monto: data.monto,
-                descripcionEmpresa: data.descripcionEmpresa,
-                indicaciones: data.instrucciones_adicionales,
+                id_servicio: id_servicio,
+                id_organizacion: id_organizacion,
+                titulo: titulo,
+                monto: monto,
+                descripcionEmpresa: descripcionEmpresa,
+                indicaciones: instrucciones_adicionales,
                 estructura: estructura
             }
+            // Realizamos la solicitud a GEMINI para que retorne el contenido de la propuesta en la estructura dada
             console.log(dataParaAi)
-            const respuestaDeIa = await postData('propuestas/respuesta-ai', dataParaAi); // NO FUNCIONA
+            const respuestaDeIa = await postData('propuestas/respuesta-ai', dataParaAi);
             console.log("Desde laravel respuesta")
             console.log(respuestaDeIa)
 
-            // Ahora reemplazamos el texto de la plantilla por el texto hecho por la AI
+            // Ahora reemplazamos el contenido de la plantilla por el texto hecho por la AI
             contenidoGrapesJS = reemplazarEstructuraGrapesJS(grapesJsContent.contenido, JSON.parse(respuestaDeIa))
             console.log(contenidoGrapesJS)
         }
-        // Una vez obtenida la respuesta podemos proceder a crear la propuesta
+
         // Creamos la propuesta
         console.log("Antes de crear propuesta")
-        console.log(data)
         const propuestaCreada = await postData('propuestas', cuerpo);
 
 
         // Una vez inyectado, ya esta listo para almacenarse como la primera version de esta propuesta
-        const cuerpoDeVersionACrear = {
+        const cuerpoDeVersionACrear: Partial<VersionPropuesta> = {
             id_propuesta: propuestaCreada.id,
             contenido: contenidoGrapesJS,
-            en_edicion: 1
+            en_edicion: true,
+            generado_por_ia: usar_ai,
         }
         console.log(cuerpoDeVersionACrear)
         await crearVersionPropuesta(cuerpoDeVersionACrear)
         // Retornamos true para que luego, en el front redirija al usuario
-        return true;
+        return propuestaCreada;
     } catch (error) {
         throw new Error(`Ocurrio un error al crear la propuesta ${error instanceof Error ? error.message : String(error)}`)
     }

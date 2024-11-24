@@ -1,33 +1,47 @@
 "use client"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Phone, Users, Mail, Group } from 'lucide-react'
+import { User, Phone, Users, Mail, Group, Text } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { FormEvent, useEffect, useState } from 'react'
 import BackLink from "@/app/components/global/BackLink"
 import { editarOrganizacion } from "@/lib/services/organizacion"
-import { editarConToast } from "@/lib/utils/alertToast"
+import { editarConToast, notificacionAsyncrona } from "@/lib/utils/alertToast"
 import { editarRol, obtenerRol } from "@/lib/services/rol"
+import { Rol } from "@/lib/utils/definitions"
+import { useParams, useRouter } from "next/navigation"
+import useSWR from "swr"
+import ErrorInterface from "@/app/components/global/ErrorInterface"
+import PagesLoading from "@/app/components/skeletons/PagesLoading"
 
 interface PageProps {
-    rol: any
+    rol: Rol
 }
 
 
 export default function EditarRolesClient({ rol }: PageProps) {
     const [rolActual, setRolActual] = useState<any>({})
+    const router = useRouter()
 
-     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const formEntries = Object.fromEntries(formData.entries())
-    
         try {
-            await editarConToast({
+            /*await editarConToast({
                 id: parseInt(rol.id),
                 cuerpo: formEntries, 
                 event: editarRol 
-            });
+            });*/
+            const nombre = formData.get('nombre') as string;
+            const descripcion = formData.get('descripcion') as string;
+            const rolActualizar : Rol = {
+                id: rol.id,
+                nombre: nombre,
+                descripcion: descripcion
+            }
+            await notificacionAsyncrona(editarRol(rolActualizar), 'Actualizando rol...', 'Rol actualizado correctamente', 'Ocurrio un error, intentalo mas tarde')
+            router.push('/roles')
         } catch (error) {
             console.log(error)
         }
@@ -56,7 +70,7 @@ export default function EditarRolesClient({ rol }: PageProps) {
                 <div className="space-y-2">
                     <Label htmlFor="descripcion">Descripcion</Label>
                     <div className="relative">
-                        <Mail className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                        <Text className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
                         <Input
                             id="descripcion"
                             name="descripcion"

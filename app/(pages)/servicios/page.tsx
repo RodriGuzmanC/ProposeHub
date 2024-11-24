@@ -12,6 +12,7 @@ import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { eliminarPlantilla, obtenerPlantillas } from '@/lib/services/plantilla';
 import { eliminarRol, obtenerRoles } from '@/lib/services/rol';
 import { eliminarServicio, obtenerServicios } from '@/lib/services/servicio';
+import { Servicio } from '@/lib/utils/definitions';
 import { Fallback } from '@radix-ui/react-avatar';
 import { Briefcase, BriefcaseBusiness, HandHelping } from 'lucide-react';
 import Link from 'next/link';
@@ -19,7 +20,6 @@ import React, { Suspense, useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 export default function ListRoles() {
-    const [filteredData, setFilteredData] = useState<any>([])
     /** Elimina la plantilla seleccionada */
     async function eliminarFun(id: number) {
         await eliminarServicio(id)
@@ -31,16 +31,17 @@ export default function ListRoles() {
     const closeOpenModal = () => setIsModalOpen(!isModalOpen);
 
     /** Carga los datos */
-    
-    const { data, error, isLoading, mutate } = useSWR<any>('/servicios', obtenerServicios)
+    const [filteredData, setFilteredData] = useState<Servicio[]>([])
+    const { data: servicios, error, isLoading, mutate } = useSWR<Servicio[]>('/servicios', obtenerServicios)
     
     if (error) return <ErrorInterface></ErrorInterface>
     if (isLoading) return <PagesLoading></PagesLoading>
+    if (servicios == undefined) return <PagesLoading></PagesLoading>
     
     return (
         <div className="flex flex-col w-full h-screen overflow-auto p-6">
             <FilterComponent
-            data={data}
+            data={servicios}
             onFilteredDataChange={setFilteredData}
             >
                 <div className="w-full">
@@ -57,18 +58,17 @@ export default function ListRoles() {
             </FilterComponent>
 
                 <>
-                {isModalOpen && <CreateServiceModal closeEvent={closeOpenModal} />}
+                {isModalOpen && <CreateServiceModal closeEvent={closeOpenModal} revalidate={mutate}/>}
                 
-
                 <div className="space-y-4">
-                    {filteredData.map((plantilla: any) => (
+                    {filteredData.map((servicio: Servicio) => (
                         <CustomItemCard
-                            key={plantilla.id}
-                            id={plantilla.id}
-                            nombre={plantilla.nombre}
-                            elementos={[plantilla.descripcion]}
+                            key={servicio.id}
+                            id={servicio.id}
+                            nombre={servicio.nombre}
+                            elementos={[servicio.descripcion]}
                             verHref='/plantillas/ver'
-                            editarHref={`servicios/editar/${plantilla.id}`}
+                            editarHref={`servicios/editar/${servicio.id}`}
                             IconCard={HandHelping}
                             eliminarAction={eliminarFun}
                         ></CustomItemCard>

@@ -1,4 +1,4 @@
-import { OrganizacionInterface } from "../utils/definitions";
+import { Organizacion } from "../utils/definitions";
 import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 
@@ -17,50 +17,62 @@ const OrganizationsDataExample = [
 
 
 // Obtener todas las organizaciones
-export const obtenerOrganizaciones = async (): Promise<any[]> => {
+export const obtenerOrganizaciones = async (): Promise<Organizacion[]> => {
     try {
-        const data = await getData('organizaciones');
-        return data; // Devuelve los datos obtenidos
+        const organizaciones = await getData('organizaciones');
+        return organizaciones; // Devuelve los datos obtenidos
     } catch (error) {
         throw new Error(`Error al obtener organizaciones: ${error}`);
     }
 };
 
 // Obtener una organización por ID
-export const obtenerOrganizacion = async (id: number): Promise<any> => {
+export const obtenerOrganizacion = async (id: number): Promise<Organizacion> => {
     try {
-        const data = await getData(`organizaciones/${id}`);
-        return data; // Devuelve la organización obtenida
+        const organizacion = await getData(`organizaciones/${id}`);
+        if (!organizacion) throw new Error(`Organizacion con ID ${id} no encontrado`);
+
+        return organizacion; // Devuelve la organización obtenida
     } catch (error) {
         throw new Error(`Error al obtener la organización: ${error}`);
     }
 };
 
 // Crear una nueva organización
-export const crearOrganizacion = async (cuerpo: any): Promise<boolean> => {
+export const crearOrganizacion = async (organizacion: Partial<Organizacion>): Promise<Organizacion> => {
     try {
-        await postData('organizaciones', cuerpo);
-        return true; // Devuelve true si la operación se realiza correctamente
+        // Extraemos los datos necesarios del objeto
+        const { nombre, telefono, correo } = organizacion;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, telefono, correo };
+        // Realizamos la solicitud
+        const organizacionNueva = await postData('organizaciones', cuerpo);
+        return organizacionNueva; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al crear organización: ${error}`);
     }
 };
 
 // Editar una organización
-export const editarOrganizacion = async (id: number, cuerpo: any): Promise<boolean> => {
+export const editarOrganizacion = async (organizacion: Partial<Organizacion>): Promise<Organizacion> => {
     try {
-        await updateData(`organizaciones/${id}`, cuerpo);
-        return true; // Devuelve true si la operación se realiza correctamente
+        // Extraemos los datos necesarios del objeto
+        const { id, nombre, telefono, correo } = organizacion;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, telefono, correo };
+        // Realizamos la solicitud
+        const organizacionEditada = await updateData(`organizaciones/${id}`, cuerpo);
+        return organizacionEditada; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al editar organización: ${error}`);
     }
 };
 
 // Eliminar una organización
-export const eliminarOrganizacion = async (id: number): Promise<boolean> => {
+export const eliminarOrganizacion = async (id: number): Promise<Organizacion> => {
     try {
-        await deleteData(`organizaciones/${id}`);
-        return true; // Devuelve true si la operación se realiza correctamente
+        const organizacionEliminada = await deleteData(`organizaciones/${id}`);
+        return organizacionEliminada; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al eliminar organización: ${error}`);
     }

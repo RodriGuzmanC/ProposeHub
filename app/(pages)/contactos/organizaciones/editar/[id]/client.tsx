@@ -6,14 +6,17 @@ import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { FormEvent } from 'react'
 import BackLink from "@/app/components/global/BackLink"
 import { editarOrganizacion } from "@/lib/services/organizacion"
-import { editarConToast } from "@/lib/utils/alertToast"
+import { editarConToast, notificacionAsyncrona } from "@/lib/utils/alertToast"
+import { Organizacion } from "@/lib/utils/definitions"
+import { useRouter } from "next/navigation"
 
 interface PageProps {
-    organizacion: any
+    organizacion: Organizacion
 }
 
 
 export default function EditarOrganizacionesClient({ organizacion }: PageProps) {
+    const router = useRouter()
 
      const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -21,11 +24,24 @@ export default function EditarOrganizacionesClient({ organizacion }: PageProps) 
         const formEntries = Object.fromEntries(formData.entries())
     
         try {
-            await editarConToast({
+            /*await editarConToast({
                 id: organizacion.id,
                 cuerpo: formEntries, 
                 event: editarOrganizacion 
-            });
+            });*/
+
+            const nombre = formData.get('nombre') as string;
+            const telefono = formData.get('telefono') as string;
+            const correo = formData.get('correo') as string;
+
+            const organizacionActualizar : Partial<Organizacion> = {
+                id: organizacion.id,
+                nombre: nombre,
+                telefono: telefono,
+                correo: correo
+            }
+            await notificacionAsyncrona(editarOrganizacion(organizacionActualizar), 'Actualizando...', 'Organizacion actualizada correctamente', 'Ocurrio un error, intentalo mas tarde')
+            router.push('/contactos/organizaciones')
         } catch (error) {
             console.log(error)
         }

@@ -5,31 +5,40 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { crearPlantilla } from '@/lib/services/plantilla';
-import { crearConToast } from '@/lib/utils/alertToast';
+import { crearConToast, notificacionAsyncrona } from '@/lib/utils/alertToast';
 import { crearRol } from '@/lib/services/rol';
 import { crearServicio } from '@/lib/services/servicio';
+import { Servicio } from '@/lib/utils/definitions';
 
 interface CreateTemplateModalProps {
   closeEvent: () => void;
+  revalidate: any
 }
 
-export default function CreateServiceModal({ closeEvent }: CreateTemplateModalProps) {
-  const [templateName, setTemplateName] = useState('');
+export default function CreateServiceModal({ closeEvent, revalidate }: CreateTemplateModalProps) {
 
   const handleCreate = async (e : FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
     console.log(data)
     try {
-      await crearConToast({
+      /*await crearConToast({
         cuerpo: data,
         event: crearServicio
-      });
+      });*/
+      const nombre = formData.get('nombre') as string;
+      const descripcion = formData.get('descripcion') as string;
+      const servicioNuevo: Partial<Servicio> = {
+        nombre: nombre,
+        descripcion: descripcion
+      }
+      await notificacionAsyncrona(crearServicio(servicioNuevo), 'Creando...', 'Servicio creado correctamente', 'Ocurrio un error, intentalo mas tarde')
+      revalidate()
+      closeEvent();
     } catch (error) {
       console.log(error)
     }
-
-    closeEvent(); // Cierra el modal después de crear la plantilla
   };
 
   return (

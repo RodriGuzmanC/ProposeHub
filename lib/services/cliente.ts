@@ -1,3 +1,4 @@
+import { Cliente } from "../utils/definitions";
 import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 const ContactosDataExample = [
@@ -10,9 +11,10 @@ const ContactosDataExample = [
 ];
 
 // Obtener todos los clientes
-export const obtenerClientes = async () => {
+export const obtenerClientes = async (): Promise<Cliente[]> => {
     try {
-        return await getData('clientes')
+        const clientes = await getData('clientes')
+        return clientes
         //return ContactosDataExample;
     } catch (error) {
         throw new Error(`Error al obtener usuarios: ${error instanceof Error ? error.message : String(error)}`);
@@ -20,11 +22,12 @@ export const obtenerClientes = async () => {
 };
 
 
-export const obtenerClientesDeOrganizacion = async (idOrganizacion: number) => {
+export const obtenerClientesDeOrganizacion = async (idOrganizacion: number) : Promise<Cliente[]> => {
     try {
         // Obtienes los datos de los clientes
         const clientes = await getData('clientes');
-        
+        if (!clientes) throw new Error(`Cliente con ID ${idOrganizacion} no encontrado`);
+
         // Filtras los clientes que coincidan con el id de organización proporcionado
         const clientesFiltrados = clientes.filter((cliente: { id_organizacion: number }) => cliente.id_organizacion === idOrganizacion);
         
@@ -35,7 +38,7 @@ export const obtenerClientesDeOrganizacion = async (idOrganizacion: number) => {
 };
 
 // Obtener un cliente por ID
-export const obtenerCliente = async (id: number) => {
+export const obtenerCliente = async (id: number) : Promise<Cliente> => {
     try {
         const cliente = await getData(`clientes/${id}`)
 
@@ -48,48 +51,59 @@ export const obtenerCliente = async (id: number) => {
 
 
 // Crear una nueva organización
-export const crearCliente = async (cuerpo: any): Promise<boolean> => {
+export const crearCliente = async (cliente: Partial<Cliente>): Promise<Cliente> => {
     try {
-        const data = {
+        /*const data = {
             nombre: cuerpo.nombre,
             correo: cuerpo.correo,
             telefono: cuerpo.telefono,
             id_organizacion: cuerpo.organization
-        }
-        await postData('clientes', data);
-        return true; // Devuelve true si la operación se realiza correctamente
+        }*/
+        // Extraemos los datos necesarios del objeto
+        const { nombre, telefono, correo, organizacion } = cliente;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, telefono, correo, id_organizacion: organizacion?.id };
+        // Realizamos la solicitud
+        const clienteNuevo = await postData('clientes', cuerpo);
+        return clienteNuevo; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al crear el cliente: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
 // Editar una organización
-export const editarCliente = async (id: number, cuerpo: any): Promise<boolean> => {
+export const editarCliente = async (cliente: Partial<Cliente>): Promise<Cliente> => {
     try {
-        const data = {
+        /*const data = {
             nombre: cuerpo.nombre,
             correo: cuerpo.correo,
             telefono: cuerpo.telefono,
             id_organizacion: cuerpo.organization
-        }
-        await updateData(`clientes/${id}`, data);
-        return true; // Devuelve true si la operación se realiza correctamente
+        }*/
+        // Extraemos los datos necesarios del objeto
+        const { id, nombre, telefono, correo, organizacion } = cliente;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, telefono, correo, id_organizacion : organizacion?.id };
+        // Realizamos la solicitud
+        const clienteEditado = await updateData(`clientes/${id}`, cuerpo);
+        return clienteEditado; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al editar cliente: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
 
-export const eliminarCliente = async (id: number): Promise<boolean> => {
+export const eliminarCliente = async (id: number): Promise<Cliente> => {
     try {
-        await deleteData(`clientes/${id}`);
-        return true; // Devuelve true si la operación se realiza correctamente
+        // Realizamos la solicitud
+        const clienteEliminado = await deleteData(`clientes/${id}`);
+        return clienteEliminado; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al eliminar cliente: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
-export const validarCredencialesCliente = async (correo: string, clave: string): Promise<boolean> => {
+export const validarCredencialesCliente = async (correo: string, clave: string): Promise<Cliente> => {
     try {
         const data = {
             correo: correo,

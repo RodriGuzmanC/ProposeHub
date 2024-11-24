@@ -8,13 +8,14 @@ import EditRolModal from '@/app/components/roles/editRolModal';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { eliminarPlantilla, obtenerPlantillas } from '@/lib/services/plantilla';
 import { eliminarRol, obtenerRoles } from '@/lib/services/rol';
+import { Rol } from '@/lib/utils/definitions';
 import { Briefcase, BriefcaseBusiness, Group } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
 
 export default function ListRoles() {
-    /** Elimina la plantilla seleccionada */
+    /** Elimina el rol seleccionada */
     async function eliminarFun(id: number) {
         await eliminarRol(id)
         mutate()
@@ -25,14 +26,14 @@ export default function ListRoles() {
     const closeOpenModal = () => setIsModalOpen(!isModalOpen);
 
     /** Carga los datos */
-    const { data, error, isLoading, mutate } = useSWR<any>('/roles', obtenerRoles)
+    const { data: roles, error, isLoading, mutate } = useSWR<Rol[]>('/roles', obtenerRoles)
     if (error) return <ErrorInterface></ErrorInterface>
     if (isLoading) return <PagesLoading></PagesLoading>
     return (
         <div className="flex flex-col w-full h-screen overflow-auto p-6">
             
                     <>
-                        {isModalOpen && <CreateRolModal closeEvent={closeOpenModal} />}
+                        {isModalOpen && <CreateRolModal closeEvent={closeOpenModal} revalidate={mutate} />}
                         <div className="w-full">
                             <div className="flex space-x-4 mb-6 items-end">
                                 <h3 className='text-2xl font-bold'>Roles</h3>
@@ -45,15 +46,14 @@ export default function ListRoles() {
                             </div>
                         </div>
                         <div className="space-y-4">
-                            {data.map((plantilla: any) => (
-                                /*<PropuestaCard numero={propuesta.id} monto={propuesta.monto}></PropuestaCard>*/
+                            {roles?.map((rol: Rol) => (
                                 <CustomItemCard
-                                    key={plantilla.id}
-                                    id={plantilla.id}
-                                    nombre={plantilla.nombre}
-                                    elementos={[plantilla.descripcion]}
+                                    key={rol.id}
+                                    id={rol.id}
+                                    nombre={rol.nombre}
+                                    elementos={[rol.descripcion]}
                                     verHref='/plantillas/ver'
-                                    editarHref={`roles/editar/${plantilla.id}`}
+                                    editarHref={`roles/editar/${rol.id}`}
                                     importantMessage={'Al eliminar este rol, se eliminarán los usuarios asignados. Asegúrate de reasignar el rol de los usuarios antes de proceder.'}
                                     IconCard={Group}
                                     eliminarAction={eliminarFun}
@@ -62,7 +62,6 @@ export default function ListRoles() {
                         </div>
                     </>
                 
-
         </div>
     )
 }

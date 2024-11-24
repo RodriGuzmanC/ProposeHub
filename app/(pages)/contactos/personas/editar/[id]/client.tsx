@@ -10,21 +10,23 @@ import Link from "next/link"
 import { FormEvent, useEffect, useState } from "react"
 import BackLink from "@/app/components/global/BackLink"
 import { editarCliente, obtenerCliente } from "@/lib/services/cliente"
-import { ClienteInterface } from "@/lib/utils/definitions"
-import { editarConToast } from "@/lib/utils/alertToast"
+import { Cliente, Organizacion } from "@/lib/utils/definitions"
+import { editarConToast, notificacionAsyncrona } from "@/lib/utils/alertToast"
+import { useRouter } from "next/navigation"
 
 
 
 
 type PageProps = {
-    datosContactoActual: any
-    organizaciones: any
+    datosContactoActual: Cliente
+    organizaciones: Organizacion[]
 }
 
 
 
 
 export default function EditarClienteClient({ datosContactoActual, organizaciones }: PageProps) {
+    const router = useRouter()
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,12 +34,34 @@ export default function EditarClienteClient({ datosContactoActual, organizacione
         const formEntries = Object.fromEntries(formData.entries());
         console.log(formEntries)
         try {
-            await editarConToast({
+            /*await editarConToast({
                 id: datosContactoActual.id,
                 cuerpo: formEntries, 
                 event: editarCliente 
-            });
-            
+            });*/
+
+            const nombre = formData.get('nombre') as string;
+            const telefono = formData.get('telefono') as string;
+            const correo = formData.get('correo') as string;
+            const organizacionId = formData.get('organizacion') as string;
+
+            const clienteEditar: Partial<Cliente> = {
+                id: datosContactoActual.id,
+                nombre: nombre,
+                telefono: telefono,
+                correo: correo,
+                organizacion: {
+                    id: parseInt(organizacionId),
+                    correo: '',
+                    created_at: '',
+                    nombre: '',
+                    telefono: '',
+                    updated_at: ''
+                }
+            }
+            await notificacionAsyncrona(editarCliente(clienteEditar), 'Editando...', 'Contacto editado correctamente', 'Ocurrio un error, intentalo mas tarde')
+            router.push('/contactos/personas')
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -91,15 +115,15 @@ export default function EditarClienteClient({ datosContactoActual, organizacione
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="organization">Organización</Label>
+                    <Label htmlFor="organizacion">Organización</Label>
                     <div className="relative">
                         <Building className="absolute left-2 top-2.5 h-4 w-4 text-gray-500 z-10" />
-                        <Select name="organization" defaultValue={datosContactoActual?.organizacion_id.toString()}>
+                        <Select name="organizacion" defaultValue={datosContactoActual?.organizacion.id.toString()}>
                             <SelectTrigger className="pl-8">
                                 <SelectValue placeholder="Selecciona una organización" />
                             </SelectTrigger>
                             <SelectContent>
-                                {organizaciones.map((organizacion : any) => (
+                                {organizaciones.map((organizacion: Organizacion) => (
                                     <SelectItem key={organizacion.id} value={organizacion.id.toString()}>
                                         {organizacion.nombre}
                                     </SelectItem>

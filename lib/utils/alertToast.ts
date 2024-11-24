@@ -200,12 +200,12 @@ export const notificacionToast = {
 };
 
 // Función asíncrona para manejar operaciones con promesas
-export async function notificacionAsyncrona(promise: Promise<void>, loadingMessage = 'Cargando...', successMessage = 'Operación exitosa', errorMessage = 'Hubo un error') {
+export async function notificacionAsyncrona(promise: Promise<any>, loadingMessage = 'Cargando...', successMessage = 'Operación exitosa', errorMessage = 'Hubo un error') {
     const toastId = toast.loading(loadingMessage); // Mostrar un toast de carga
 
     try {
         // Esperamos la promesa
-        await promise;
+        const res = await promise;
 
         // Si la promesa se resuelve con éxito, mostramos un toast de éxito
         toast.update(toastId, {
@@ -214,6 +214,7 @@ export async function notificacionAsyncrona(promise: Promise<void>, loadingMessa
             isLoading: false,
             autoClose: 5000
         });
+        return res
     } catch (error) {
         // Si la promesa falla, mostramos un toast de error
         toast.update(toastId, {

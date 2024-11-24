@@ -2,11 +2,12 @@
 import Button from '@/app/components/Button';
 import { ServiceItem } from '@/app/components/UserProfile';
 import { obtenerServicios } from '@/lib/services/servicio';
+import { Servicio } from '@/lib/utils/definitions';
 import React, { useState } from 'react';
 
 
 interface Page3Props {
-  serviciosData: Array<any>
+  serviciosData: Servicio[]
   selectedService: any
   setSelectedService: (id: any) => void;
   nextStep: () => void;
@@ -16,15 +17,15 @@ interface Page3Props {
 export default function Page3({ serviciosData, selectedService, setSelectedService, nextStep }: Page3Props) {
   const [servicios, setServicios] = useState<any>([])
 
-  async function fetchServicios(){
+  /*async function fetchServicios(){
     setServicios(await obtenerServicios())
   }
-  fetchServicios()
+  fetchServicios()*/
 
   return (
     <div className="flex-col flex gap-6 items-center w-full">
       <h2 className="text-2xl font-bold text-primary">Selecciona el Servicio</h2>
-      {serviciosData.map((servicio: any) => (
+      {serviciosData.map((servicio: Servicio) => (
         <ServiceItem
           key={servicio.id}
           name={servicio.nombre}

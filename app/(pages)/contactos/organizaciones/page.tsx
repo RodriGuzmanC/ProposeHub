@@ -5,6 +5,7 @@ import ErrorInterface from '@/app/components/global/ErrorInterface'
 import FilterComponent from '@/app/components/global/FilterComponent'
 import PagesLoading from '@/app/components/skeletons/PagesLoading'
 import { eliminarOrganizacion, obtenerOrganizaciones } from '@/lib/services/organizacion'
+import { Organizacion } from '@/lib/utils/definitions'
 import { Building, Building2 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -18,12 +19,12 @@ export default function OrganizacionClient() {
         await eliminarOrganizacion(id)
         mutate()
     }
-
     //const [filteredData, setFilteredData] = useState(data);
 
     /** Carga los datos */
-    const { data, error, isLoading, mutate } = useSWR<any>('/contactos/organizaciones', obtenerOrganizaciones)
+    const { data: organizaciones, error, isLoading, mutate } = useSWR<Organizacion[]>('/contactos/organizaciones', obtenerOrganizaciones)
     if (error) return <ErrorInterface></ErrorInterface>
+    if (organizaciones == undefined) return <ErrorInterface></ErrorInterface>
     if (isLoading) return <PagesLoading></PagesLoading>
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
@@ -46,7 +47,7 @@ export default function OrganizacionClient() {
                         </div>
                     </div>
                     <div className="space-y-4">
-                        {data.map((organization : any) => (
+                        {organizaciones.map((organization : Organizacion) => (
                             <CustomItemCard 
                             key={organization.id} 
                             IconCard={Building} 

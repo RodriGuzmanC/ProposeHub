@@ -1,6 +1,7 @@
 import { obtenerCliente } from "@/lib/services/cliente"
 import EditarClienteClient from "./client"
 import { obtenerOrganizaciones } from "@/lib/services/organizacion";
+import ErrorInterface from "@/app/components/global/ErrorInterface";
 
 
 const fetchOrganizaciones = async () => {
@@ -34,6 +35,7 @@ export default async function Page({ params }: PageProps) {
     // Llama a fetchCliente directamente
     const cliente = await fetchCliente(parseInt(params.id));
     const organizaciones = await fetchOrganizaciones();
+    if (cliente == undefined) return <ErrorInterface></ErrorInterface>
 
     console.log(cliente)
     return (

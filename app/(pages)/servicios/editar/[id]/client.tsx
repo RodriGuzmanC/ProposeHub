@@ -6,17 +6,19 @@ import ButtonTheme from "@/app/components/global/ButtonTheme"
 import { FormEvent, useEffect, useState } from 'react'
 import BackLink from "@/app/components/global/BackLink"
 import { editarOrganizacion } from "@/lib/services/organizacion"
-import { editarConToast } from "@/lib/utils/alertToast"
+import { editarConToast, notificacionAsyncrona } from "@/lib/utils/alertToast"
 import { editarRol, obtenerRol } from "@/lib/services/rol"
 import { editarServicio } from "@/lib/services/servicio"
+import { Servicio } from "@/lib/utils/definitions"
+import { useRouter } from "next/navigation"
 
 interface PageProps {
-    servicio: any
+    servicio: Servicio
 }
 
 
 export default function EditarServiciosClient({ servicio }: PageProps) {
-    const [rolActual, setRolActual] = useState<any>({})
+    const router = useRouter()
 
      const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -24,11 +26,21 @@ export default function EditarServiciosClient({ servicio }: PageProps) {
         const formEntries = Object.fromEntries(formData.entries())
     
         try {
-            await editarConToast({
+            /*await editarConToast({
                 id: parseInt(servicio.id),
                 cuerpo: formEntries, 
                 event: editarServicio 
-            });
+            });*/
+
+            const nombre = formData.get('nombre') as string;
+            const descripcion = formData.get('descripcion') as string;
+            const servicioActualizar : Servicio = {
+                id: servicio.id,
+                nombre: nombre,
+                descripcion: descripcion
+            }
+            await notificacionAsyncrona(editarServicio(servicioActualizar), 'Actualizando...', 'Servicio actualizado correctamente', 'Ocurrio un error, intentalo mas tarde')
+            router.push('/servicios')
         } catch (error) {
             console.log(error)
         }

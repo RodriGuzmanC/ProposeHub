@@ -9,6 +9,7 @@ import { eliminarCliente, obtenerClientes } from '@/lib/services/cliente'
 import ErrorInterface from '@/app/components/global/ErrorInterface'
 import PagesLoading from '@/app/components/skeletons/PagesLoading'
 import useSWR from 'swr'
+import { Cliente } from '@/lib/utils/definitions'
 
 
 
@@ -20,9 +21,10 @@ export default function PersonasVistaClient() {
   }
   
   /** Carga los datos */
-  const { data, error, isLoading, mutate } = useSWR<any>('/contactos/personas', obtenerClientes)
+  const { data: clientes, error, isLoading, mutate } = useSWR<Cliente[]>('/contactos/personas', obtenerClientes)
   if (error) return <ErrorInterface></ErrorInterface>
   if (isLoading) return <PagesLoading></PagesLoading>
+  if (clientes == undefined) return <ErrorInterface></ErrorInterface>
   return (
     <div className="flex flex-col w-full h-screen overflow-auto">
       <main className="flex-1 h-full">
@@ -40,7 +42,7 @@ export default function PersonasVistaClient() {
             {/*</FilterComponent>*/}
           </div>
           <div className="space-y-4">
-            {data.map((cliente: any) => (
+            {clientes.map((cliente: Cliente) => (
               <CustomItemCard
                 key={cliente.id}
                 IconCard={User}
@@ -49,7 +51,7 @@ export default function PersonasVistaClient() {
                 id={cliente.id}
                 eliminarAction={eliminarFun}
                 nombre={cliente.nombre}
-                elementos={[cliente.correo, cliente.telefono, cliente.organizacion]}></CustomItemCard>
+                elementos={[cliente.correo, cliente.telefono, cliente.organizacion.nombre]}></CustomItemCard>
             ))}
           </div>
         </div>

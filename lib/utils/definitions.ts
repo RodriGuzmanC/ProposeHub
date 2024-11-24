@@ -4,35 +4,39 @@ export interface LayoutPropsLib{
 }
 
 
-export interface OrganizacionInterface {
-    id?: number
-    nombre?: string
-    telefono?: string
-    correo?: string
-    created_at?: string
-    updated_at?: string
+export interface Organizacion {
+    id: number
+    nombre: string
+    telefono: string
+    correo: string
+    created_at: string
+    updated_at: string
 }
 
-export interface ClienteInterface {
+export interface Cliente {
     id: number
     correo: string
     nombre: string
-    telefono: number
-    organizacionID: number
+    telefono: string
+    created_at?: string
+    updated_at?: string
+    organizacion: Organizacion
+    contrasena_hash: string
 }
 
-export interface ServicioInterface {
-    id: number
-    nombre: string
-}
-
-export interface RolInterface {
+export interface Servicio {
     id: number
     nombre: string
     descripcion: string
 }
 
-export interface UsuarioInterface {
+export interface Rol {
+    id: number
+    nombre: string
+    descripcion: string
+}
+
+export interface Usuario {
     id: number
     nombre: string
     correo: string
@@ -40,42 +44,56 @@ export interface UsuarioInterface {
     rolID: number
 }
 
-export interface PlantillaInterface{
+export interface Plantilla{
     id: number
     nombre: string
     contenido: string
-    updateAt: string
+    descripcion: string
+    is_active: boolean
+    created_at?: string
+    updated_at?: string
 }
 
-export interface PropuestaInterface {
-    id: number
-    clienteID: number | null
-    organizacionID: number
-    titulo: string
-    monto: number
-    estadoID: number
-    plantillaID: number
-    servicioID: number
-    usuarioID: number
-    informacion: string | null
-    createdAt: string
-    updatedAt: string
-    versionPublicadaID: number | null
-    html: string | null
-    css: string | null
-}
-
-export interface EstadoPropuestaInterface {
+export interface EstadosPropuesta{
     id: number
     nombre: string
+    created_at?: string
+    updated_at?: string
+
 }
 
-export interface VersionPropuestaInterface {
+export interface Propuesta {
+    id: number
+    id_cliente?: number
+    cliente?: Cliente
+    id_organizacion?: number
+    organizacion?: Organizacion
+    id_estado?: number
+    estado?: EstadosPropuesta
+    id_plantilla?: number
+    plantilla?: Plantilla
+    id_servicio?: number
+    servicio?: Servicio
+    id_usuario?: number
+    usuario?: Usuario
+    titulo: string
+    monto: number
+    informacion: string | null
+    created_at?: string
+    updated_at?: string
+    version_publicada: number | null
+    html?: string | null
+    css?: string | null
+}
+
+
+export interface VersionPropuesta {
     id: number
     id_propuesta: number
     version_numero: number
     contenido: string
-    fecha_creacion: string
+    fecha_creacion?: string
+    generado_por_ia: boolean
     en_edicion: boolean
 }
 

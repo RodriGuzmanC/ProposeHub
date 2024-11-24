@@ -6,10 +6,11 @@ import Tab from '@/app/components/Tab';
 import { UserProfileItem } from '@/app/components/UserProfile';
 import { obtenerClientes } from '@/lib/services/cliente';
 import { obtenerOrganizaciones } from '@/lib/services/organizacion';
+import { Organizacion } from '@/lib/utils/definitions';
 
 
 interface Page2Props {
-  organizacionesData: Array<any>
+  organizacionesData: Organizacion[]
   selectedContact: any;
   setSelectedContact: (contact: any) => void;
   nextStep: () => void;
@@ -22,7 +23,7 @@ export default function Page2({ organizacionesData, selectedContact, setSelected
   const [organizaciones, setOrganizaciones] = useState<any>([])
   const [organizacionesCargadas, setOrganizacionesCargadas] = useState(false); // Estado para controlar la carga
 
-  async function fetchContactos(){
+  /*async function fetchContactos(){
     setContactos(await obtenerClientes())
   }
   async function fetchOrganizaciones(){
@@ -32,7 +33,7 @@ export default function Page2({ organizacionesData, selectedContact, setSelected
     if (!organizacionesCargadas) { // Solo carga si no se han cargado
       fetchOrganizaciones();
     }
-  }, [organizacionesCargadas])
+  }, [organizacionesCargadas])*/
 
   return (
     <div className='flex flex-col gap-8'>

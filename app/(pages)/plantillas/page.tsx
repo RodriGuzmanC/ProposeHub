@@ -5,13 +5,13 @@ import ErrorInterface from '@/app/components/global/ErrorInterface';
 import CreateTemplateModal from '@/app/components/plantillas/createTemplateModal';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { eliminarPlantilla, obtenerPlantillas } from '@/lib/services/plantilla';
+import { Plantilla } from '@/lib/utils/definitions';
 import { Briefcase, BriefcaseBusiness, LayoutPanelLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
 
 export default function ListPlantillas() {
-    const [loading, setLoading] = useState(true)
     /** Elimina la plantilla seleccionada */
     async function eliminarFun(id: number) {
         await eliminarPlantilla(id)
@@ -24,8 +24,9 @@ export default function ListPlantillas() {
     const closeOpenModal = () => setIsModalOpen(!isModalOpen);
 
     /** Carga los datos */
-    const { data, error, isLoading, mutate } = useSWR<any>('/plantillas', obtenerPlantillas)
+    const { data: plantillas, error, isLoading, mutate } = useSWR<Plantilla[]>('/plantillas', obtenerPlantillas)
     if (error) return <ErrorInterface></ErrorInterface>
+    if (plantillas == undefined) return <PagesLoading></PagesLoading>
     if (isLoading) return <PagesLoading></PagesLoading>
     return (
         <div className="flex flex-col w-full h-screen overflow-auto p-6 bg-white text-primary">
@@ -44,13 +45,12 @@ export default function ListPlantillas() {
                     </div>
                 </div>
                 <div className="space-y-4">
-                    {data.map((plantilla: any) => (
-                        /*<PropuestaCard numero={propuesta.id} monto={propuesta.monto}></PropuestaCard>*/
+                    {plantillas.map((plantilla: Plantilla) => (
                         <CustomItemCard
                             key={plantilla.id}
                             id={plantilla.id}
                             nombre={plantilla.nombre}
-                            elementos={['creacion propia']}
+                            elementos={[plantilla.descripcion]}
                             verHref='/plantillas/ver'
                             editarHref={`constructor/plantilla/editar/${plantilla.id}`}
                             IconCard={LayoutPanelLeftIcon}

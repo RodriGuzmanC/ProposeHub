@@ -1,3 +1,4 @@
+import { Servicio } from "../utils/definitions";
 import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 const serviciosData = [
@@ -7,52 +8,63 @@ const serviciosData = [
     { id: 4, nombre: 'Hubspot'}
 ];
 
-// Obtener todas las organizaciones
-export const obtenerServicios = async () => {
+// Obtener todas los servicios
+export const obtenerServicios = async (): Promise<Servicio[]> => {
     try {
-        return await getData('servicios')
+        const servicios = await getData('servicios')
+        return servicios
     } catch (error) {
         throw new Error(`Error al obtener usuarios: ${error}`);
     }
 };
 
 // Obtener una organización por ID
-export const obtenerServicio = async (id: number) => {
+export const obtenerServicio = async (id: number): Promise<Servicio> => {
     try {
-        const cliente = await getData(`servicios/${id}`)
+        const servicio = await getData(`servicios/${id}`)
 
-        if (!cliente) throw new Error(`Rol con ID ${id} no encontrado`);
-        return cliente;
+        if (!servicio) throw new Error(`Rol con ID ${id} no encontrado`);
+        return servicio;
     } catch (error) {
         throw new Error(`Error al obtener rol: ${error}`);
     }
 };
 
 // Crear una nueva organización
-export const crearServicio = async (cuerpo: any) => {
+export const crearServicio = async (servicio: Partial<Servicio>): Promise<Servicio> => {
     try {
-        await postData('servicios', cuerpo);
-        return true; // Devuelve true si la operación se realiza correctamente
+        // Extraemos los datos necesarios del objeto
+        const { nombre, descripcion } = servicio;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, descripcion };
+        // Realizamos la solicitud
+        const servicioNuevo = await postData('servicios', cuerpo);
+        return servicioNuevo;
     } catch (error) {
         throw new Error(`Error al crear el rol: ${error}`);
     }
 };
 
 // Editar una organización
-export const editarServicio = async (id: number, cuerpo: any) => {
+export const editarServicio = async (servicio: Servicio) => {
     try {
-        await updateData(`servicios/${id}`, cuerpo);
-        return true; // Devuelve true si la operación se realiza correctamente
+        // Extraemos los datos necesarios del objeto
+        const { id, nombre, descripcion } = servicio;
+        // Creamos el cuerpo
+        const cuerpo = { nombre, descripcion };
+        // Realizamos la solicitud
+        const servicioEditado = await updateData(`servicios/${id}`, cuerpo);
+        return servicioEditado;
     } catch (error) {
         throw new Error(`Error al editar rol: ${error}`);
     }
 };
 
 // Eliminar una organización
-export const eliminarServicio = async (id: number): Promise<boolean> => {
+export const eliminarServicio = async (id: number): Promise<Servicio> => {
     try {
-        await deleteData(`servicios/${id}`);
-        return true; // Devuelve true si la operación se realiza correctamente
+        const servicioEliminado = await deleteData(`servicios/${id}`);
+        return servicioEliminado;
     } catch (error) {
         throw new Error(`Error al eliminar rol: ${error}`);
     }

@@ -5,15 +5,21 @@ import ListProposes from './ListProposes'
 import ErrorInterface from '@/app/components/global/ErrorInterface'
 import PagesLoading from '@/app/components/skeletons/PagesLoading'
 import { obtenerPropuestas } from '@/lib/services/propuesta'
+import { Propuesta } from '@/lib/utils/definitions'
+import { useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 
 
 export default function PropuestasClient() {
-    
+
     /** Carga los datos */
-    const { data, error, isLoading, mutate } = useSWR<any>('/propuestas', obtenerPropuestas)
+    const { data, error, isLoading, mutate } = useSWR<Propuesta[]>(`/propuestas`, ()=>obtenerPropuestas('1'))
+
     if (error) return <ErrorInterface></ErrorInterface>
+    if (data == undefined) return <PagesLoading></PagesLoading>
     if (isLoading) return <PagesLoading></PagesLoading>
+    
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
 

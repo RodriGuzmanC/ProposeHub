@@ -5,25 +5,43 @@ import { User, Phone, Mail, Building2 } from 'lucide-react'
 import ButtonTheme from "@/app/components/global/ButtonTheme"
 import BackLink from "@/app/components/global/BackLink"
 import { crearOrganizacion } from "@/lib/services/organizacion"
-import { crearConToast } from "@/lib/utils/alertToast"
+import { crearConToast, notificacionAsyncrona } from "@/lib/utils/alertToast"
+import { Organizacion } from "@/lib/utils/definitions"
+import { useRouter } from "next/navigation"
 
-async function handleSubmit(e: any){
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const formEntries = Object.fromEntries(formData.entries())
-    try {
-        await crearConToast({
-            cuerpo: formEntries, 
-            event: crearOrganizacion 
-        });
-    } catch (error) {
-        console.log(error)
+
+export default function page() {
+    const router = useRouter()
+
+    async function handleSubmit(e: any) {
+
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        const formEntries = Object.fromEntries(formData.entries())
+        try {
+            /*await crearConToast({
+                cuerpo: formEntries, 
+                event: crearOrganizacion 
+            });*/
+
+            const nombre = formData.get('nombre') as string;
+            const telefono = formData.get('telefono') as string;
+            const correo = formData.get('correo') as string;
+
+            const organizacionNueva: Partial<Organizacion> = {
+                nombre: nombre,
+                telefono: telefono,
+                correo: correo
+            }
+            await notificacionAsyncrona(crearOrganizacion(organizacionNueva), 'Creando...', 'Organizacion creada correctamente', 'Ocurrio un error, intentalo mas tarde')
+            router.push('/contactos/organizaciones')
+        } catch (error) {
+            console.log(error)
+        }
+
     }
-    
-}
 
-export default async function page() {
-    
+
     return (
         <div className="container mx-auto px-8 py-8">
             <BackLink href="/contactos/organizaciones">Volver a organizaciones</BackLink>
@@ -68,7 +86,7 @@ export default async function page() {
                         />
                     </div>
                 </div>
-                
+
                 <div className='w-full flex justify-end'>
                     <ButtonTheme
                         type="submit"

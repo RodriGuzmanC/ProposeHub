@@ -4,6 +4,7 @@ import ProposeCard from '@/app/components/propuestas/ProposeCard';
 import SendMailProposeModal from '@/app/components/propuestas/SendMailModal';
 import { eliminarPropuesta, obtenerPropuestas } from '@/lib/services/propuesta';
 import { formatearFecha, formatearFechaSimple } from '@/lib/utils/datetimeFormater';
+import { Propuesta } from '@/lib/utils/definitions';
 import { Briefcase, BriefcaseBusiness } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -11,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 
 
 
-export default function ListProposes({ data }: any) {
+export default function ListProposes({ data }: {data: Propuesta[]}) {
 
     /** Funcion para abrir el modal de envio de correos */
     const [modalEnviarCorreo, setModalEnviarCorreo] = useState(false)
@@ -31,17 +32,17 @@ export default function ListProposes({ data }: any) {
 
     async function eliminarFun(id: number) {
         await eliminarPropuesta(id)
-        const propuestas = await obtenerPropuestas();
-        setFilteredProposals(propuestas)
+        //const propuestas = await obtenerPropuestas();
+        //setFilteredProposals(propuestas)
     }
 
     /** Carga de propuestas */
     const searchParams = useSearchParams()
-    const [filteredProposals, setFilteredProposals] = useState(data);
-
+    const [filteredProposals, setFilteredProposals] = useState<Propuesta[]>(data);
+    console.log(data)
     useEffect(() => {
         const search = searchParams.get('estado') ?? '1';
-        const filteredPropuestas = data.filter((propuesta: any) => propuesta.id_estado.toString() === search);
+        const filteredPropuestas = data.filter((propuesta: Propuesta) => propuesta.estado?.id.toString() === search);
         console.log("Propuestas")
         console.log(filteredPropuestas)
         setFilteredProposals(filteredPropuestas);
@@ -67,18 +68,18 @@ export default function ListProposes({ data }: any) {
                 {filteredProposals.length === 0 ? (
                     <p>No se han encontrado resultados.</p>
                 ) : (
-                    filteredProposals.map((filteredProposal : any) => (
+                    filteredProposals.map((filteredProposal : Propuesta) => (
                         <ProposeCard
                             key={filteredProposal.id}
                             id={filteredProposal.id}
                             nombre={filteredProposal.titulo}
                             elementos={
                                 [`S/${filteredProposal.monto}`, 
-                                    filteredProposal.servicio_nombre, 
-                                    formatearFechaSimple(filteredProposal.fecha_creacion)
+                                    filteredProposal.servicio?.nombre ?? '', 
+                                    formatearFechaSimple(filteredProposal.created_at ?? '')
                                 ]}
                             modalCorreo={()=> {
-                                mostrarModal(filteredProposal.id_organizacion, `${window.location.origin}/vista/propuesta/${filteredProposal.id}`)
+                                mostrarModal(filteredProposal.organizacion?.id ?? 0, `${window.location.origin}/vista/propuesta/${filteredProposal.id}`)
                             }}
                             editarHref={`/constructor/propuesta/editar/${filteredProposal.id}`}
                             IconCard={Briefcase}

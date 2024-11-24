@@ -5,49 +5,57 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { crearPlantilla } from '@/lib/services/plantilla';
-import { crearConToast } from '@/lib/utils/alertToast';
+import { crearConToast, notificacionAsyncrona } from '@/lib/utils/alertToast';
 import { crearRol } from '@/lib/services/rol';
+import { Rol } from '@/lib/utils/definitions';
+import { useRouter } from 'next/navigation';
 
 interface CreateTemplateModalProps {
   closeEvent: () => void;
+  revalidate: any;
 }
 
-export default function CreateRolModal({ closeEvent }: CreateTemplateModalProps) {
-  const [templateName, setTemplateName] = useState('');
+export default function CreateRolModal({ closeEvent, revalidate }: CreateTemplateModalProps) {
 
-  const handleCreate = async (e : FormEvent<HTMLFormElement>) => {
+  const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
-    console.log(data)
     try {
-      await crearConToast({
-        cuerpo: data,
-        event: crearRol
-      });
+      
+      const nombre = formData.get('nombre') as string;
+      const descripcion = formData.get('descripcion') as string;
+      const rolNuevo: Partial<Rol> = {
+        nombre: nombre,
+        descripcion: descripcion
+      }
+      await notificacionAsyncrona(crearRol(rolNuevo), 'Creando...', 'Rol creado correctamente', 'Ocurrio un error, intentalo mas tarde')
+      revalidate()
+      closeEvent(); // Cierra el modal después de crear la plantilla
+
     } catch (error) {
       console.log(error)
     }
 
-    closeEvent(); // Cierra el modal después de crear la plantilla
   };
 
   return (
     <ModalBackground>
       <Card className="w-[90%] max-w-md mx-auto bg-white text-primary">
-      <form onSubmit={handleCreate}>
+        <form onSubmit={handleCreate}>
 
-        <CardHeader className="flex flex-row items-center">
-          <CardTitle className="text-2xl font-bold">Crear rol</CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="ml-auto"
-            onClick={closeEvent}
-            aria-label="Cerrar"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
+          <CardHeader className="flex flex-row items-center">
+            <CardTitle className="text-2xl font-bold">Crear rol</CardTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-auto"
+              onClick={closeEvent}
+              aria-label="Cerrar"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </CardHeader>
           <CardContent>
             <CardDescription className="mb-4">
               Nombre:
@@ -68,15 +76,15 @@ export default function CreateRolModal({ closeEvent }: CreateTemplateModalProps)
               required
             />
           </CardContent>
-        
-        <CardFooter className="flex justify-end space-x-2">
-          <Button variant="ghost" onClick={closeEvent}>
-            Cancelar
-          </Button>
-          <Button type="submit">
-            Crear
-          </Button>
-        </CardFooter>
+
+          <CardFooter className="flex justify-end space-x-2">
+            <Button variant="ghost" onClick={closeEvent}>
+              Cancelar
+            </Button>
+            <Button type="submit">
+              Crear
+            </Button>
+          </CardFooter>
         </form>
 
       </Card>
