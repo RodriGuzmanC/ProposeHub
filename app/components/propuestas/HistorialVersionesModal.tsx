@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cambiarEstadoVersionPropuesta, obtenerVersionesPropuesta, obtenerVersionPropuesta, obtenerVersionPublicada } from "@/lib/services/versionPropuesta"
 import { editarConToast } from "@/lib/utils/alertToast"
-import { VersionPropuestaInterface } from "@/lib/utils/definitions"
+import { VersionPropuesta } from "@/lib/utils/definitions"
 import grapesjs from "grapesjs"
 import { ArrowDownRight, X } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -19,8 +19,8 @@ interface HistorialVersionesModalProps {
 
 export default function HistorialVersionesModal({ idPropuesta, onClose, onCardClick }: HistorialVersionesModalProps) {
 
-  const [versionesPropuesta, setVersionesPropuesta] = useState<VersionPropuestaInterface[]>([])
-  const [versionPublicada, setVersionPublicada] = useState<VersionPropuestaInterface>()
+  const [versionesPropuesta, setVersionesPropuesta] = useState<VersionPropuesta[]>([])
+  const [versionPublicada, setVersionPublicada] = useState<VersionPropuesta>()
 
   const [dataEstaCargada, setDataEstaCargada] = useState(false)
 
@@ -117,7 +117,10 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
     cargarVersion(versionId);
   }
 
-
+  /** Carga los datos */
+  /*const { data: roles, error, isLoading, mutate } = useSWR<VersionPropuesta[]>('/roles', obtenerRoles)
+  if (error) return <ErrorInterface></ErrorInterface>
+  if (isLoading) return <PagesLoading></PagesLoading>*/
   return (
     <div className="fixed inset-0 bg-white flex flex-col z-50 h-screen">
       <header className="p-4 bg-primary text-primary-foreground flex justify-between items-center">

@@ -3,7 +3,8 @@ import LoadingFallback from '@/app/components/grapes/LoadingFallback';
 import { obtenerPlantilla } from '@/lib/services/plantilla';
 import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
 import { editarVersionPropuesta, obtenerVersionEnEdicion, obtenerVersionesPropuesta, obtenerVersionPropuesta } from '@/lib/services/versionPropuesta';
-import { editarConToast } from '@/lib/utils/alertToast';
+import { editarConToast, notificacionAsyncrona } from '@/lib/utils/alertToast';
+import { VersionPropuesta } from '@/lib/utils/definitions';
 import dynamic from 'next/dynamic';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -18,10 +19,10 @@ interface EditorPageProps{
 
 // Solo edita las propuestas
 export default function EditorPropuestaPage({params} : EditorPageProps) {
-    const [slug, setSlug] = useState<number | null>(parseInt(params.id)); // Inicializa como null
+    const [slug, setSlug] = useState<number>(parseInt(params.id)); // Inicializa como null
     const [idVersionPropuesta, setIdVersionPropuesta] = useState()
 
-    async function getVersionporPropuesta(){
+    async function getVersionporPropuesta() : Promise<VersionPropuesta>{
         try {
             if (slug == null) {
                 throw new Error("No se ingreso un parametro")
@@ -30,7 +31,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
             const versionEnEdicion = await obtenerVersionEnEdicion(slug)
             return versionEnEdicion
         } catch (error) {
-            console.log(error)
+            throw new Error("Hubo un error al momento de obtener la version en edicion")
         }
     }
     /**
@@ -40,7 +41,7 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
     async function obtenerContenidoVersion(){
         try {
             
-            const version : any = await getVersionporPropuesta()
+            const version : VersionPropuesta = await getVersionporPropuesta()
             
             // Verifica que la propiedad "contenido" exista en el objeto
             if (version && version.contenido) {
@@ -58,23 +59,28 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
      */
     async function actualizarVersion(grapesJSData : any){
         try {
-            const versionActual : any = await getVersionporPropuesta()
+            const versionActual : VersionPropuesta = await getVersionporPropuesta()
 
             const data = {
                 contenido: JSON.stringify(grapesJSData)
             }
             //const version: any = await editarVersionPropuesta(slug, data)
 
-            const version = await editarConToast({
+            /*const version = await editarConToast({
                 id: versionActual.id,
                 cuerpo: data,
                 event: editarVersionPropuesta
-            })
+            })*/
+            const versionActualizar : Partial<VersionPropuesta> = {
+                id: slug,
+                contenido: JSON.stringify(grapesJSData),
+            }
+            await notificacionAsyncrona(editarVersionPropuesta(versionActualizar), 'Actualizando...', 'Cambios guardados', 'Ocurrio un error, intentalo mas tarde')
             // Verifica que la propiedad "contenido" exista en el objeto
             /*if (version && version.contenido) {
                 return version.contenido; // Accede directamente a la propiedad "contenido"
             }*/
-           return version
+           return versionActualizar
         } catch (error) {
             throw new Error("Hubo un error al momento de obtener la ultima version")
         }
@@ -83,14 +89,14 @@ export default function EditorPropuestaPage({params} : EditorPageProps) {
     async function publicarHtmlCss(html:string, css:string){
 
         try {
-            const idVersion = await getVersionporPropuesta()
+            const version = await getVersionporPropuesta()
         
             if (slug == null) {
                 throw new Error("No se ingreso un parametro")
             }
             
             const data = {
-                version_publicada: idVersion.id,
+                version_publicada: version.id,
                 html: html,
                 css: css
             }

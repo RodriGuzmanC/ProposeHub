@@ -1,3 +1,4 @@
+import { VersionPropuesta } from "../utils/definitions";
 import { deleteData, getData, postData, updateData } from "../utils/methods";
 
 const ContactosDataExample = [
@@ -10,9 +11,10 @@ const ContactosDataExample = [
 ];
 
 // Obtener todos los clientes
-export const obtenerVersionesPropuesta = async (idPropuesta : number) => {
+export const obtenerVersionesPropuesta = async (idPropuesta : number) : Promise<VersionPropuesta[]> => {
     try {
-        return await getData(`versiones-propuesta/${idPropuesta}`)
+        const versiones = await getData(`versiones-propuesta/${idPropuesta}`)
+        return versiones
         //return ContactosDataExample;
     } catch (error) {
         throw new Error(`Error al obtener las versiones de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
@@ -20,35 +22,35 @@ export const obtenerVersionesPropuesta = async (idPropuesta : number) => {
 };
 
 // Obtener un cliente por ID
-export const obtenerVersionPropuesta = async (id: number) => {
+export const obtenerVersionPropuesta = async (id: number) : Promise<VersionPropuesta> => {
     try {
-        const cliente = await getData(`version-propuesta/${id}`)
+        const version = await getData(`version-propuesta/${id}`)
 
-        if (!cliente) throw new Error(`Version con ID ${id} no encontrado`);
-        return cliente;
+        if (!version) throw new Error(`Version con ID ${id} no encontrado`);
+        return version;
     } catch (error) {
         throw new Error(`Error al obtener la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
-export const obtenerVersionEnEdicion = async (id: number) => { // Id de la propuesta
+export const obtenerVersionEnEdicion = async (id: number) : Promise<VersionPropuesta> => { // Id de la propuesta
     try {
-        const cliente = await getData(`version-propuesta/en-edicion/${id}`)
+        const versionEnEdicion = await getData(`version-propuesta/en-edicion/${id}`)
 
-        if (!cliente) throw new Error(`Propuesta con ID ${id} no encontrado`);
-        return cliente;
+        if (!versionEnEdicion) throw new Error(`Propuesta con ID ${id} no encontrado`);
+        return versionEnEdicion;
     } catch (error) {
         throw new Error(`Error al obtener la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
 
-export const obtenerVersionPublicada = async (id: number) => { // Id de la propuesta
+export const obtenerVersionPublicada = async (id: number) : Promise<VersionPropuesta> => { // Id de la propuesta
     try {
-        const cliente = await getData(`version-propuesta/publicada/${id}`)
+        const versionPublicada = await getData(`version-propuesta/publicada/${id}`)
 
-        if (!cliente) throw new Error(`Propuesta con ID ${id} no encontrado`);
-        return cliente;
+        if (!versionPublicada) throw new Error(`Propuesta con ID ${id} no encontrado`);
+        return versionPublicada;
     } catch (error) {
         throw new Error(`Error al obtener la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -56,11 +58,11 @@ export const obtenerVersionPublicada = async (id: number) => { // Id de la propu
 
 
 // Crear una nueva organización
-export const crearVersionPropuesta = async (cuerpo: any): Promise<any> => {
+export const crearVersionPropuesta = async (versionPropuesta: VersionPropuesta): Promise<VersionPropuesta> => {
     try {
         
-        const res = await postData('version-propuesta', cuerpo);
-        return res; // Devuelve true si la operación se realiza correctamente
+        const versionCreada = await postData('version-propuesta', versionPropuesta);
+        return versionCreada; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al crear la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -70,12 +72,14 @@ export const crearVersionPropuesta = async (cuerpo: any): Promise<any> => {
 
 
 // Editar una organización
-export const editarVersionPropuesta = async (id: number, cuerpo: any): Promise<any> => {
+export const editarVersionPropuesta = async (versionPropuesta: Partial<VersionPropuesta>): Promise<VersionPropuesta> => {
     try {
-        const data = {
+        /*const data = {
             contenido: cuerpo.contenido
-        }
-        const res = await updateData(`version-propuesta/${id}`, data);
+        }*/
+        const { id, contenido } = versionPropuesta
+        const cuerpo = { contenido }
+        const res = await updateData(`version-propuesta/${id}`, cuerpo);
         return res; // Devuelve true si la operación se realiza correctamente
     } catch (error) {
         throw new Error(`Error al editar la version de la propuesta: ${error instanceof Error ? error.message : String(error)}`);

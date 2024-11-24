@@ -1,7 +1,8 @@
 'use client'
 import LoadingFallback from '@/app/components/grapes/LoadingFallback';
 import { editarContenidoPlantilla, editarPlantilla, obtenerPlantilla } from '@/lib/services/plantilla';
-import { editarConToast } from '@/lib/utils/alertToast';
+import { editarConToast, notificacionAsyncrona } from '@/lib/utils/alertToast';
+import { Plantilla } from '@/lib/utils/definitions';
 import dynamic from 'next/dynamic';
 import { lazy, Suspense, useEffect, useState } from 'react';
 
@@ -27,7 +28,7 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
                 throw new Error("No se ingreso un parametro")
             }
 
-            const plantilla: any = await obtenerPlantilla(slug)
+            const plantilla: Plantilla = await obtenerPlantilla(slug)
             // Verifica que la propiedad "contenido" exista en el objeto
             if (plantilla && plantilla.contenido) {
                 return JSON.parse(plantilla.contenido); // Accede directamente a la propiedad "contenido"
@@ -52,11 +53,18 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
                 contenido: JSON.stringify(grapesJSData)
             }
             //const plantilla: any = await editarPlantilla(slug, data)
-            const plantilla = await editarConToast({
+            /*const plantilla = await editarConToast({
                 id: slug,
                 cuerpo: data,
                 event: editarContenidoPlantilla
-            })
+            })*/
+
+            const servicioActualizar : Partial<Plantilla> = {
+                id: slug,
+                contenido: JSON.stringify(grapesJSData),
+            }
+            await notificacionAsyncrona(editarContenidoPlantilla(servicioActualizar), 'Actualizando...', 'Cambios guardados', 'Ocurrio un error, intentalo mas tarde')
+            
             // Verifica que la propiedad "contenido" exista en el objeto
             /*if (version && version.contenido) {
                 return version.contenido; // Accede directamente a la propiedad "contenido"
@@ -67,9 +75,6 @@ export default function EditorPlantillaPage({params} : EditorPageProps) {
         }
     }
 
-    async function nada(html: string, css: string){
-        return true
-    }
 
     return (
         <div className="h-screen flex flex-col">
