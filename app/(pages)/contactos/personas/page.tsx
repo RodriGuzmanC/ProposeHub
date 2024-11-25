@@ -19,7 +19,8 @@ export default function PersonasVistaClient() {
     await eliminarCliente(id)
     mutate()
   }
-  
+  const [filteredData, setFilteredData] = useState([]);
+
   /** Carga los datos */
   const { data: clientes, error, isLoading, mutate } = useSWR<Cliente[]>('/contactos/personas', obtenerClientes)
   if (error) return <ErrorInterface></ErrorInterface>
@@ -30,7 +31,7 @@ export default function PersonasVistaClient() {
       <main className="flex-1 h-full">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            {/*<FilterComponent data={data} onFilteredDataChange={setFilteredData}>*/}
+            <FilterComponent data={clientes} onFilteredDataChange={setFilteredData}>
               <h3 className='text-2xl font-bold'>Clientes</h3>
               <Link href={'personas/crear'}>
                 <ButtonTheme>
@@ -39,10 +40,10 @@ export default function PersonasVistaClient() {
                   <span className="ml-2 bg-white bg-opacity-20 text-xs font-bold py-1 px-2 rounded-full">+</span>
                 </ButtonTheme>
               </Link>
-            {/*</FilterComponent>*/}
+            </FilterComponent>
           </div>
           <div className="space-y-4">
-            {clientes.map((cliente: Cliente) => (
+            {filteredData.map((cliente: Cliente) => (
               <CustomItemCard
                 key={cliente.id}
                 IconCard={User}

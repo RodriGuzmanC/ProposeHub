@@ -61,10 +61,10 @@ export async function editarConToast({ id, cuerpo, event }: toastEditInterface) 
     return toast.promise(
         () => event(id, cuerpo),
         {
-            pending: 'Editando...',
+            pending: 'Publicando...',
             success: {
                 render({ data }: any) {
-                    return data?.message ?? 'Editado correctamente';
+                    return data?.message ?? 'Publicado correctamente';
                 },
             },
             error: {

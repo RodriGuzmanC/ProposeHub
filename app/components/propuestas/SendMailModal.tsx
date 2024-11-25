@@ -93,6 +93,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerra
                     
                 }
                 const propuesta = await obtenerPropuesta(slug)
+                if (propuesta.id_organizacion == undefined) throw new Error("Id organizacion no se difinio")
 
                 const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion);
                 console.log("Clientes obtenidos de bd");

@@ -19,7 +19,7 @@ export default function OrganizacionClient() {
         await eliminarOrganizacion(id)
         mutate()
     }
-    //const [filteredData, setFilteredData] = useState(data);
+    const [filteredData, setFilteredData] = useState([]);
 
     /** Carga los datos */
     const { data: organizaciones, error, isLoading, mutate } = useSWR<Organizacion[]>('/contactos/organizaciones', obtenerOrganizaciones)
@@ -33,7 +33,7 @@ export default function OrganizacionClient() {
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex space-x-4 w-full">
 
-                            {/*<FilterComponent data={data} onFilteredDataChange={setFilteredData}>*/}
+                            <FilterComponent data={organizaciones} onFilteredDataChange={setFilteredData}>
                                 <h3 className='text-2xl font-bold'>Organizaciones</h3>
                                 <Link href={'organizaciones/crear'}>
                                     <ButtonTheme >
@@ -42,12 +42,12 @@ export default function OrganizacionClient() {
                                         <span className="ml-2 bg-white bg-opacity-20 text-xs font-bold py-1 px-2 rounded-full">+</span>
                                     </ButtonTheme>
                                 </Link>
-                            {/*</FilterComponent>*/}
+                            </FilterComponent>
 
                         </div>
                     </div>
                     <div className="space-y-4">
-                        {organizaciones.map((organization : Organizacion) => (
+                        {filteredData.map((organization : Organizacion) => (
                             <CustomItemCard 
                             key={organization.id} 
                             IconCard={Building} 

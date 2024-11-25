@@ -47,7 +47,7 @@ export const crearRol = async (rol: Partial<Rol>): Promise<Rol> => {
 };
 
 // Editar un rol
-export const editarRol = async (rol: Rol): Promise<Rol> => {
+export const editarRol = async (rol: Partial<Rol>): Promise<Rol> => {
     try {
         // Extraemos los datos necesarios del objeto
         const { id, nombre, descripcion } = rol;

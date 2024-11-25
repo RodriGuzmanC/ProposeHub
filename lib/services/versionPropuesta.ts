@@ -58,7 +58,7 @@ export const obtenerVersionPublicada = async (id: number) : Promise<VersionPropu
 
 
 // Crear una nueva organización
-export const crearVersionPropuesta = async (versionPropuesta: VersionPropuesta): Promise<VersionPropuesta> => {
+export const crearVersionPropuesta = async (versionPropuesta: Partial<VersionPropuesta>): Promise<VersionPropuesta> => {
     try {
         
         const versionCreada = await postData('version-propuesta', versionPropuesta);

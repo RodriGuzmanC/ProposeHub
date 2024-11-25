@@ -45,16 +45,17 @@ export default function LoginForm() {
   return (
     <div className="flex h-screen">
       <div className="w-1/2 relative">
-      <img
-  src="https://xmarts.com/wp-content/uploads/2024/11/propuesta-comercial-impactante-xmarts-pandadoc.webp"
-  alt="Login illustration"
-  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-/>
-        
+        <img
+          src="https://xmarts.com/wp-content/uploads/2024/11/propuesta-comercial-impactante-xmarts-pandadoc.webp"
+          alt="Login illustration"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+
       </div>
       <div className="w-1/2 flex items-center justify-center bg-primary">
         <Card className="w-full max-w-md mx-4">
-          <CardHeader className="space-y-1">
+          <CardHeader className="space-y-1 flex flex-col justify-center items-center">
+            <img className='mb-3' src='https://th.bing.com/th/id/OIP.BMdzpSRYQGL8y7ioWhckVgHaBR?rs=1&pid=ImgDetMain' width={250}></img>
             <CardTitle className="text-2xl font-bold text-center">Bienvenido de vuelta</CardTitle>
           </CardHeader>
           <CardContent>
@@ -99,14 +100,22 @@ export default function LoginForm() {
                 </div>
               </div>
               {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-primary text-white transition-all duration-300 ease-in-out"
               >
                 Iniciar sesión
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
+            <div className="mt-4 text-center">
+            <a
+              href="/recuperar-contraseña"
+              className="text-sm text-blue-500 hover:text-blue-700"
+            >
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
           </CardContent>
         </Card>
       </div>

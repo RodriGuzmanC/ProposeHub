@@ -32,7 +32,9 @@ editor.Panels.addPanel({
                 let versionCreada = await crearVersionPropuesta({
                     id_propuesta: projectID,
                     contenido: versionEnEdicion.contenido,
-                    en_edicion: true
+                    en_edicion: true,
+                    generado_por_ia: false,
+                    
                 }) 
                 // Cambia el estado de la nueva version
                 await cambiarEstadoVersionPropuesta(projectID, {

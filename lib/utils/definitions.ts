@@ -90,7 +90,7 @@ export interface Propuesta {
 export interface VersionPropuesta {
     id: number
     id_propuesta: number
-    version_numero: number
+    version_numero?: number
     contenido: string
     fecha_creacion?: string
     generado_por_ia: boolean

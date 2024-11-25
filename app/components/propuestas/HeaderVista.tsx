@@ -9,8 +9,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { getClientIdFromSession, logoutClientSession } from '@/lib/services/auth/auth'
 import AcceptModal from './AcceptModal'
 import { obtenerPropuesta } from '@/lib/services/propuesta'
-import { PropuestaInterface } from '@/lib/utils/definitions'
 import { obtenerClientes, obtenerClientesDeOrganizacion } from '@/lib/services/cliente'
+import { Propuesta } from '@/lib/utils/definitions'
 
 interface headerInt{
   slug: number | null,
@@ -24,7 +24,7 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false)
   const [isButtonActive, setIsButtonActive] = useState(false)
 
-  const [Propuesta, setPropuesta] = useState<Partial<PropuestaInterface>>()
+  const [Propuesta, setPropuesta] = useState<Partial<Propuesta>>()
 
 
   function logout() {
@@ -43,7 +43,7 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
         console.log("Propuesta objeto:")
         console.log(propuesta)
         setPropuesta(propuesta)
-        
+        if (propuesta.id_organizacion == undefined) throw new Error("Id organizacion no se difinio")
         const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion)
         const clienteIdSession = getClientIdFromSession()
         // Buscar si el cliente actual esta en la lista permitida

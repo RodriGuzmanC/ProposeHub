@@ -14,9 +14,7 @@ export default function EditorPage() {
 
             {/* El editor de GrapesJS */}
             <div className="flex-grow">
-                <Suspense fallback={<LoadingFallback />}>
-                    <GrapesJSComponent />
-                </Suspense>
+                
             </div>
         </div>
     );

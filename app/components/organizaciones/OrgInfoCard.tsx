@@ -26,7 +26,7 @@ export default function OrgInfoCard({ id, correo, nombre, telefono, organizacion
     }
     return (
         <Card className="w-full">
-            {showDeleteModal && <DeleteFormModal userId={id} userName={nombre} closeEvent={showHideDeleteForm}></DeleteFormModal>}
+            {showDeleteModal && <DeleteFormModal deleteEvent={() => console.log("e")} userId={id} userName={nombre} closeEvent={showHideDeleteForm}></DeleteFormModal>}
             <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <div className="bg-principal-100 p-2 rounded-full">
