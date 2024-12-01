@@ -44,12 +44,14 @@ export default function HeaderVistaPropuesta({ slug, aceptarPropuestaFun, obtene
         console.log(propuesta)
         setPropuesta(propuesta)
         if (propuesta.id_organizacion == undefined) throw new Error("Id organizacion no se difinio")
+
         const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion)
         const clienteIdSession = getClientIdFromSession()
         // Buscar si el cliente actual esta en la lista permitida
         const esPermitido = clientesDeOrganizacion.find((cliente : any)=> Number(cliente.id) === Number(clienteIdSession))
 
         console.log(clientesDeOrganizacion)
+        //  Verifica si la propuesta fue anteriormente aceptada
         if (propuesta.id_cliente == null && esPermitido !== undefined) {
           setIsButtonActive(true)
         }

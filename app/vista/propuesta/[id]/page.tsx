@@ -5,8 +5,9 @@ import HeaderVistaPropuesta from '@/app/components/propuestas/HeaderVista';
 import PagesLoading from '@/app/components/skeletons/PagesLoading';
 import { Button } from '@/components/ui/button';
 import { getClientIdFromSession } from '@/lib/services/auth/auth';
-import { editarPropuesta, obtenerPropuesta } from '@/lib/services/propuesta';
-import { editarConToast } from '@/lib/utils/alertToast';
+import { correoPropuestaAceptada, editarPropuesta, obtenerPropuesta } from '@/lib/services/propuesta';
+import { editarConToast, notificacionAsyncrona } from '@/lib/utils/alertToast';
+import { Propuesta } from '@/lib/utils/definitions';
 import { downloadRequest, postData } from '@/lib/utils/methods';
 import { CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -24,7 +25,7 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     const [htmlContent, setHtmlContent] = useState<string | null>(null);
     const [cssContent, setCssContent] = useState<string | null>(null);
     const [error, setError] = useState("")
-    const [datosPropuesta, setDatosPropuesta] = useState()
+    const [Propuesta, setPropuesta] = useState<Partial<Propuesta>>()
 
     // Estado por si el id de propuesta pasado no es correcto
     const [contenidoEstaCargado, setContenidoEstaCargado] = useState(false)
@@ -32,19 +33,27 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
     
     async function aceptarPropuestaFun(){
         try {
-            const data = {
-                id_cliente: getClientIdFromSession(),
-                id_estado: 3
-            }
+            
             if (slug == null) {
                 setError("El id pasado es invalido o no existe")
                 throw new Error("El id pasado es invalido o no existe")
             }
-            await editarConToast({
+            const data = {
+                id_cliente: getClientIdFromSession(),
+                id_estado: 3
+            }
+            /*await editarConToast({
                 id: slug,
                 cuerpo: data,
                 event: editarPropuesta
-            })
+            })*/
+
+            await notificacionAsyncrona(editarPropuesta(slug, data), 'Actualizando...', 'Propuesta actualizada', 'Ocurrio un error, intentalo mas tarde')
+            const correoData = {
+                correo: 'uncorreocualquiera@gmail.com',
+                nombre_propuesta: Propuesta?.titulo
+            }
+            notificacionAsyncrona(correoPropuestaAceptada(correoData))
 
         } catch (error) {
             console.error(error)
@@ -62,7 +71,7 @@ const PropuestaPage = ({ params }: PropuestasViewPageProps) => {
                 }
                 
                 const propuesta = await obtenerPropuesta(slug)
-
+                setPropuesta(propuesta)
                 if (!propuesta){
                     setError('El contenido no esta disponible, intentalo mas tarde')
                     throw new Error('El contenido no esta disponible, intentalo mas tarde')

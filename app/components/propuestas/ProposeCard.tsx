@@ -9,13 +9,14 @@ interface ContactInfoCardProps {
   id: number;
   nombre: string;
   elementos: Array<string | number>; // Array de información genérica
+  verDetalleHref: string;
   modalCorreo: () => any;
   editarHref: string;
   eliminarAction: (id: number) => void;
   IconCard: React.ElementType;
 }
 
-export default function ProposeCard({ id, nombre, elementos, modalCorreo, editarHref, IconCard, eliminarAction }: ContactInfoCardProps) {
+export default function ProposeCard({ id, nombre, elementos, verDetalleHref, modalCorreo, editarHref, IconCard, eliminarAction }: ContactInfoCardProps) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const showHideDeleteForm = () => {
@@ -42,9 +43,14 @@ export default function ProposeCard({ id, nombre, elementos, modalCorreo, editar
           </div>
         </div>
         <div className="flex space-x-2">
-            <Button variant="ghost" size="icon" onClick={modalCorreo}>
-              <Send className="h-4 w-4" />
+          <Link href={verDetalleHref}>
+            <Button variant="ghost" size="icon">
+              <Eye className="h-4 w-4" />
             </Button>
+          </Link>
+            {/*<Button variant="ghost" size="icon" onClick={modalCorreo}>
+              <Send className="h-4 w-4" />
+            </Button>*/}
           <Link href={editarHref}>
             <Button variant="ghost" size="icon">
               <Edit className="h-4 w-4" />

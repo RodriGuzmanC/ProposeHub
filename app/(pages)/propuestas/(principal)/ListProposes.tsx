@@ -81,6 +81,7 @@ export default function ListProposes({ data }: {data: Propuesta[]}) {
                             modalCorreo={()=> {
                                 mostrarModal(filteredProposal.organizacion?.id ?? 0, `${window.location.origin}/vista/propuesta/${filteredProposal.id}`)
                             }}
+                            verDetalleHref={`/propuestas/${filteredProposal.id}`}
                             editarHref={`/constructor/propuesta/editar/${filteredProposal.id}`}
                             IconCard={Briefcase}
                             eliminarAction={eliminarFun}

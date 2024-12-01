@@ -11,6 +11,7 @@ import { EnviarCorreoConToast } from "@/lib/utils/alertToast";
 import type { Plugin } from 'grapesjs';
 import ReactDOM from 'react-dom'; // Asegúrate de importar ReactDOM correctamente
 import { obtenerPropuesta } from "@/lib/services/propuesta";
+import { Cliente } from "@/lib/utils/definitions";
 
 interface OptionsInterface{
     slug: number,
@@ -82,7 +83,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerra
 
     const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
     const [selectedClients, setSelectedClients] = useState<string[]>([]);
-    const [clientesData, setClientesData] = useState<any[]>([]);
+    const [clientesData, setClientesData] = useState<Cliente[]>([]);
     const [loading, setLoading] = useState(true);  // Agregar estado de carga
 
     useEffect(() => {
@@ -96,12 +97,7 @@ export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerra
                 if (propuesta.id_organizacion == undefined) throw new Error("Id organizacion no se difinio")
 
                 const clientesDeOrganizacion = await obtenerClientesDeOrganizacion(propuesta.id_organizacion);
-                console.log("Clientes obtenidos de bd");
-                console.log(clientesDeOrganizacion);
 
-                /*const clientesDeOrganizacion = clientes.filter((cliente: any) =>
-                    cliente.id_organizacion === Number(idOrganizacion) // Fuerza la conversión de `idOrganizacion` a número
-                );*/
                 setClientesData(clientesDeOrganizacion);  // Actualiza el estado con los datos filtrados
                 setLoading(false);  // Deja de mostrar el estado de "Cargando"
             } catch (error) {
@@ -122,13 +118,13 @@ export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerra
         );
     };
 
-    async function realizarEnvio(datosClientes: any) {
+    async function realizarEnvio(datosClientes: Cliente[]) {
         for (const cliente of datosClientes) {
             console.log(cliente.correo);
             const data = {
                 correo: cliente.correo,
                 contrasena: cliente.contrasena_hash,
-                organizacion: cliente.organizacion,
+                organizacion: cliente.organizacion.nombre,
                 propuesta_url: `${process.env.NEXT_PUBLIC_ROOT}/vista/propuesta/${slug}`
             };
             await EnviarCorreoConToast({
@@ -140,11 +136,9 @@ export default function SendMailProposeModal({ cerrarModalEvent, slug }: { cerra
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Clientes seleccionados:", selectedClients);
         const datosDeClientes = clientesData.filter((cliente: any) =>
             selectedClients.includes(cliente.id)
         );
-        console.log(datosDeClientes);
         realizarEnvio(datosDeClientes);
     };
 

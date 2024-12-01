@@ -125,7 +125,7 @@ export const crearPropuesta = async (
         const { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado, informacion } = propuesta;
         // Creamos el cuerpo
         const cuerpo = { id_plantilla, id_servicio, id_organizacion, titulo, monto, id_usuario, id_estado, informacion };
-        
+
         // Realizamos la solicitud
         if (!id_plantilla) throw new Error("No se ha encontrado el id de la plantilla proporcionada")
         // Obtenemos la ESTRUCTURA de la plantilla
@@ -180,7 +180,7 @@ export const crearPropuesta = async (
 };
 
 export const llamarGeminiApi = async (cuerpo: any) => {
-    try{
+    try {
         const data = {
             id_plantilla: cuerpo.id_plantilla,
             id_servicio: cuerpo.id_servicio,
@@ -201,7 +201,7 @@ export const llamarGeminiApi = async (cuerpo: any) => {
             const estructura = decodificadorEstructuraGrapesJS(grapesJsContent.contenido) // ['{{titulo}}', '{{saludo}}']
             console.log("Estructura de la plantilla")
             console.log(estructura)
-            
+
             const dataParaAi = {
                 id_servicio: data.id_servicio,
                 id_organizacion: data.id_organizacion,
@@ -245,7 +245,7 @@ export const editarHtmlCssPropuesta = async (id: number, cuerpo: any) => {
             css: cuerpo.css
         }
         const res = await updateData(`propuestas/${id}`, data)
-        
+
         return res
     } catch (error) {
         console.log(error)
@@ -261,4 +261,92 @@ export const eliminarPropuesta = async (id: number): Promise<boolean> => {
     } catch (error) {
         throw new Error((<Error>error).message);
     }
+};
+
+
+export const correoPropuestaAceptada = async (cuerpo: any) => {
+
+    try {
+
+        const data = {
+            to: cuerpo.correo,
+            subject: 'Tienes una nueva propuesta aceptada',
+            notification: true,
+            body: `<!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Notificación de Aceptación de Propuesta</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .email-container {
+                            background-color: #ffffff;
+                            width: 100%;
+                            max-width: 600px;
+                            margin: 20px auto;
+                            border-radius: 10px;
+                            padding: 20px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        }
+                        .email-header {
+                            background-color: #4CAF50;
+                            color: white;
+                            padding: 15px;
+                            text-align: center;
+                            border-radius: 10px 10px 0 0;
+                        }
+                        .email-body {
+                            padding: 20px;
+                            color: #333;
+                            font-size: 16px;
+                        }
+                        .email-footer {
+                            text-align: center;
+                            padding-top: 20px;
+                        }
+                        .button {
+                            background-color: #4CAF50;
+                            color: white;
+                            padding: 12px 20px;
+                            font-size: 16px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            text-align: center;
+                            display: inline-block;
+                        }
+                        .button:hover {
+                            background-color: #45a049;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <div class="email-header">
+                            <h2>¡Tu propuesta ha sido aceptada!</h2>
+                        </div>
+                        <div class="email-body">
+                            <p>Hola Tres Media,</p>
+                            <p>Nos complace informarte que alguien ha aceptado la propuesta "<strong>${cuerpo.nombre_propuesta}</strong>".</p>
+                            <p>Puedes ir directamente al sistema para ver más detalles y continuar con el proceso.</p>
+                        </div>
+                        <div class="email-footer">
+                            <a href="${process.env.NEXT_PUBLIC_ROOT}/propuestas?estado=3" class="button">Ir al Sistema</a>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                `
+        }
+        const response = await postData('enviar-correo', data)
+        return response
+    } catch (error) {
+
+    }
+
 };
