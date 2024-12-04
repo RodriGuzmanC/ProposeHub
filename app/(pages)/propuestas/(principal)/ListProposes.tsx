@@ -1,7 +1,7 @@
 'use client'
 import ButtonTheme from '@/app/components/global/ButtonTheme';
 import ProposeCard from '@/app/components/propuestas/ProposeCard';
-import SendMailProposeModal from '@/app/components/propuestas/SendMailModal';
+import SendMailProposeModal from '@/app/components/grapes/Plugins/SendMailModal';
 import { eliminarPropuesta, obtenerPropuestas } from '@/lib/services/propuesta';
 import { formatearFecha, formatearFechaSimple } from '@/lib/utils/datetimeFormater';
 import { Propuesta } from '@/lib/utils/definitions';

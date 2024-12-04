@@ -1,5 +1,5 @@
 
-import ModalBackground from "../global/ModalBackground";
+import ModalBackground from "../../global/ModalBackground";
 import type { Plugin } from 'grapesjs';
 import ReactDOM from 'react-dom'; // Asegúrate de importar ReactDOM correctamente
 import { downloadRequest, downloadRequestPdf } from "@/lib/utils/methods";

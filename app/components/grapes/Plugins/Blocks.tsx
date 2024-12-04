@@ -8,7 +8,7 @@ export function AddBlocks(editor: any) {
         label: 'Página',
         content: `
             <div class="page-container" style="width: 100%; height: 100%; background-color: #f0f0f0; position: relative; display: flex; justify-content: center; align-items: center; padding-top: 15px; padding-bottom: 15px;">
-                <div data-page="true" style="margin: 0 auto; height: 297mm; width: 210mm; background: white; border: 1px solid #ccc; box-sizing: border-box; position: relative;">
+                <div data-page="true" style="line-height: 1.5; margin: 0 auto; height: 297mm; width: 210mm; background: white; border: 1px solid #ccc; box-sizing: border-box; position: relative;">
                     <div style="padding: 10px;">
                         Empieza escribiendo algo....
                     </div>
@@ -21,9 +21,24 @@ export function AddBlocks(editor: any) {
     blockManager.add('boton-block', {
         media: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 17h-17A2.502 2.502 0 0 1 1 14.5v-4A2.502 2.502 0 0 1 3.5 8h17a2.502 2.502 0 0 1 2.5 2.5v4a2.502 2.502 0 0 1-2.5 2.5zm-17-8A1.502 1.502 0 0 0 2 10.5v4A1.502 1.502 0 0 0 3.5 16h17a1.502 1.502 0 0 0 1.5-1.5v-4A1.502 1.502 0 0 0 20.5 9zM17 12H7v1h10z"/><path fill="none" d="M0 0h24v24H0z"/></svg>`,
         label: 'Botón',
-        content: '<button style="color: white; background-color: #1a7edb; padding: 10px; border: none; border-radius: 5px;">Haz clic aquí</button>',
+        content: '<a href="#" style="text-decoration: none; color: white; background-color: #1a7edb; padding: 10px; border: none; border-radius: 5px;">Haz clic aquí</a>',
         category: 'Otros',
         activate: true,
+        type: 'link',
+        traits: [
+            {
+              type: 'text',
+              label: 'Texto',
+              name: 'title',
+              changeProp: 1,  // Indica que cuando el valor cambia, el cambio se refleja en el componente
+            },
+            {
+              type: 'url',
+              label: 'Enlace',
+              name: 'href',  // Definir el atributo href como editable
+              changeProp: 1,  // Indica que cuando el valor cambia, el cambio se refleja en el componente
+            },
+          ],
     });
 
     blockManager.add('lista-ordenada-block', {

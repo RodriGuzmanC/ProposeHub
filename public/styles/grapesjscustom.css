@@ -40,6 +40,10 @@
   .page{
     overflow: hidden;
     position: relative;
+    line-height: 1.5;
+  }
+  .page a{
+    text-decoration: none;
   }
 
 
@@ -67,7 +71,6 @@
     align-items: center;
   }
   .panel__top .panel__right{
-    box-shadow: 1px -1px 4px black;
     z-index: 20;
   }
   
@@ -114,3 +117,40 @@
   .panel__switcher .gjs-pn-buttons{
     width: 100%;
   }
+
+  
+.gjs-pn-buttons span{
+  padding-left: 5px;
+}
+.panel__basic-actions .panel__action-basic span:hover{
+  background-color: #ffffff1f;
+}
+
+.panel__basic-actions .panel__action-buttons span:hover{
+  background-color: #ffffff1f;
+}
+
+
+
+.panel__basic-actions .gjs-pn-btn {
+  display: flex;
+  transition: all 0.5s ease;
+  overflow: hidden; /* Evita que el texto se desborde antes de aparecer */
+}
+
+.texto-option {
+  margin-left: 3px;
+  font-size: 16px !important;
+  width: 0; /* El texto empieza con un ancho de 0 */
+  opacity: 0; /* El texto empieza invisible */
+  visibility: hidden; /* El texto no es interactuable ni visible */
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  transition: width 0.5s ease, opacity 0.5s ease, visibility 0s 0.5s; /* Transición suave */
+}
+
+.panel__basic-actions .gjs-pn-btn:hover .texto-option {
+  width: fit-content; /* El texto ocupa el espacio necesario */
+  opacity: 1; /* El texto se hace visible */
+  visibility: visible; /* El texto se vuelve interactuable */
+  transition: width 0.5s ease, opacity 0.5s ease, visibility 0s; /* Transición suave al hacer hover */
+}

@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
-import ModalBackground from "../global/ModalBackground";
+import ModalBackground from "../../global/ModalBackground";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, X } from "lucide-react";
 import { enviarCoreoACliente, obtenerClientes, obtenerClientesDeOrganizacion } from "@/lib/services/cliente";

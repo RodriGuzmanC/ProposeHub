@@ -6,10 +6,9 @@ import '../../../public/styles/grapesjscustom.css';
 import 'font-awesome/css/font-awesome.min.css';
 
 import LoadingFallback from './LoadingFallback';
-import { AddBlocks } from './Blocks';
-import { AddStorage } from './Storage'
-import { AddOptions } from './Options';
-import PrintPDFButton from './PrintPDFButton';
+import { AddBlocks } from './Plugins/Blocks';
+import { AddStorage } from './Plugins/Storage'
+import { AddOptions } from './Plugins/Options';
 import { AddPdfBlocks } from './AddPdfBlocks';
 //import 'grapesjs-blocks-basic'; // Asegúrate de que esté correctamente instalado
 import blocksBasic from 'grapesjs-blocks-basic';
@@ -18,16 +17,19 @@ import { useRouter } from 'next/navigation';
 import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
 import HistorialVersionesModal from '../propuestas/HistorialVersionesModal';
 import { cambiarEstadoVersionPropuesta } from '@/lib/services/versionPropuesta';
-import { AddPanels } from './Panels';
-import { OptionsPlantilla } from './OptionsPlantilla';
+import { AddPanels } from './Plugins/Panels';
+import { OptionsPlantilla } from './Plugins/OptionsPlantilla';
 import { CustomToolbars } from './Toolbars';
-import { MailModalPlugin } from '../propuestas/SendMailModal';
+import { MailModalPlugin } from './Plugins/SendMailModal';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
-import { PdfPreviewModalPlugin } from './PdfPreviewPlugin';
-import { GaleryPlugin } from './GaleryPlugin';
+import { PdfPreviewModalPlugin } from './Plugins/PdfPreviewPlugin';
+import { GaleryPlugin } from './Plugins/GaleryPlugin';
+
 // @ts-ignore
 import es from 'grapesjs/locale/es.js';
 import plugin from 'grapesjs-blocks-basic';
+// @ts-ignore
+import grapesStyleBorder from 'grapesjs-style-border';
 
 interface gsjs {
   slug: number
@@ -40,10 +42,7 @@ interface gsjs {
 
 const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor, launchFunction, linkHome }: gsjs) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter()
-  const [htmlContent, setHtmlContent] = useState<string>('');
   const [projectID, setProjectID] = useState(slug)
-  const projectEndpoint = `http://127.0.0.1:8000/api/plantillas/contenido/${projectID}`;
 
   const [modalVersionesOpen, setModalVersionesOpen] = useState(false);
 
@@ -53,6 +52,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
 
   // Inicializa el array de plugins
   const plugins = [
+    grapesStyleBorder,
     blocksBasic,
     AddBlocks,
     //CustomToolbars,
@@ -160,6 +160,8 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
         deviceManager: {
           appendTo: '.panel__devices',
         } as any,
+
+        
       });
 
       

@@ -71,7 +71,7 @@ editor.Panels.addPanel({
             },
             className: '', // Icono de publicación
             attributes: { title: 'Guardar cambios' },
-            label: `<button style="font-size: 18px;">Guardar</button>`
+            label: `<button style="font-size: 16px;">Guardar</button>`
         },
         
     ],
