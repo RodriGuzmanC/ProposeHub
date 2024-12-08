@@ -15,7 +15,7 @@ import blocksBasic from 'grapesjs-blocks-basic';
 import { guardarPlantilla, obtenerContenidoPlantilla } from '@/lib/services/plantilla';
 import { useRouter } from 'next/navigation';
 import { editarHtmlCssPropuesta } from '@/lib/services/propuesta';
-import HistorialVersionesModal from '../propuestas/HistorialVersionesModal';
+import HistorialVersionesModal from './Plugins/HistorialVersionesModal';
 import { cambiarEstadoVersionPropuesta } from '@/lib/services/versionPropuesta';
 import { AddPanels } from './Plugins/Panels';
 import { OptionsPlantilla } from './Plugins/OptionsPlantilla';
@@ -24,12 +24,12 @@ import { MailModalPlugin } from './Plugins/SendMailModal';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import { PdfPreviewModalPlugin } from './Plugins/PdfPreviewPlugin';
 import { GaleryPlugin } from './Plugins/GaleryPlugin';
-
 // @ts-ignore
 import es from 'grapesjs/locale/es.js';
-import plugin from 'grapesjs-blocks-basic';
 // @ts-ignore
 import grapesStyleBorder from 'grapesjs-style-border';
+// @ts-ignore
+import MaterialIconsPlugin from 'grapesjs-google-material-icons';
 
 interface gsjs {
   slug: number
@@ -42,7 +42,7 @@ interface gsjs {
 
 const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor, launchFunction, linkHome }: gsjs) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const [projectID, setProjectID] = useState(slug)
+  const [projectID, setProjectID] = useState<number>(slug)
 
   const [modalVersionesOpen, setModalVersionesOpen] = useState(false);
 
@@ -55,6 +55,7 @@ const GrapesJSComponent = ({ slug, loadFunction, storeFunction, isProposeEditor,
     grapesStyleBorder,
     blocksBasic,
     AddBlocks,
+    MaterialIconsPlugin,
     //CustomToolbars,
     usePlugin(AddPanels, {
       // Parámetros 

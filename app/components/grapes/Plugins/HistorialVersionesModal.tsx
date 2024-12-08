@@ -8,7 +8,7 @@ import { VersionPropuesta } from "@/lib/utils/definitions"
 import grapesjs from "grapesjs"
 import { ArrowDownRight, X } from "lucide-react"
 import { useEffect, useState } from "react"
-import '../../../public/styles/pruebaeliminar.css';
+import '../../../../public/styles/grapesjscustom.css';
 
 
 interface HistorialVersionesModalProps {
@@ -52,9 +52,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
         // Carga la version que actualmente esta publicada
         if (dataVersionPublicada) {
           setVersionPublicada(dataVersionPublicada)
-
         }
-
         setDataEstaCargada(true)
       } catch (error) {
         console.error(`Error al cargar la propuesta: ${error instanceof Error ? error.message : String(error)}`);
@@ -62,10 +60,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
         // Por ejemplo, puedes establecer un estado para manejar errores o simplemente ignorar el error
       }
     }
-    if (!dataEstaCargada) {
       cargar(idPropuesta)
-
-    }
   }, [idPropuesta])
 
 
@@ -134,7 +129,7 @@ export default function HistorialVersionesModal({ idPropuesta, onClose, onCardCl
         <div className="w-1/4 h-full border-r-2">
           <ScrollArea className="h-full">
             <div className="p-4 space-y-4 overflow-auto">
-              {versionesPropuesta ? (
+              {(versionesPropuesta && versionesPropuesta.length > 0) ? (
                 versionesPropuesta.map((versionActual : any) => (
                   <Card
                     key={versionActual.id ?? ''}

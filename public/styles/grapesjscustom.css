@@ -154,3 +154,28 @@
   visibility: visible; /* El texto se vuelve interactuable */
   transition: width 0.5s ease, opacity 0.5s ease, visibility 0s; /* Transición suave al hacer hover */
 }
+
+
+#gjs-preview {
+  border: 2px solid #5e5e5e;
+}
+
+/* Reset some default styling */
+#gjs-preview .gjs-cv-canvas {
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Estilos para boton de eliminar de la galeria de imagenes */
+
+.gallery-delete-btn{
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.gallery-image:hover .gallery-delete-btn{
+  display: block;
+}

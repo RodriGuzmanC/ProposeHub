@@ -15,10 +15,6 @@ export const GaleryPlugin: Plugin = (editor) => {
     // Referencia al modal que se crea para contener al plugin
     let modalContainer: HTMLDivElement | null = null;
 
-    async function esl() {
-        return await cargarAssets()
-    }
-
     let editorInstance = editor
     // Escuchar el evento cuando el Asset Manager se abre o se cierra
     editor.on('asset:custom', async (props) => {
@@ -40,82 +36,7 @@ export const GaleryPlugin: Plugin = (editor) => {
                 container.appendChild(modalContainer);
             }
 
-            const assetsPropios = [
-                {
-                    "id": 1,
-                    "nombre": null,
-                    "url": "/storage/images/GHkZ0I4mUchtGgkVpikOQUSAalHFB1crTPThV3Hb.png"
-                },
-                {
-                    "id": 2,
-                    "nombre": null,
-                    "url": "/storage/images/LsKinGHRYqT63L1G83rjmbdBcilnLXKhFXPMyiQk.png"
-                },
-                {
-                    "id": 3,
-                    "nombre": null,
-                    "url": "/storage/images/IgzO3J4ZWLDG28ImAoJUnyy2M2SgVwPPRMM3u76c.png"
-                },
-                {
-                    "id": 4,
-                    "nombre": null,
-                    "url": "/storage/images/EdKjTVUUQhM5aBqaFJm1RSTb8YGRtncDR8TUF5Wg.png"
-                },
-                {
-                    "id": 5,
-                    "nombre": null,
-                    "url": "/storage/images/8J6jq7o0jhN2xBhf21rPXtFDhzDAhZRXsp14ejME.png"
-                },
-                {
-                    "id": 6,
-                    "nombre": null,
-                    "url": "/storage/images/4bLIS75RTCApkjdPLXPo9lAH5vaWrbJBZReRfShe.png"
-                },
-                {
-                    "id": 7,
-                    "nombre": null,
-                    "url": "/storage/images/svJZxP3TWdFMFLLpAPsyJE6UfYTP1Wh3Gvtt0uoJ.png"
-                },
-                {
-                    "id": 8,
-                    "nombre": null,
-                    "url": "/storage/images/K4nrfuQ4XaJuM0EIr6ZNgebEdyRuq5cdjtmUerLx.png"
-                },
-                {
-                    "id": 9,
-                    "nombre": null,
-                    "url": "/storage/images/5HQhEKkcIUWDp05A3SbyiUa5tnI3oFV2CS7dNS0i.png"
-                },
-                {
-                    "id": 10,
-                    "nombre": null,
-                    "url": "/storage/images/rMApPXgQmYWDR2UHta0ANex97zVAFmZCCfnKICix.png"
-                },
-                {
-                    "id": 11,
-                    "nombre": null,
-                    "url": "/storage/images/s1CLN0dL03pKj94KbZr1Od3Y54NhKzrDfVxc2tKh.png"
-                },
-                {
-                    "id": 12,
-                    "nombre": "image-removebg-preview (2).png",
-                    "url": "/storage/images/Wz4YNM4L387RkpbotjFr78q0fEQ7VGW88jZlqIkl.png"
-                },
-                {
-                    "id": 13,
-                    "nombre": "tresmedia-logo.png",
-                    "url": "/storage/images/xijJjmuPda5UI5UvaA8HziIgAg7qRRlMZ3F3QD2a.png"
-                },
-                {
-                    "id": 14,
-                    "nombre": "supervision-del-proceso.gif",
-                    "url": "/storage/images/PNYy07QMVXHKKWfbRQapypyy6KBU0MJ1Gxy4JgO4.gif"
-                }
-            ]
 
-            const ele = await esl()
-            // Renderizar las imágenes en el modal
-            //renderGallery(assetsPropios);
         } else {
             // Si el Asset Manager se cierra, eliminar la galería
             if (modalContainer) {
@@ -125,97 +46,8 @@ export const GaleryPlugin: Plugin = (editor) => {
         }
     });
 
-    // Función para renderizar las imágenes en la interfaz de la galería
-    const renderGallery = (assets: any[]) => {
-        if (!modalContainer) return;
-
-        // Limpiar el modal antes de actualizarlo
-        modalContainer.innerHTML = '';
-
-        // Crear un contenedor para la galería si no existe
-        const gallery = document.getElementById('gallery-content');
-        console.log("Galeria contenido");
-        console.log(gallery);
-
-        if (gallery) {
-            console.log("Galería encontrada.");
-            renderImagesInGallery(assets, gallery);
-        } else {
-            console.log("Esperando que se cargue el contenedor...");
-
-            // Si no existe, intentamos nuevamente después de un breve retraso
-            setTimeout(() => {
-                renderGallery(assets); // Volver a intentar
-            }, 100); // Esperar 100ms antes de intentar otra vez
-        }
-
-    };
-
-    const renderImagesInGallery = (assets: any[], gallery: HTMLElement) => {
-        // Agregar las imágenes al contenedor de la galería
-        assets.forEach((asset) => {
-            const img = document.createElement('img');
-            img.src = `http://127.0.0.1:8000${asset.url}`;
-            img.alt = asset.name;
-            img.classList.add('gallery-image');
-            gallery.appendChild(img);
-        });
-
-        // Agregar eventos de clic a las imágenes
-        let imagenes = document.getElementsByClassName('gallery-image');
-        Array.from(imagenes).forEach((imagen: any) => {
-            imagen.addEventListener('click', () => {
-                const selected = editor.getSelected();
-                if (selected && selected.get('type') === 'image') {
-                    selected.set('src', imagen.src); // Cambiar el src del componente seleccionado
-                }
-
-                // Opcional: Cerrar el Asset Manager
-                editor.Modal.close();
-                editor.Commands.run('core:open-assets');
-
-            });
-        });
-    };
+    
 };
-
-const cargarAssets = async () => {
-    //const data = await obtenerAssets(); // Esperamos la promesa
-    return ''; // Actualizamos el estado con los activos obtenidos
-};
-
-
-/*function obtenerAssets() {
-    console.log("aaaaaaaaa");
-
-    // Realizar la solicitud para obtener las imágenes
-    return fetch('http://127.0.0.1:8000/api/imagenes')
-        .then(response => {
-            if (!response.ok) {
-                // Si la respuesta no es exitosa, lanzamos un error
-                throw new Error(`Error en la respuesta del servidor: ${response.status} ${response.statusText}`);
-            }
-            return response.json(); // Convertimos la respuesta en JSON
-        })
-        .then(images => {
-            // Mapeamos las imágenes a la estructura que GrapesJS espera
-            const assets = images.map((img: any) => ({
-                src: `http://127.0.0.1:8000${img.url}`,
-                name: `Imagen ${img.id}`,
-                type: 'image',
-            }));
-
-            console.log("Imágenes obtenidas:", assets);
-
-            // Devolvemos los activos
-            return assets;
-        })
-        .catch(error => {
-            console.error("Error al cargar las imágenes:", error);
-            return [];  // Devolvemos un array vacío en caso de error
-        });
-}*/
-
 
 
 
@@ -223,7 +55,6 @@ const cargarAssets = async () => {
 
 const GaleryUI = ({ editor }: { editor: any }) => {
     
-
     return (
         <Card className="border-none w-full mx-auto bg-transparent text-white">
             <Tabs defaultValue="upload" className="w-full bg-transparent text-white">

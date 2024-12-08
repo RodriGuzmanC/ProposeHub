@@ -1,6 +1,5 @@
 import type { Editor, Plugin } from 'grapesjs';
 
-
 interface apinterface {
     linkHome: string
 }

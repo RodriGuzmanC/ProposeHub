@@ -1,4 +1,4 @@
-import { getData, postData } from "../utils/methods";
+import { deleteData, getData, postData } from "../utils/methods";
 
 const urlStorage = process.env.NEXT_PUBLIC_STORAGE_URL;
 
@@ -71,5 +71,17 @@ export const subirAsset = async (files: FileList | File[]) => {
         console.log('Imágenes subidas exitosamente:', data);
     } catch (error) {
         throw new Error(`Error al subir las imágenes: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+
+
+
+export const eliminarAsset = async (id: number) => {
+    try {
+        // Obtienes los datos de los clientes
+        const imagen = await deleteData(`imagenes/${id}`)
+        return imagen
+    } catch (error) {
+        throw new Error(`Error al obtener imagenes: ${error instanceof Error ? error.message : String(error)}`);
     }
 };
