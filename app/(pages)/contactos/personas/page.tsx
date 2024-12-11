@@ -25,7 +25,7 @@ export default function PersonasVistaClient() {
   const { data: clientes, error, isLoading, mutate } = useSWR<Cliente[]>('/contactos/personas', obtenerClientes)
   if (error) return <ErrorInterface></ErrorInterface>
   if (isLoading) return <PagesLoading></PagesLoading>
-  if (clientes == undefined) return <ErrorInterface></ErrorInterface>
+  if (clientes == undefined) return <PagesLoading></PagesLoading>
   return (
     <div className="flex flex-col w-full h-screen overflow-auto">
       <main className="flex-1 h-full">

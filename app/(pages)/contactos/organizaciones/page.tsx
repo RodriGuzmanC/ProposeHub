@@ -24,7 +24,7 @@ export default function OrganizacionClient() {
     /** Carga los datos */
     const { data: organizaciones, error, isLoading, mutate } = useSWR<Organizacion[]>('/contactos/organizaciones', obtenerOrganizaciones)
     if (error) return <ErrorInterface></ErrorInterface>
-    if (organizaciones == undefined) return <ErrorInterface></ErrorInterface>
+    if (organizaciones == undefined) return <PagesLoading></PagesLoading>
     if (isLoading) return <PagesLoading></PagesLoading>
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
@@ -52,7 +52,6 @@ export default function OrganizacionClient() {
                             key={organization.id} 
                             IconCard={Building} 
                             editarHref={`organizaciones/editar/${organization.id}`}
-                            importantMessage={'Al eliminar esta organización, también se eliminarán todos sus clientes. Asegúrate de moverlos antes de proceder.'}
                             verHref={`organizaciones/ver/${organization.id}`} id={organization.id} 
                             eliminarAction={eliminarFun}
                             nombre={organization.nombre} 
